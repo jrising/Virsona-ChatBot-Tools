@@ -1,0 +1,69 @@
+Virsona ChatBot Tools
+
+This repository contains a sophisticated plugin-framework for natural
+language and artificial intelligence projects, and a collection of
+plugins for that framework from the ChatBot developed by Virsona, Inc.
+The libraries may be linked through directly, or used through the
+plugin framework.
+
+All of this material is released under an LGPL, v3, license.  All code
+is in C#.
+
+The repository is contains material of five types:
+
+*** PluggerBase
+
+This is the plugin framework.  It provides a way for plugins (dll's
+with the extension .vip) to expose data sources and "handlers".
+Handlers provide the ability to perform different functions, roughly
+thought of as translating arguments from one kind to another.  If no
+plugin can perform a requested conversion, a collection of partial
+conversions will be attempted.
+
+*** Tools
+
+*Grammarian* provides a common code base for all of the natural language
+processing currently available, as well as helper functions to
+abstract away the plugin environment.
+
+*GenericTools* is a collection of Generic classes that are generally
+useful.  The Enumerables do not rely on PluggerBase, while the
+DataSources do.
+
+*** Plugins
+
+The currently exposed plugins are as follows.  To use them, put the
+compiled library dll into the plugin environment's data directory,
+with the extension ".vip".
+
+*HeppleTagger* is a C# implementation of Mark Hepple's part of speech
+ tagger.
+
+*AgentParser* is a class-based phrase parser (that is, constructing
+ strucutres of typed phrases), which can also perform paraphrasing.
+
+*DummyWordNet* is a very simple WordNet dummy, for testing tools that
+ use the wordnet data sources without exposing the whole of WordNet.
+
+*MemcachedWordNet* provides access to WordNet, and relies on memcached
+ for efficiency.
+
+*Morphologer* provides functions for changing the number of nouns and
+ and inflecting verbs, based on David Levy's DoMuchMore project.
+
+*** data
+
+The data directory contains compiled plugins and data files that those
+plugins use.  It also contains config.xml, the configuration file
+provided to the plugins.
+
+*** Test Paraphrasing
+
+A simple project which compiles all of the plugins and tests their
+paraphrasing capabilities.
+
+To use the provided source code, do the following:
+ * Install memcached, and start the service
+ * Put the data/ directory somewhere, and change data/config.xml and
+   the plugbase variable in Test Paraphrasing/Main.cs to point to it.
+ * Run Test Paraphrasing.

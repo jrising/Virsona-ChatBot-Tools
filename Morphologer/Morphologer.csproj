@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6F541755-110A-4E99-9D8A-764F894D2AC7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Morphologer</RootNamespace>
+    <AssemblyName>Morphologer</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AuxString.cs" />
+    <Compile Include="MorphologerInterface.cs" />
+    <Compile Include="ChangeNounHandler.cs" />
+    <Compile Include="ConjugateHandler.cs" />
+    <Compile Include="TransitiveTestHandler.cs" />
+    <Compile Include="InflectionTestHandler.cs" />
+    <Compile Include="VerbsData.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PluggerBase\PluggerBase\PluggerBase.csproj">
+      <Project>{4D2297C0-FE51-4056-80CD-A72469075B10}</Project>
+      <Name>PluggerBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Grammarian\Grammarian.csproj">
+      <Project>{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}</Project>
+      <Name>Grammarian</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GenericTools\GenericTools.csproj">
+      <Project>{7AEB4A15-8603-4675-B636-98DA6292291A}</Project>
+      <Name>GenericTools</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

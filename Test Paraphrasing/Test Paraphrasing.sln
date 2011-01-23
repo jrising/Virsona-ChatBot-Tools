@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test Paraphrasing", "Test Paraphrasing\Test Paraphrasing.csproj", "{92539854-CCCB-4F5F-B631-89D2E94D05D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentParser", "..\AgentParser\AgentParser.csproj", "{3700E5DE-B669-41FB-A815-30DCB7E34466}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluggerBase", "..\PluggerBase\PluggerBase\PluggerBase.csproj", "{4D2297C0-FE51-4056-80CD-A72469075B10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grammarian", "..\Grammarian\Grammarian.csproj", "{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericTools", "..\GenericTools\GenericTools.csproj", "{7AEB4A15-8603-4675-B636-98DA6292291A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyWordNet", "..\DummyWordNet\DummyWordNet.csproj", "{4D235CEC-BAF8-4FEF-9D9D-FAF59DD98DE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeppleTagger", "..\HeppleTagger\HeppleTagger.csproj", "{EFDCF9D4-CD29-4FD4-8CCF-8A13A8DE95D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemcachedWordNet", "..\MemcachedWordNet\MemcachedWordNet.csproj", "{E2C07795-9345-4E41-B9DB-8AC1DB69A590}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Morphologer", "..\Morphologer\Morphologer.csproj", "{6F541755-110A-4E99-9D8A-764F894D2AC7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3700E5DE-B669-41FB-A815-30DCB7E34466}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3700E5DE-B669-41FB-A815-30DCB7E34466}.Debug|x86.Build.0 = Debug|Any CPU
+		{3700E5DE-B669-41FB-A815-30DCB7E34466}.Release|x86.ActiveCfg = Release|Any CPU
+		{3700E5DE-B669-41FB-A815-30DCB7E34466}.Release|x86.Build.0 = Release|Any CPU
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Debug|x86.Build.0 = Debug|Any CPU
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Release|x86.Build.0 = Release|Any CPU
+		{4D235CEC-BAF8-4FEF-9D9D-FAF59DD98DE0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D235CEC-BAF8-4FEF-9D9D-FAF59DD98DE0}.Debug|x86.Build.0 = Debug|Any CPU
+		{4D235CEC-BAF8-4FEF-9D9D-FAF59DD98DE0}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D235CEC-BAF8-4FEF-9D9D-FAF59DD98DE0}.Release|x86.Build.0 = Release|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Debug|x86.Build.0 = Debug|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Release|x86.ActiveCfg = Release|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Release|x86.Build.0 = Release|Any CPU
+		{6F541755-110A-4E99-9D8A-764F894D2AC7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6F541755-110A-4E99-9D8A-764F894D2AC7}.Debug|x86.Build.0 = Debug|Any CPU
+		{6F541755-110A-4E99-9D8A-764F894D2AC7}.Release|x86.ActiveCfg = Release|Any CPU
+		{6F541755-110A-4E99-9D8A-764F894D2AC7}.Release|x86.Build.0 = Release|Any CPU
+		{7AEB4A15-8603-4675-B636-98DA6292291A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7AEB4A15-8603-4675-B636-98DA6292291A}.Debug|x86.Build.0 = Debug|Any CPU
+		{7AEB4A15-8603-4675-B636-98DA6292291A}.Release|x86.ActiveCfg = Release|Any CPU
+		{7AEB4A15-8603-4675-B636-98DA6292291A}.Release|x86.Build.0 = Release|Any CPU
+		{92539854-CCCB-4F5F-B631-89D2E94D05D1}.Debug|x86.ActiveCfg = Debug|x86
+		{92539854-CCCB-4F5F-B631-89D2E94D05D1}.Debug|x86.Build.0 = Debug|x86
+		{92539854-CCCB-4F5F-B631-89D2E94D05D1}.Release|x86.ActiveCfg = Release|x86
+		{92539854-CCCB-4F5F-B631-89D2E94D05D1}.Release|x86.Build.0 = Release|x86
+		{E2C07795-9345-4E41-B9DB-8AC1DB69A590}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E2C07795-9345-4E41-B9DB-8AC1DB69A590}.Debug|x86.Build.0 = Debug|Any CPU
+		{E2C07795-9345-4E41-B9DB-8AC1DB69A590}.Release|x86.ActiveCfg = Release|Any CPU
+		{E2C07795-9345-4E41-B9DB-8AC1DB69A590}.Release|x86.Build.0 = Release|Any CPU
+		{EFDCF9D4-CD29-4FD4-8CCF-8A13A8DE95D3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EFDCF9D4-CD29-4FD4-8CCF-8A13A8DE95D3}.Debug|x86.Build.0 = Debug|Any CPU
+		{EFDCF9D4-CD29-4FD4-8CCF-8A13A8DE95D3}.Release|x86.ActiveCfg = Release|Any CPU
+		{EFDCF9D4-CD29-4FD4-8CCF-8A13A8DE95D3}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Test Paraphrasing\Test Paraphrasing.csproj
+	EndGlobalSection
+EndGlobal

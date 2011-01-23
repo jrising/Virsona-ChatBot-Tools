@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4D2297C0-FE51-4056-80CD-A72469075B10}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PluggerBase</RootNamespace>
+    <AssemblyName>PluggerBase</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionReaction\Actions\Aborter.cs" />
+    <Compile Include="ActionReaction\Actions\FormableAction.cs" />
+    <Compile Include="ActionReaction\Actions\LastFailure.cs" />
+    <Compile Include="ArgumentTree.cs" />
+    <Compile Include="FastSerializer\FastSerializerInterfaces.cs" />
+    <Compile Include="FastSerializer\SerializationReader.cs" />
+    <Compile Include="FastSerializer\SerializationWriter.cs" />
+    <Compile Include="InitialzeResult.cs" />
+    <Compile Include="ActionReaction\Evaluations\Agents.cs" />
+    <Compile Include="ActionReaction\Evaluations\CallableAsContinuation.cs" />
+    <Compile Include="ActionReaction\Evaluations\Callables.cs" />
+    <Compile Include="ActionReaction\Evaluations\Continuations.cs" />
+    <Compile Include="ActionReaction\Evaluations\ImmediateArena.cs" />
+    <Compile Include="ActionReaction\Actions\TryValues.cs" />
+    <Compile Include="ActionReaction\Evaluations\Failures.cs" />
+    <Compile Include="ActionReaction\Actions\ArgumentsHandler.cs" />
+    <Compile Include="ActionReaction\Actions\BestContinuation.cs" />
+    <Compile Include="ActionReaction\Actions\HandlerWrapper.cs" />
+    <Compile Include="ActionReaction\Actions\UnitaryHandler.cs" />
+    <Compile Include="ActionReaction\Evaluations\Evaluables.cs" />
+    <Compile Include="ActionReaction\Evaluations\IArena.cs" />
+    <Compile Include="ActionReaction\Actions\IActions.cs" />
+    <Compile Include="ActionReaction\Actions\ActionConversion.cs" />
+    <Compile Include="ActionReaction\Evaluations\Nops.cs" />
+    <Compile Include="ActionReaction\Interfaces\HtmlInterface\HtmlArgumentTree.cs" />
+    <Compile Include="ActionReaction\Interfaces\HtmlInterface\HtmlUtilities.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDataSource.cs" />
+    <Compile Include="FastSerializer\IFastSerializable.cs" />
+    <Compile Include="IMessageReceiver.cs" />
+    <Compile Include="ActionReaction\Interfaces\BaseArgumentTypes.cs" />
+    <Compile Include="ActionReaction\Interfaces\DerivedArgumentTypes.cs" />
+    <Compile Include="ActionReaction\Interfaces\HtmlInterface\HtmlInterface.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ActionReaction\Interfaces\Interfaces.cs" />
+    <Compile Include="ActionReaction\Actions\QueueArena.cs" />
+    <Compile Include="IPlugin.cs" />
+    <Compile Include="PluginDisplayNameAttribute.cs" />
+    <Compile Include="PluginEnvironment.cs" />
+    <Compile Include="PluginNotValidException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

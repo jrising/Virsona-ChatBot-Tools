@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3700E5DE-B669-41FB-A815-30DCB7E34466}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>AgentParser</RootNamespace>
+    <AssemblyName>AgentParser</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Adjective.cs" />
+    <Compile Include="AdjectiveComparative.cs" />
+    <Compile Include="AdjectivePhrase.cs" />
+    <Compile Include="AdjectiveSuperlative.cs" />
+    <Compile Include="Adverb.cs" />
+    <Compile Include="AdverbComparative.cs" />
+    <Compile Include="AdverbPhrase.cs" />
+    <Compile Include="AdverbSuperlative.cs" />
+    <Compile Include="CardinalNumber.cs" />
+    <Compile Include="Colon.cs" />
+    <Compile Include="Comma.cs" />
+    <Compile Include="Conjunction.cs" />
+    <Compile Include="Determiner.cs" />
+    <Compile Include="DollarSign.cs" />
+    <Compile Include="Exclamation.cs" />
+    <Compile Include="ExistentialThere.cs" />
+    <Compile Include="ForeignWord.cs" />
+    <Compile Include="Fragment.cs" />
+    <Compile Include="ImpliedSubjectPhrase.cs" />
+    <Compile Include="IndeterminatePhrase.cs" />
+    <Compile Include="Interjection.cs" />
+    <Compile Include="InvertedSubjectPhrase.cs" />
+    <Compile Include="LeftParens.cs" />
+    <Compile Include="ListItem.cs" />
+    <Compile Include="ModalVerb.cs" />
+    <Compile Include="Noun.cs" />
+    <Compile Include="NounPhrase.cs" />
+    <Compile Include="NounPlural.cs" />
+    <Compile Include="NounProper.cs" />
+    <Compile Include="NounProperPlural.cs" />
+    <Compile Include="Paragraph.cs" />
+    <Compile Include="Parenthetical.cs" />
+    <Compile Include="Particle.cs" />
+    <Compile Include="Period.cs" />
+    <Compile Include="Phrase.cs" />
+    <Compile Include="POSPhrase.cs" />
+    <Compile Include="PossessiveEnding.cs" />
+    <Compile Include="PoundSign.cs" />
+    <Compile Include="Predeterminer.cs" />
+    <Compile Include="Preposition.cs" />
+    <Compile Include="PrepositionalPhrase.cs" />
+    <Compile Include="PronounPersonal.cs" />
+    <Compile Include="PronounPossessive.cs" />
+    <Compile Include="Punctuation.cs" />
+    <Compile Include="QuestionMark.cs" />
+    <Compile Include="RightParens.cs" />
+    <Compile Include="Semicolon.cs" />
+    <Compile Include="Sentence.cs" />
+    <Compile Include="SimpleDeclarativePhrase.cs" />
+    <Compile Include="SimpleQuestion.cs" />
+    <Compile Include="StraightDoubleQuote.cs" />
+    <Compile Include="StraightSingleQuote.cs" />
+    <Compile Include="SubconstituentPhrase.cs" />
+    <Compile Include="Symbol.cs" />
+    <Compile Include="To.cs" />
+    <Compile Include="UnknownPart.cs" />
+    <Compile Include="Verb.cs" />
+    <Compile Include="Verb3rdSingularPresent.cs" />
+    <Compile Include="VerbGerund.cs" />
+    <Compile Include="VerbNon3rdSingularPresent.cs" />
+    <Compile Include="VerbPastParticiple.cs" />
+    <Compile Include="VerbPhrase.cs" />
+    <Compile Include="VerbSimplePast.cs" />
+    <Compile Include="WhAdverb.cs" />
+    <Compile Include="WhAdverbPhrase.cs" />
+    <Compile Include="WhDeterminer.cs" />
+    <Compile Include="WhNounPhrase.cs" />
+    <Compile Include="WhPrepositionalPhrase.cs" />
+    <Compile Include="WhPronoun.cs" />
+    <Compile Include="WhPronounPossessive.cs" />
+    <Compile Include="AgentParserInterface.cs" />
+    <Compile Include="StringParseHandler.cs" />
+    <Compile Include="EnumerableParseHandler.cs" />
+    <Compile Include="ParaphraseHandler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PluggerBase\PluggerBase\PluggerBase.csproj">
+      <Project>{4D2297C0-FE51-4056-80CD-A72469075B10}</Project>
+      <Name>PluggerBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Grammarian\Grammarian.csproj">
+      <Project>{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}</Project>
+      <Name>Grammarian</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

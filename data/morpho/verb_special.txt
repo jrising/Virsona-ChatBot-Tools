@@ -1,0 +1,51 @@
+# lines beginning with # are comments
+# The format of the table is [base] [base-ing] [base-ed] [base-s] [type]
+# - means no entry (won't be added to search table for that criteria)
+	annexe annexing - annexes T
+	axe axing - axes T
+	befall befalling - - T
+	belie belying belied belies T
+	blackball blackballing blackballed - T
+	boycott boycotting boycotted - T
+	bus bussing bussed buses T
+	bus - - busses T
+	die dying died dies I
+	dye - dyed - T
+	err erring erred - I
+	eye eying eyed - T
+	finesse finessing finessed finesses I
+	frolic frolicking frolicked - I
+	gas gassing gassed gases T
+	gas - - gasses T
+	install installing installed - T
+	have - - has T
+	hoe - - hoes T
+	lie lying lied lies I
+	mimic mimicking mimicked - T
+	mis-spell mis-spelling mis-spelled - T
+	overawe overawing overawed - T
+	overcall overcalling overcalled - E
+	overfill overfilling overfilled - T
+	oversell overselling - - T
+	owe owing owed - T
+	panic panicking panicked - I
+	purr purring purred - I
+	putt putting putted - E
+	recall recalling recalled - T
+	resell reselling - - T
+	retell retelling - - T
+	shoe - - shoes T
+	shellac shellacking shellacked - T
+	singe - singed - T
+	summons - summonsed sumonses T
+	tarmac tarmacking tarmaced - T
+	taxi - taxied - I
+	tie tying tied ties T
+	toe - - toes T
+	traffic trafficking trafficked - I
+	type typing typed - E
+	undersell underselling - - E	
+	unroll unrolling unrolled - E
+	vie vying vied vies I
+	whirr whirring whirred - I
+	

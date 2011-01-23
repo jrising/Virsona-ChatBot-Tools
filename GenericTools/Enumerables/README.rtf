@@ -1,0 +1,130 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf110
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fmodern\fcharset0 Courier;\f2\fmodern\fcharset0 Courier-Oblique;
+}
+{\colortbl;\red255\green255\blue255;\red106\green106\blue106;\red0\green14\blue175;\red247\green247\blue247;
+\red23\green110\blue109;\red193\green193\blue193;\red246\green0\blue0;\red25\green112\blue0;\red0\green0\blue255;
+\red83\green83\blue83;}
+\margl1440\margr1440\vieww9000\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl380\sa40\ql\qnatural
+
+\f0\fs24 \cf0 The included source code is licensed under the MIT License: see LICENSE.
+\fs48 \
+\
+Enumeration Tools\
+\pard\pardeftab720\sl240\ql\qnatural
+
+\fs22 \cf2 \
+\pard\pardeftab720\sl380\sa120\ql\qnatural
+
+\fs26 \cf0 Here are some enumeration utilities I've developed because they seem useful. Feel free to use and abuse them. The zip file contains these classes, a class containing the examples below, a class for NUnit testing, and a class with some other useful functions for working with IEnumerables.\
+\pard\pardeftab720\sl380\sa120\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://wiki.virsona.com/images/2/27/Enumerables.zip"}}{\fldrslt \cf3 media:Enumerables.zip}}\
+\pard\pardeftab720\sl380\ql\qnatural
+\cf0 \
+\pard\pardeftab720\sl380\sa220\ql\qnatural
+
+\fs38 \cf0 AppendEnumerable\
+\pard\pardeftab720\sl380\sa120\ql\qnatural
+
+\f1\fs20 \cf0 \cb4 AppendEnumerable<T>
+\f0\fs26 \cb1  concatenates two 
+\f1\fs20 \cb4 IEnumerable<T>
+\f0\fs26 \cb1 's, using delayed operations.\
+\pard\pardeftab720\sl380\qc
+\cf0 Example: Append two arrays of numbers\
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trcbpat6 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth9000\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sl240\ql\qnatural
+
+\f2\i\fs20 \cf5 // Append the following two lists
+\f1\i0 \cf0 \
+\pard\intbl\itap1\pardeftab720\sl240\ql\qnatural
+\cf7 int\cf0 [] one2three \cf8 =\cf0  \cf8 new\cf0  \cf7 int\cf0 [] \{ 1, 2, 3 \}\cf8 ;\cf0 \
+\cf7 int\cf0 [] four2six \cf8 =\cf0  \cf8 new\cf0  \cf7 int\cf0 [] \{ 4, 5, 6 \}\cf8 ;\cf0 \
+\'a0\
+IEnumerable\cf8 <\cf7 int\cf8 >\cf0  appended \cf8 =\cf0  \cf8 new\cf0  AppendEnumerable\cf8 <\cf7 int\cf8 >\cf0 (one2three, four2six)\cf8 ;\cf0 \
+\'a0\
+\pard\intbl\itap1\pardeftab720\sl240\ql\qnatural
+
+\f2\i \cf5 // Writes: 1, 2, 3, 4, 5, 6
+\f1\i0 \cf0 \
+Console.\cf9 WriteLine\cf0 (EnumerableUtilities.\cf9 JoinEnumerator\cf0 (\cf10 ", "\cf0 , appended))\cf8 ;\cf0 \cell \lastrow\row
+\pard\pardeftab720\sl380\ql\qnatural
+
+\f0\fs26 \cf0 \
+\pard\pardeftab720\sl380\sa220\ql\qnatural
+
+\fs38 \cf0 MapEnumerable\
+\pard\pardeftab720\sl380\sa120\ql\qnatural
+
+\f1\fs20 \cf0 \cb4 MapEnumerable<TFrom, TTo>
+\f0\fs26 \cb1  applies a mapping function (
+\f1\fs20 \cb4 TTo func(TFrom, object)
+\f0\fs26 \cb1 ) to every element of an enumerable, using delayed operations. The second argument to the mapped function is any kind of shared state relevant to the function, and can be null.\
+\pard\pardeftab720\sl380\qc
+\cf0 Example: Square each element in a list of numbers\
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trcbpat6 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth9240\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sl240\ql\qnatural
+
+\f1\fs20 \cf9 public\cf0  \cf7 int\cf0  SquareIt(\cf7 int\cf0  num, \cf7 object\cf0  shared)\
+\{\
+  \cf9 return\cf0  num \cf8 *\cf0  num\cf8 ;\cf0 \
+\}\
+\'a0\
+\pard\intbl\itap1\pardeftab720\sl240\ql\qnatural
+
+\f2\i \cf5 // Square every element of a lst
+\f1\i0 \cf0 \
+\pard\intbl\itap1\pardeftab720\sl240\ql\qnatural
+\cf7 int\cf0 [] nums \cf8 =\cf0  \cf8 new\cf0  \cf7 int\cf0 [] \{ 1, 2, 3 \}\cf8 ;\cf0 \
+\'a0\
+IEnumerable\cf8 <\cf7 int\cf8 >\cf0  squared \cf8 =\cf0  \cf8 new\cf0  MapEnumerable\cf8 <\cf7 int\cf0 , \cf7 int\cf8 >\cf0 (nums, SquareIt, \cf9 null\cf0 )\cf8 ;\cf0 \
+\'a0\
+\pard\intbl\itap1\pardeftab720\sl240\ql\qnatural
+
+\f2\i \cf5 // Writes: 1, 4, 9
+\f1\i0 \cf0 \
+Console.\cf9 WriteLine\cf0 (EnumerableUtilities.\cf9 JoinEnumerator\cf0 (\cf10 ", "\cf0 , squared))\cf8 ;\cf0 \cell \lastrow\row
+\pard\pardeftab720\sl380\ql\qnatural
+
+\f0\fs26 \cf0 \
+\pard\pardeftab720\sl380\sa220\ql\qnatural
+
+\fs38 \cf0 SkipEnumerable\
+\pard\pardeftab720\sl380\sa120\ql\qnatural
+
+\f1\fs20 \cf0 \cb4 SkipEnumerable<T>
+\f0\fs26 \cb1  reproduces the contents of another 
+\f1\fs20 \cb4 IEnumeration<T>
+\f0\fs26 \cb1  with the exception of one element, using delayed operations.\
+\pard\pardeftab720\sl380\qc
+\cf0 Example: Remove any square numbers from a list of numbers\
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trcbpat6 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth8640\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sl240\ql\qnatural
+
+\f2\i\fs20 \cf5 // Remove all the square numbers
+\f1\i0 \cf0 \
+\pard\intbl\itap1\pardeftab720\sl240\ql\qnatural
+\cf7 int\cf0 [] nums \cf8 =\cf0  \cf8 new\cf0  \cf7 int\cf0 [] \{1, 2, 3, 4, 5, 6, 7, 8, 9\}\cf8 ;\cf0 \
+IEnumerable\cf8 <\cf7 int\cf8 >\cf0  squareless \cf8 =\cf0  nums\cf8 ;\cf0 \
+\'a0\
+\pard\intbl\itap1\pardeftab720\sl240\ql\qnatural
+\cf9 foreach\cf0  (\cf7 int\cf0  num \cf9 in\cf0  nums)\
+\{\
+    \cf7 double\cf0  sqrt \cf8 =\cf0  Math.\cf9 Sqrt\cf0 (num)\cf8 ;\cf0 \
+    \cf9 if\cf0  (sqrt \cf8 ==\cf0  Math.\cf9 Round\cf0 (sqrt))\
+        squareless \cf8 =\cf0  \cf8 new\cf0  SkipEnumerable\cf8 <\cf7 int\cf8 >\cf0 (squareless, num)\cf8 ;\cf0 \
+\}\
+\'a0\
+\pard\intbl\itap1\pardeftab720\sl240\ql\qnatural
+
+\f2\i \cf5 // Writes: 2, 3, 5, 6, 7, 8
+\f1\i0 \cf0 \
+Console.\cf9 WriteLine\cf0 (EnumerableUtilities.\cf9 JoinEnumerator\cf0 (\cf10 ", "\cf0 , squareless))\cf8 ;\cf0 \cell \lastrow\row
+}
