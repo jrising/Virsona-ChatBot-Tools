@@ -20,7 +20,7 @@ namespace PluggerBase.ActionReaction.Evaluations
     //   and for each of developing IAgents are handled all in IArena
     public interface IAgent : IFastSerializable
     {
-        int Initialize(IArena arena, double salience);
+        int Initialize(IArena arena, double salience); // returns the expected time needs
         bool Complete();
     }
 
@@ -34,6 +34,12 @@ namespace PluggerBase.ActionReaction.Evaluations
             arena = new ImmediateArena();
             salience = 1.0;
         }
+		
+		public double Salience {
+			get {
+				return salience;
+			}
+		}
 
         #region IAgent Members
 

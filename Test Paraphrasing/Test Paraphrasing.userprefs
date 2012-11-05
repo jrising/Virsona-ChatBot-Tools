@@ -1,14 +1,18 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Test Paraphrasing/Main.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../DummyWordNet/DummyWordNetInterface.cs">
     <Files>
       <File FileName="Test Paraphrasing/Main.cs" Line="30" Column="64" />
+      <File FileName="../Grammarian/GroupPhrase.cs" Line="1" Column="1" />
+      <File FileName="../Grammarian/GrammarParser.cs" Line="13" Column="19" />
+      <File FileName="../PluggerBase/PluggerBase/IDataSource.cs" Line="28" Column="2" />
+      <File FileName="../DummyWordNet/DummyWordNetInterface.cs" Line="1" Column="1" />
+      <File FileName="../DummyWordNet/SynonymSource.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="PluggerBase" selected="True" />
-          <Node name="Test Paraphrasing" expanded="True" />
+          <Node name="DummyWordNet" selected="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">

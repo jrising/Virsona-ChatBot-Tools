@@ -21,3 +21,4 @@ namespace PluggerBase
         bool Receive(string message, object reference);
     }
 }
+	

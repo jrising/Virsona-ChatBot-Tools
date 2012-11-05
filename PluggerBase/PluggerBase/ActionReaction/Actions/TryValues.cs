@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Text;
 using PluggerBase.ActionReaction.Evaluations;
 
-namespace PluggerBase.ActionReaction.ActionReaction
+namespace PluggerBase.ActionReaction.Actions
 {
     // Call cont on each element in value (an enumerable of T), with the failure being to continue down enumerables
     class TryValues<T> : AgentBase, ICallable

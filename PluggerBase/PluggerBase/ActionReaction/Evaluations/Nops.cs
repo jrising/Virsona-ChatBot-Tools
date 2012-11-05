@@ -13,7 +13,7 @@ using System.Text;
 
 namespace PluggerBase.ActionReaction.Evaluations
 {
-    public class NopCallable : ICallable, IContinuation, IFailure
+    public class NopCallable : ICallable, IContinuation, IFailure, IEvaluable
     {
         public NopCallable()
         {
@@ -54,5 +54,17 @@ namespace PluggerBase.ActionReaction.Evaluations
         }
 
         #endregion
+		
+        #region IEvaluable Members
+
+        public int Evaluate()
+        {
+            return 1;
+        }
+
+        #endregion
+
     }
+	
+	
 }

@@ -24,7 +24,11 @@ namespace LanguageNet.Grammarian
             this.part = part;
             this.branches = branches;
         }
-
+		
+		public GroupPhrase(IParsedPhrase copy)
+			: this(copy.Part, copy.Branches) {
+		}
+		
         #region IParsedPhrase Members
 
         // Recursively get Text on all branches and concatenate
@@ -61,7 +65,57 @@ namespace LanguageNet.Grammarian
         }
 
         #endregion
+		
+		public IEnumerable<IParsedPhrase> GetRange(int start) {
+			IEnumerator<IParsedPhrase> e = branches.GetEnumerator();
+			int i = 0;
+			while (i < start && e.MoveNext())
+				i++;
+			while (e.MoveNext()) {
+				yield return e.Current;
+				i++;
+		    }
+		}
+		
+		public IParsedPhrase GetBranch(int which) {
+			IEnumerator<IParsedPhrase> e = branches.GetEnumerator();
+			int i = 0;
+			while (i < which && e.MoveNext())
+				i++;
+			return e.Current;
+		}
+		
+		public IParsedPhrase FindBranch(string part) {
+			IEnumerator<IParsedPhrase> e = branches.GetEnumerator();
+			while (e.MoveNext())
+				if (e.Current.Part == part)
+					return e.Current;
+			return null;
+		}
+				
+		public int Count {
+			get {
+				IEnumerator<IParsedPhrase> e = branches.GetEnumerator();
+				int i = 0;
+				while (e.MoveNext())
+					i++;
+				return i;
+			}
+		}
+		
+		public static List<string> PhraseToTexts(IParsedPhrase phrase) {
+            List<string> words = new List<string>();
+			if (phrase is WordPhrase)
+				words.Add(phrase.Text);
+			else {
+				GroupPhrase groupPhrase = (GroupPhrase) phrase;
+	            foreach (IParsedPhrase branch in groupPhrase.branches)
+	                words.AddRange(PhraseToTexts(branch));
+			}
 
+            return words;
+		}
+		
         #region ICloneable Members
 
         public object Clone()

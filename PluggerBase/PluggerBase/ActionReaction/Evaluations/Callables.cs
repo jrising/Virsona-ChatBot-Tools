@@ -7,6 +7,7 @@
  *                      (see license.txt and license.lesser.txt)
  *      -----------------------------------------------------------
  * Basic classes for callables
+ * Callables are called with continuations
 \******************************************************************/
 using System;
 using System.Collections.Generic;

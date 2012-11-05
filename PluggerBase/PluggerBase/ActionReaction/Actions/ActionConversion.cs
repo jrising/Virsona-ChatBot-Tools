@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Text;
 using PluggerBase.ActionReaction.Evaluations;
 using PluggerBase.ActionReaction.Interfaces;
-using PluggerBase.ActionReaction.ActionReaction;
 
 namespace PluggerBase.ActionReaction.Actions
 {

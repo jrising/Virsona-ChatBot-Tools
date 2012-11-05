@@ -144,6 +144,7 @@ namespace PluggerBase
                 try
                 {
                     Assembly assembly = Assembly.LoadFrom(dll);
+					receiver.Receive(dll + " loaded", assembly);
                 }
                 catch (Exception e)
                 {

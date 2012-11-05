@@ -26,6 +26,11 @@ namespace LanguageNet.Grammarian
             this.text = text;
             this.part = part;
         }
+		
+		public WordPhrase(string text) {
+			this.text = text;
+			this.part = "??"; // unknown part
+		}
 
         #region IParsedPhrase Members
 
@@ -58,7 +63,7 @@ namespace LanguageNet.Grammarian
         }
 
         #endregion
-
+		
         #region ICloneable Members
 
         public object Clone()
