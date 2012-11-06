@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentParser", "AgentParser.csproj", "{3700E5DE-B669-41FB-A815-30DCB7E34466}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluggerBase", "..\PluggerBase\PluggerBase\PluggerBase.csproj", "{4D2297C0-FE51-4056-80CD-A72469075B10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grammarian", "..\Grammarian\Grammarian.csproj", "{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3700E5DE-B669-41FB-A815-30DCB7E34466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3700E5DE-B669-41FB-A815-30DCB7E34466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3700E5DE-B669-41FB-A815-30DCB7E34466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3700E5DE-B669-41FB-A815-30DCB7E34466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = AgentParser.csproj
+	EndGlobalSection
+EndGlobal
