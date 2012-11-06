@@ -1,0 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Tools.SearchTree
+{
+    public enum RandomSearchQuality
+    {
+        Fast,
+        Exact
+    }
+
+    public class SalienceUtilities
+    {
+    }
+}

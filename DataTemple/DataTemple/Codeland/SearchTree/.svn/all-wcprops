@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/virsona/!svn/ver/2/trunk/Utils/Tools/Tools/SearchTree
+END
+RedBlackNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/virsona/!svn/ver/2/trunk/Utils/Tools/Tools/SearchTree/RedBlackNode.cs
+END
+SalienceList.cs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/virsona/!svn/ver/2/trunk/Utils/Tools/Tools/SearchTree/SalienceList.cs
+END
+SalienceUtilities.cs
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/virsona/!svn/ver/2/trunk/Utils/Tools/Tools/SearchTree/SalienceUtilities.cs
+END
+SalienceTree.cs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/virsona/!svn/ver/2/trunk/Utils/Tools/Tools/SearchTree/SalienceTree.cs
+END
+RedBlackException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/virsona/!svn/ver/2/trunk/Utils/Tools/Tools/SearchTree/RedBlackException.cs
+END
+RedBlackTree.cs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/virsona/!svn/ver/2/trunk/Utils/Tools/Tools/SearchTree/RedBlackTree.cs
+END
+ISalienceSet.cs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/virsona/!svn/ver/2/trunk/Utils/Tools/Tools/SearchTree/ISalienceSet.cs
+END
+RedBlackEnumerator.cs
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/virsona/!svn/ver/2/trunk/Utils/Tools/Tools/SearchTree/RedBlackEnumerator.cs
+END

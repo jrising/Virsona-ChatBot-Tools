@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/virsona/!svn/ver/2/trunk/WordNet/wndll/wndll/ConceptNet
+END
+ConceptNetUtilities.cs
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/virsona/!svn/ver/2/trunk/WordNet/wndll/wndll/ConceptNet/ConceptNetUtilities.cs
+END
+Notion.cs
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/virsona/!svn/ver/2/trunk/WordNet/wndll/wndll/ConceptNet/Notion.cs
+END
+Assertion.cs
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/virsona/!svn/ver/2/trunk/WordNet/wndll/wndll/ConceptNet/Assertion.cs
+END
+Associator.cs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/virsona/!svn/ver/2/trunk/WordNet/wndll/wndll/ConceptNet/Associator.cs
+END

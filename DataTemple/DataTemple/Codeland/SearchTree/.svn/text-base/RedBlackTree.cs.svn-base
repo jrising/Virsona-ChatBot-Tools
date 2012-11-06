@@ -1,0 +1,941 @@
+/******************************************************************\
+ *      Class Name:     RedBlackTree
+ *      Written By:     James.R
+ *      Copyright:      Virsona Inc
+ *      -----------------------------------------------------------
+ *
+\******************************************************************/
+// Modified from online source!
+///<summary>
+///A red-black tree must satisfy these properties:
+///
+///1. The root is black. 
+///2. All leaves are black. 
+///3. Red nodes can only have black children. 
+///4. All paths from a node to its leaves contain the same number of black nodes.
+///</summary>
+
+using System.Collections;
+using System.Text;
+using System;
+using System.Reflection;
+using System.Collections.Generic;
+
+namespace Tools.SearchTree
+{
+    public class RedBlackTree<KeyType, DataType> : IDictionary<KeyType, DataType>, IFastSerializable
+        where KeyType : IComparable<KeyType>
+	{
+        // tree node colors
+        public static int RED = 0;
+        public static int BLACK = 1;
+
+        // the number of nodes contained in the tree
+		protected int intCount;
+		// the tree
+        public RedBlackNode<KeyType, DataType> rbTree;
+        // the node that was last found; used to optimize searches
+        protected RedBlackNode<KeyType, DataType> lastNodeFound;
+
+        public RedBlackTree() 
+        {
+            rbTree              = null;
+            lastNodeFound       = null;
+        }
+
+        /***** Add Operation *****/
+				
+		///<summary>
+		/// Add
+		/// args: ByVal key As IComparable, ByVal data As Object
+		/// key is object that implements IComparable interface
+		/// performance tip: change to use use int type (such as the hashcode)
+		///</summary>
+		public virtual void Add(KeyType key, DataType data)
+		{
+            try
+            {
+                if (key == null || data == null)
+                    throw (new RedBlackException("RedBlackNode key and data must not be null"));
+
+                // traverse tree - find where node belongs
+                int result = 0;
+                // create new node
+                RedBlackNode<KeyType, DataType> node = new RedBlackNode<KeyType, DataType>();
+                RedBlackNode<KeyType, DataType> temp = rbTree;				// grab the rbTree node of the tree
+
+                while (temp != null)
+                {	// find Parent
+                    node.Parent = temp;
+                    result = key.CompareTo(temp.Key);
+                    if (result == 0)
+                    {
+                        if (temp.Left == null || temp.Right == null)
+                            break; // good enough!
+                    }
+                    if (result > 0)
+                        temp = temp.Right;
+                    else
+                        temp = temp.Left;
+                }
+
+                // setup node
+                node.Key = key;
+                node.Data = data;
+                node.Left = null;
+                node.Right = null;
+
+                // insert node into tree starting at parent's location
+                if (node.Parent != null)
+                {
+                    result = node.Key.CompareTo(node.Parent.Key);
+                    if (result == 0)
+                    {
+                        if (node.Parent.Right == null)
+                            node.Parent.Right = node;
+                        else
+                            node.Parent.Left = node;
+                    }
+                    else
+                    {
+                        if (result > 0)
+                            node.Parent.Right = node;
+                        else
+                            node.Parent.Left = node;
+                    }
+                }
+                else
+                    rbTree = node;					// first node added
+
+                RestoreAfterInsert(node);           // restore red-black properities
+
+                lastNodeFound = node;
+
+                intCount = intCount + 1;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("RedBlackTree::Add threw " + e.Message);
+            }
+		}
+        ///<summary>
+        /// RestoreAfterInsert
+        /// Additions to red-black trees usually destroy the red-black 
+        /// properties. Examine the tree and restore. Rotations are normally 
+        /// required to restore it
+        ///</summary>
+        private void RestoreAfterInsert(RedBlackNode<KeyType, DataType> x)
+		{   
+            // x and y are used as variable names for brevity, in a more formal
+            // implementation, you should probably change the names
+
+            RedBlackNode<KeyType, DataType> y;
+
+			// maintain red-black tree properties after adding x
+            while (x != rbTree && x.Parent.Color == RED)
+			{
+				// Parent node is .Colored red; 
+				if(x.Parent == x.Parent.Parent.Left)	// determine traversal path			
+				{										// is it on the Left or Right subtree?
+					y = x.Parent.Parent.Right;			// get uncle
+                    if (y != null && y.Color == RED)
+					{	// uncle is red; change x's Parent and uncle to black
+                        x.Parent.Color = BLACK;
+                        y.Color = BLACK;
+						// grandparent must be red. Why? Every red node that is not 
+						// a leaf has only black children 
+                        x.Parent.Parent.Color = RED;	
+						x						= x.Parent.Parent;	// continue loop with grandparent
+					}	
+					else
+					{
+						// uncle is black; determine if x is greater than Parent
+						if(x == x.Parent.Right) 
+						{	// yes, x is greater than Parent; rotate Left
+							// make x a Left child
+							x = x.Parent;
+							RotateLeft(x);
+						}
+						// no, x is less than Parent
+						x.Parent.Color			= BLACK;	// make Parent black
+						x.Parent.Parent.Color	= RED;		// make grandparent black
+						RotateRight(x.Parent.Parent);					// rotate right
+					}
+				}
+				else
+				{	// x's Parent is on the Right subtree
+					// this code is the same as above with "Left" and "Right" swapped
+					y = x.Parent.Parent.Left;
+					if(y!= null && y.Color == RED)
+					{
+						x.Parent.Color			= BLACK;
+						y.Color					= BLACK;
+						x.Parent.Parent.Color	= RED;
+						x						= x.Parent.Parent;
+					}
+					else
+					{
+						if(x == x.Parent.Left)
+						{
+							x = x.Parent;
+							RotateRight(x);
+						}
+						x.Parent.Color			= BLACK;
+						x.Parent.Parent.Color	= RED;
+						RotateLeft(x.Parent.Parent);
+					}
+				}																													
+			}
+            if (rbTree != null)
+    			rbTree.Color = BLACK;		// rbTree should always be black
+		}
+		
+		///<summary>
+		/// RotateLeft
+		/// Rebalance the tree by rotating the nodes to the left
+		///</summary>
+        public void RotateLeft(RedBlackNode<KeyType, DataType> x)
+		{
+			// pushing node x down and to the Left to balance the tree. x's Right child (y)
+			// replaces x (since y > x), and y's Left child becomes x's Right child 
+			// (since it's < y but > x).
+
+            RedBlackNode<KeyType, DataType> y = x.Right;			// get x's Right node, this becomes y
+
+			// set x's Right link
+			x.Right = y.Left;					// y's Left child's becomes x's Right child
+
+			// modify parents
+			if(y.Left != null) 
+				y.Left.Parent = x;				// sets y's Left Parent to x
+
+            if(y != null)
+			    y.Parent = x.Parent;			// set y's Parent to x's Parent
+
+			if(x.Parent != null)		
+			{	// determine which side of it's Parent x was on
+				if(x == x.Parent.Left)			
+					x.Parent.Left = y;			// set Left Parent to y
+				else
+					x.Parent.Right = y;			// set Right Parent to y
+			} 
+			else 
+				rbTree = y;						// at rbTree, set it to y
+
+			// link x and y 
+			y.Left = x;							// put x on y's Left 
+			if(x != null)						// set y as x's Parent
+				x.Parent = y;		
+		}
+		///<summary>
+		/// RotateRight
+		/// Rebalance the tree by rotating the nodes to the right
+		///</summary>
+        public void RotateRight(RedBlackNode<KeyType, DataType> x)
+		{
+			// pushing node x down and to the Right to balance the tree. x's Left child (y)
+			// replaces x (since x < y), and y's Right child becomes x's Left child 
+			// (since it's < x but > y).
+
+            RedBlackNode<KeyType, DataType> y = x.Left;			// get x's Left node, this becomes y
+
+			// set x's Right link
+			x.Left = y.Right;					// y's Right child becomes x's Left child
+
+			// modify parents
+			if(y.Right != null) 
+				y.Right.Parent = x;				// sets y's Right Parent to x
+
+            if(y != null)
+                y.Parent = x.Parent;			// set y's Parent to x's Parent
+
+			if(x.Parent != null)				// null=rbTree, could also have used rbTree
+			{	// determine which side of it's Parent x was on
+				if(x == x.Parent.Right)			
+					x.Parent.Right = y;			// set Right Parent to y
+				else
+					x.Parent.Left = y;			// set Left Parent to y
+			} 
+			else 
+				rbTree = y;						// at rbTree, set it to y
+
+			// link x and y 
+			y.Right = x;						// put x on y's Right
+			if(x != null)				// set y as x's Parent
+				x.Parent = y;		
+		}
+
+        public void Add(KeyValuePair<KeyType, DataType> kvp)
+        {
+            Add(kvp.Key, kvp.Value);
+        }
+
+        /***** Remove Operation *****/
+
+		///<summary>
+		/// Remove
+		/// removes the key and data object (delete)
+		///<summary>
+		public virtual bool Remove(KeyType key)
+		{
+            if(key == null)
+                throw(new ArgumentNullException());
+		
+			// find node
+            RedBlackNode<KeyType, DataType> node = Search(key);
+            if (node == null)
+                return false;   // not found!
+
+			Delete(node);
+
+            return true;
+		}
+		///<summary>
+		/// Delete
+		/// Delete a node from the tree and restore red black properties
+		///<summary>
+        public void Delete(RedBlackNode<KeyType, DataType> z)
+		{
+            try
+            {
+                // A node to be deleted will be: 
+                //		1. a leaf with no children
+                //		2. have one child
+                //		3. have two children
+                // If the deleted node is red, the red black properties still hold.
+                // If the deleted node is black, the tree needs rebalancing
+
+                RedBlackNode<KeyType, DataType> x; // work node to contain the replacement node
+                RedBlackNode<KeyType, DataType> y; // work node 
+
+                // find the replacement node (the successor to x) - the node one with 
+                // at *most* one child. 
+                if (z.Left == null || z.Right == null)
+                    y = z;						// node has sentinel as a child
+                else
+                {
+                    // z has two children, find replacement node which will 
+                    // be the leftmost node greater than z
+                    y = z.Right;				        // traverse right subtree	
+                    while (y.Left != null)		// to find next node in sequence
+                        y = y.Left;
+                }
+
+                // at this point, y contains the replacement node. it's content will be copied 
+                // to the valules in the node to be deleted
+
+                // x (y's only child) is the node that will be linked to y's old parent. 
+                if (y.Left != null)
+                    x = y.Left;
+                else
+                    x = y.Right;
+
+                // replace x's parent with y's parent and
+                // link x to proper subtree in parent
+                // this removes y from the chain
+                if (x != null)
+                    x.Parent = y.Parent;
+                if (y.Parent != null)
+                    if (y == y.Parent.Left)
+                        y.Parent.Left = x;
+                    else
+                        y.Parent.Right = x;
+                else
+                    rbTree = x;			// make x the root node
+
+                // copy the values from y (the replacement node) to the node being deleted.
+                // note: this effectively deletes the node. 
+                if (y != z)
+                {
+                    z.Key = y.Key;
+                    z.Data = y.Data;
+                }
+
+                if (y.Color == BLACK)
+                    RestoreAfterDelete(x, y.Parent);
+
+                lastNodeFound = null;
+
+                intCount = intCount - 1;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("RedBlackTree::RestoreAfterDelete threw " + e.Message);
+            }
+        }
+
+        ///<summary>
+        /// RestoreAfterDelete
+        /// Deletions from red-black trees may destroy the red-black 
+        /// properties. Examine the tree and restore. Rotations are normally 
+        /// required to restore it
+        ///</summary>
+		private void RestoreAfterDelete(RedBlackNode<KeyType, DataType> x, RedBlackNode<KeyType, DataType> x_parent)
+		{
+            // maintain Red-Black tree balance after deleting node 			
+
+            RedBlackNode<KeyType, DataType> y;
+
+            while (x != rbTree && (x == null || x.Color == BLACK))
+            {
+                if (x == x_parent.Left)			// determine sub tree from parent
+                {
+                    y = x_parent.Right;			// y is x's sibling 
+                    if (y.Color == RED)
+                    {	// x is black, y is red - make both black and rotate
+                        y.Color = BLACK;
+                        x_parent.Color = RED;
+                        RotateLeft(x_parent);
+                        y = x_parent.Right;
+                    }
+                    if ((y.Left == null || y.Left.Color == BLACK) &&
+                        (y.Right == null || y.Right.Color == BLACK))
+                    {	// children are both black
+                        y.Color = RED;		// change parent to red
+                        x = x_parent;					// move up the tree
+                        if (x != null)
+                            x_parent = x.Parent;
+                        else
+                            x_parent = null;
+                    }
+                    else
+                    {
+                        if (y.Right == null || y.Right.Color == BLACK)
+                        {
+                            if (y.Left != null)
+                                y.Left.Color = BLACK;
+                            y.Color = RED;
+                            RotateRight(y);
+                            y = x_parent.Right;
+                        }
+                        y.Color = x_parent.Color;
+                        x_parent.Color = BLACK;
+                        if (y.Right != null)
+                            y.Right.Color = BLACK;
+                        RotateLeft(x_parent);
+                        x = rbTree;
+                        x_parent = null;
+                    }
+                }
+                else
+                {	// right subtree - same as code above with right and left swapped
+                    y = x_parent.Left;
+                    if (y.Color == RED)
+                    {
+                        y.Color = BLACK;
+                        x_parent.Color = RED;
+                        RotateRight(x_parent);
+                        y = x_parent.Left;
+                    }
+                    if ((y.Left == null || y.Left.Color == BLACK) &&
+                        (y.Right == null || y.Right.Color == BLACK))
+                    {
+                        y.Color = RED;
+                        x = x_parent;
+                        if (x != null)
+                            x_parent = x.Parent;
+                        else
+                            x_parent = null;
+                    }
+                    else
+                    {
+                        if (y.Left == null || y.Left.Color == BLACK)
+                        {
+                            if (y.Right != null)
+                                y.Right.Color = BLACK;
+                            y.Color = RED;
+                            RotateLeft(y);
+                            y = x_parent.Left;
+                        }
+                        y.Color = x_parent.Color;
+                        x_parent.Color = BLACK;
+                        if (y.Left != null)
+                            y.Left.Color = BLACK;
+                        RotateRight(x_parent);
+                        x = rbTree;
+                        x_parent = null;
+                    }
+                }
+            }
+            if (x != null)
+                x.Color = BLACK;
+		}
+
+        // We may have multiple, so check against object
+        public virtual bool Remove(KeyType key, DataType obj)
+        {
+            if (obj == null)
+                throw (new RedBlackException("RedBlackNode object is null"));
+
+            // find node
+            RedBlackNode<KeyType, DataType> node = Search(key, obj);
+            if (node == null)
+                // not found!
+                return false;
+
+            Delete(node);
+            return true;
+        }
+
+        public bool Remove(KeyValuePair<KeyType, DataType> kvp)
+        {
+            return Remove(kvp.Key, kvp.Value);
+        }
+
+		///<summary>
+		/// RemoveMin
+		/// removes the node with the minimum key
+		///<summary>
+		public bool RemoveMin()
+		{
+            if(rbTree == null)
+                throw(new RedBlackException("RedBlackNode is null"));
+            
+             return Remove(GetMinKey());
+		}
+		///<summary>
+		/// RemoveMax
+		/// removes the node with the maximum key
+		///<summary>
+        public bool RemoveMax()
+		{
+            if(rbTree == null)
+                throw(new RedBlackException("RedBlackNode is null"));
+            
+            return Remove(GetMaxKey());
+		}
+		///<summary>
+		/// Clear
+		/// Empties or clears the tree
+		///<summary>
+		public virtual void Clear()
+		{
+			rbTree      = null;
+			intCount    = 0;
+		}
+
+        /***** Searching Functions *****/
+
+        ///<summary>
+        /// GetData
+        /// Gets the data object associated with the specified key
+        ///<summary>
+        public DataType GetData(KeyType key)
+        {
+            DataType obj;
+            TryGetValue(key, out obj);
+            return obj;
+        }
+
+        public bool TryGetValue(KeyType key, out DataType obj)
+        {
+            RedBlackNode<KeyType, DataType> node = Search(key);
+            if (node != null)
+            {
+                obj = node.Data;
+                return true;
+            } 
+
+            obj = default(DataType);
+            return false;
+        }
+
+        public bool Contains(DataType obj)
+        {
+            // Search through whole tree!
+            return ContainsUnderNode(obj, rbTree) != null;
+        }
+
+        public RedBlackNode<KeyType, DataType> ContainsUnderNode(DataType obj, RedBlackNode<KeyType, DataType> node)
+        {
+            if (node == null)
+                return null;
+
+            if (ReferenceEquals(node.Data, obj))
+                return node;
+
+            RedBlackNode<KeyType, DataType> below = ContainsUnderNode(obj, node.Left);
+            if (below != null)
+                return below;
+
+            return ContainsUnderNode(obj, node.Right);
+        }
+
+        public bool ContainsKey(KeyType key)
+        {
+            DataType obj;
+            return TryGetValue(key, out obj);
+        }
+
+        ///<summary>
+        /// GetMinKey
+        /// Returns the minimum key value
+        ///<summary>
+        public KeyType GetMinKey()
+        {
+            RedBlackNode<KeyType, DataType> treeNode = rbTree;
+
+            if (treeNode == null)
+                throw (new RedBlackException("RedBlack tree is empty"));
+
+            // traverse to the extreme left to find the smallest key
+            while (treeNode.Left != null)
+                treeNode = treeNode.Left;
+
+            lastNodeFound = treeNode;
+
+            return treeNode.Key;
+
+        }
+        ///<summary>
+        /// GetMaxKey
+        /// Returns the maximum key value
+        ///<summary>
+        public KeyType GetMaxKey()
+        {
+            RedBlackNode<KeyType, DataType> treeNode = rbTree;
+
+            if (treeNode == null)
+                throw (new RedBlackException("RedBlack tree is empty"));
+
+            // traverse to the extreme right to find the largest key
+            while (treeNode.Right != null)
+                treeNode = treeNode.Right;
+
+            lastNodeFound = treeNode;
+
+            return treeNode.Key;
+
+        }
+        ///<summary>
+        /// GetMinValue
+        /// Returns the object having the minimum key value
+        ///<summary>
+        public DataType GetMinValue()
+        {
+            return GetData(GetMinKey());
+        }
+        ///<summary>
+        /// GetMaxValue
+        /// Returns the object having the maximum key
+        ///<summary>
+        public DataType GetMaxValue()
+        {
+            return GetData(GetMaxKey());
+        }
+
+        // Search against potential several such
+        public bool Contains(KeyValuePair<KeyType, DataType> kvp)
+        {
+            RedBlackNode<KeyType, DataType> node = Search(kvp.Key);
+            if (node == null)
+                return false;
+
+            // there could be several of these!
+            return SearchRecursive(kvp.Key, kvp.Value, node) != null;
+        }
+
+        // return the whole node-- used by other functions
+        public RedBlackNode<KeyType, DataType> Search(KeyType key)
+        {
+            int result;
+            RedBlackNode<KeyType, DataType> node;
+
+            // see if node to be deleted was the last one found
+            if (lastNodeFound != null && key.CompareTo(lastNodeFound.Key) == 0)
+            {
+                node = lastNodeFound;
+                // but might have same key as above-- so go up!
+                RedBlackNode<KeyType, DataType> found = node;
+                while (found != null) {
+                    while (node.Parent != null && key.CompareTo(node.Parent.Key) == 0)
+                        node = node.Parent;
+                    found = node.Parent;
+                    // and there might be more further up, above the differents!
+                    while (found != null && key.CompareTo(found.Key) != 0)
+                        found = found.Parent;
+                    if (found != null)
+                        node = found;
+                }
+            }
+            else
+            {	// not found, must search		
+                node = rbTree;
+                while (node != null)
+                {
+                    result = key.CompareTo(node.Key);
+                    if (result == 0)
+                        break;
+                    if (result < 0)
+                        node = node.Left;
+                    else
+                        node = node.Right;
+                }
+
+                if (node == null)
+                    return null;				// key not found
+            }
+
+            return node;
+        }
+
+        public RedBlackNode<KeyType, DataType> Search(KeyType key, DataType obj)
+        {
+            RedBlackNode<KeyType, DataType> node = Search(key);
+            if (node == null)
+                return null;
+
+            return SearchRecursive(key, obj, node);
+        }
+
+        public RedBlackNode<KeyType, DataType> SearchRecursive(KeyType key, DataType obj, RedBlackNode<KeyType, DataType> node)
+        {
+            if (ReferenceEquals(node.Data, obj))
+                return node;
+            if (node == null)
+                return null;
+
+            // One side or the other (or both) ought to be the same key
+            RedBlackNode<KeyType, DataType> found = null;
+            if (node.Left != null) {
+                if (key.CompareTo(node.Left.Key) == 0)
+                    found = SearchRecursive(key, obj, node.Left);
+                else {
+                    // scale down the right side-- there might be more!
+                    RedBlackNode<KeyType, DataType> below = node.Left;
+                    while (below != null && key.CompareTo(below.Key) != 0)
+                        below = below.Right;
+                    if (below != null)
+                        found = SearchRecursive(key, obj, below);
+                }
+            }
+            if (found == null && node.Right != null)
+            {
+                int rightResult = key.CompareTo(node.Right.Key);
+                if (rightResult == 0)
+                    found = SearchRecursive(key, obj, node.Right);
+                else
+                {
+                    // scale down the left side-- there might be more!
+                    RedBlackNode<KeyType, DataType> below = node.Right;
+                    while (below != null && key.CompareTo(below.Key) != 0)
+                        below = below.Left;
+                    if (below != null)
+                        found = SearchRecursive(key, obj, below);
+                }
+            }
+
+            return found;
+        }
+
+        /***** Basic Information *****/
+
+        ///<summary>
+        /// IsEmpty
+        /// Is the tree empty?
+        ///<summary>
+        public bool IsEmpty()
+        {
+            return (rbTree == null);
+        }
+
+        ///<summary>
+        /// Count
+        /// Return the number of elements contained in the tree
+        ///<summary>
+        public int Count
+        {
+            get
+            {
+                return intCount;
+            }
+        }
+
+        public bool IsReadOnly {
+            get {
+                return false;
+            }
+        }
+
+        public override string ToString()
+        {
+            if (rbTree == null)
+                return "empty";
+            else
+                return Display(rbTree);
+        }
+
+        protected string Display(RedBlackNode<KeyType, DataType> curr)
+        {
+            if (curr != null)
+                return "[" + Display(curr.Left) + "<" + curr.ToString() + ">" + Display(curr.Right) + "]";
+            else if (curr == null)
+                return "x";     // shouldn't get these!
+            else
+                return "o";
+        }
+
+        /***** Enumeration *****/
+
+        ///<summary>
+        /// GetNodeEnumerator
+        /// return an enumerator that returns the tree nodes in order
+        ///<summary>
+        public RedBlackEnumerator<KeyType, DataType> GetNodeEnumerator()
+        {
+            // elements is simply a generic name to refer to the 
+            // data objects the nodes contain
+            return GetNodeEnumerator(true);
+        }
+        ///<summary>
+        /// GetEnumerator
+        /// Returns an enumeration of the data objects.
+        /// if(ascending is true, the objects will be returned in ascending order,
+        /// else the objects will be returned in descending order.
+        ///<summary>
+        public RedBlackEnumerator<KeyType, DataType> GetNodeEnumerator(bool ascending)
+        {
+            return new RedBlackEnumerator<KeyType, DataType>(rbTree, ascending);
+        }
+
+        IEnumerator<KeyValuePair<KeyType, DataType>> IEnumerable<KeyValuePair<KeyType, DataType>>.GetEnumerator()
+        {
+            return new RedBlackEnumerator<KeyType, DataType>(rbTree, true);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new RedBlackEnumerator<KeyType, DataType>.DataOnly(rbTree, true);
+        }
+
+        public ICollection<KeyType> Keys {
+            get {
+                RedBlackEnumerator<KeyType, DataType> enumerator = GetNodeEnumerator();
+                List<KeyType> keys = new List<KeyType>();
+                while (enumerator.HasMoreElements())
+                {
+                    keys.Add(enumerator.NextElement().Key);
+                }
+
+                return keys;
+            }
+        }
+
+        public ICollection<DataType> Values
+        {
+            get
+            {
+                RedBlackEnumerator<KeyType, DataType> enumerator = GetNodeEnumerator();
+                List<DataType> values = new List<DataType>();
+                while (enumerator.HasMoreElements())
+                {
+                    values.Add(enumerator.NextElement().Data);
+                }
+
+                return values;
+            }
+        }
+
+        /***** Other Operations *****/
+
+        public void CopyTo(DataType[] array, int arrayIndex)
+        {
+            RedBlackEnumerator<KeyType, DataType> enumerator = GetNodeEnumerator();
+            while (enumerator.HasMoreElements())
+            {
+                array[arrayIndex++] = enumerator.NextElement().Data;
+            }
+        }
+
+        public void CopyTo(KeyValuePair<KeyType, DataType>[] array, int arrayIndex)
+        {
+            RedBlackEnumerator<KeyType, DataType> enumerator = GetNodeEnumerator();
+            while (enumerator.HasMoreElements())
+            {
+                RedBlackNode<KeyType, DataType> node = enumerator.NextElement();
+                array[arrayIndex++] = new KeyValuePair<KeyType, DataType>(node.Key, node.Data);
+            }
+        }
+
+        public DataType this[KeyType key]
+        {
+            get
+            {
+                DataType obj;
+                if (TryGetValue(key, out obj))
+                    return obj;
+                else
+                    throw new ArgumentOutOfRangeException();
+            }
+            set
+            {
+                // always add!
+                Add(key, value);
+            }
+        }
+
+        public virtual bool TestIntegrity()
+        {
+            // Go down nodes, ensuring red/black rules, order and that parents
+            if (rbTree == null)
+                return true;
+
+            if (rbTree.Parent != null || rbTree.Color != BLACK)
+                return false;
+
+            return TestIntegrityNode(rbTree) > 0;
+        }
+
+        // returns -# for failure, or number of blacks to leaves
+        public virtual int TestIntegrityNode(RedBlackNode<KeyType, DataType> node)
+        {
+            if (node == null)
+                return 1;
+
+            if (node.Left != null)
+            {
+                if (node.Left.Parent != node)
+                    return -1;
+                if (node.Left.Key.CompareTo(node.Key) > 0)
+                    return -3;
+            }
+            if (node.Right != null)
+            {
+                if (node.Right.Parent != node)
+                    return -2;
+                if (node.Right.Key.CompareTo(node.Key) < 0)
+                    return -4;
+            }
+            if (node.Color == RED && ((node.Left != null && node.Left.Color == RED) || (node.Right != null && node.Right.Color == RED)))
+                return -5;
+
+            // Recurse!  Count the number of blacks below us
+            int leftCount = TestIntegrityNode(node.Left);
+            int rightCount = TestIntegrityNode(node.Right);
+            if (leftCount != rightCount)
+                return -6;
+
+            return leftCount + (node.Color == BLACK ? 1 : 0);
+        }
+    
+        #region IFastSerializable Members
+
+        public virtual void Deserialize(SerializationReader reader)
+        {
+            intCount = reader.ReadInt32();  // intCount = info.GetInt32("intCount");
+            rbTree = (RedBlackNode<KeyType, DataType>) reader.ReadPointer();  // rbTree = (RedBlackNode<KeyType, DataType>)info.GetValue("rbTree", typeof(RedBlackNode<KeyType, DataType>));
+            lastNodeFound = null;
+        }
+
+        public virtual void Serialize(SerializationWriter writer)
+        {
+            writer.Write(intCount); // info.AddValue("intCount", intCount);
+            if (rbTree == null)
+                writer.WritePointer(null);      // info.AddValue("rbTree", null);
+            else
+                writer.WritePointer(rbTree);    // info.AddValue("rbTree", rbTree);
+        }
+
+        #endregion
+}
+}

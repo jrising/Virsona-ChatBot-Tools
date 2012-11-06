@@ -1,0 +1,4 @@
+The first version of extractor finds all sentences or phrases that match a given template in a file.
+
+The template can use the following elements:
+

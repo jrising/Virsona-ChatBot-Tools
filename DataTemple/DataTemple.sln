@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTemple", "DataTemple\DataTemple.csproj", "{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluggerBase", "..\PluggerBase\PluggerBase\PluggerBase.csproj", "{4D2297C0-FE51-4056-80CD-A72469075B10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grammarian", "..\Grammarian\Grammarian.csproj", "{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericTools", "..\GenericTools\GenericTools.csproj", "{7AEB4A15-8603-4675-B636-98DA6292291A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Debug|x86.Build.0 = Debug|Any CPU
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D2297C0-FE51-4056-80CD-A72469075B10}.Release|x86.Build.0 = Release|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Debug|x86.Build.0 = Debug|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Release|x86.ActiveCfg = Release|Any CPU
+		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Release|x86.Build.0 = Release|Any CPU
+		{7AEB4A15-8603-4675-B636-98DA6292291A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7AEB4A15-8603-4675-B636-98DA6292291A}.Debug|x86.Build.0 = Debug|Any CPU
+		{7AEB4A15-8603-4675-B636-98DA6292291A}.Release|x86.ActiveCfg = Release|Any CPU
+		{7AEB4A15-8603-4675-B636-98DA6292291A}.Release|x86.Build.0 = Release|Any CPU
+		{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}.Debug|x86.ActiveCfg = Debug|x86
+		{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}.Debug|x86.Build.0 = Debug|x86
+		{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}.Release|x86.ActiveCfg = Release|x86
+		{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = DataTemple\DataTemple.csproj
+	EndGlobalSection
+EndGlobal

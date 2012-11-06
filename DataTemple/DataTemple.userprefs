@@ -1,0 +1,29 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="DataTemple/Main.cs">
+    <Files>
+      <File FileName="DataTemple/Main.cs" Line="54" Column="18" />
+      <File FileName="DataTemple/CommandLineArguments.cs" Line="28" Column="40" />
+      <File FileName="../PluggerBase/PluggerBase/PluginEnvironment.cs" Line="139" Column="35" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="DataTemple" expanded="True" selected="True">
+            <Node name="AgentEvaluate" expanded="True" />
+          </Node>
+          <Node name="PluggerBase" expanded="True" />
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/jrising/projects/virsona/github/DataTemple/DataTemple/Matcher.cs" line="23" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

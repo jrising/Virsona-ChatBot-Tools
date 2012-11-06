@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>DataTemple</RootNamespace>
+    <AssemblyName>DataTemple</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+    <Commandlineparameters>-d "/Users/jrising/projects/virsona/github/data" -i "There was a dog.  The dog ate a bone.  That is it." -t "%sentence The dog %verb %noun" -c "@print Fido is reported to %verbx %noun."</Commandlineparameters>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Formation\AmbiguousPhrase.cs" />
+    <Compile Include="Formation\AmbiguousPhrasePointer.cs" />
+    <Compile Include="Formation\AnyStartMatcher.cs" />
+    <Compile Include="Formation\PatternMatch.cs" />
+    <Compile Include="Formation\SerialMatcher.cs" />
+    <Compile Include="Formation\StringTokenMatcher.cs" />
+    <Compile Include="Formation\TempleMatcher.cs" />
+    <Compile Include="Formation\WildcardMatcher.cs" />
+    <Compile Include="Codeland\SearchTree\ISalienceSet.cs" />
+    <Compile Include="Codeland\SearchTree\RedBlackEnumerator.cs" />
+    <Compile Include="Codeland\SearchTree\RedBlackException.cs" />
+    <Compile Include="Codeland\SearchTree\RedBlackNode.cs" />
+    <Compile Include="Codeland\SearchTree\RedBlackTree.cs" />
+    <Compile Include="Codeland\SearchTree\SalienceList.cs" />
+    <Compile Include="Codeland\SearchTree\SalienceTree.cs" />
+    <Compile Include="Codeland\SearchTree\SalienceUtilities.cs" />
+    <Compile Include="Variables\AbstractVariables.cs" />
+    <Compile Include="Variables\GrammarVariables.cs" />
+    <Compile Include="Variables\KnowledgeVariables.cs" />
+    <Compile Include="Variables\MathVariables.cs" />
+    <Compile Include="Variables\ProgramVariables.cs" />
+    <Compile Include="Codeland\IResultReceiver.cs" />
+    <Compile Include="AgentEvaluate\CallAgent.cs" />
+    <Compile Include="AgentEvaluate\Context.cs" />
+    <Compile Include="AgentEvaluate\IContent.cs" />
+    <Compile Include="AgentEvaluate\Special.cs" />
+    <Compile Include="AgentEvaluate\Word.cs" />
+    <Compile Include="AgentEvaluate\Evaluator.cs" />
+    <Compile Include="Codeland\IReusable.cs" />
+    <Compile Include="ConceptNet\Assertion.cs" />
+    <Compile Include="ConceptNet\Associator.cs" />
+    <Compile Include="ConceptNet\ConceptNetUtilities.cs" />
+    <Compile Include="ConceptNet\Notion.cs" />
+    <Compile Include="AgentEvaluate\ContinueCodelet.cs" />
+    <Compile Include="Codeland\Codelet.cs" />
+    <Compile Include="AgentEvaluate\ContinueAgentCodelet.cs" />
+    <Compile Include="Codeland\RecipientCodelet.cs" />
+    <Compile Include="AgentEvaluate\Value.cs" />
+    <Compile Include="AgentEvaluate\ContextAppender.cs" />
+    <Compile Include="AgentEvaluate\ContinueToCallAgent.cs" />
+    <Compile Include="AgentEvaluate\ContinuationAppender.cs" />
+    <Compile Include="Codeland\ZippyCoderack.cs" />
+    <Compile Include="Codeland\Coderack.cs" />
+    <Compile Include="Codeland\DescriptorCodelet.cs" />
+    <Compile Include="Codeland\Profiler.cs" />
+    <Compile Include="Codeland\CodeletEvaluableWrapper.cs" />
+    <Compile Include="AgentEvaluate\CallAgentWrapper.cs" />
+    <Compile Include="AgentEvaluate\Interpreter.cs" />
+    <Compile Include="Variables\OutputVariables.cs" />
+    <Compile Include="Matching\BestScore.cs" />
+    <Compile Include="Matching\Concept.cs" />
+    <Compile Include="Matching\ConceptTranslator.cs" />
+    <Compile Include="Matching\Datum.cs" />
+    <Compile Include="Matching\DictumMaker.cs" />
+    <Compile Include="Matching\IDeclinable.cs" />
+    <Compile Include="Matching\KnowledgeUtilities.cs" />
+    <Compile Include="Matching\Matcher.cs" />
+    <Compile Include="Matching\MatchProduceAgent.cs" />
+    <Compile Include="Matching\Memory.cs" />
+    <Compile Include="Matching\PatternTemplateSource.cs" />
+    <Compile Include="Matching\ProbableStrength.cs" />
+    <Compile Include="Matching\Relations.cs" />
+    <Compile Include="Matching\StarEater.cs" />
+    <Compile Include="Matching\StarUtilities.cs" />
+    <Compile Include="Matching\Thinker.cs" />
+    <Compile Include="Matching\ValidateUtilities.cs" />
+    <Compile Include="Matching\Variable.cs" />
+    <Compile Include="CommandLineArguments.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Grammarian\Grammarian.csproj">
+      <Project>{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}</Project>
+      <Name>Grammarian</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PluggerBase\PluggerBase\PluggerBase.csproj">
+      <Project>{4D2297C0-FE51-4056-80CD-A72469075B10}</Project>
+      <Name>PluggerBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GenericTools\GenericTools.csproj">
+      <Project>{7AEB4A15-8603-4675-B636-98DA6292291A}</Project>
+      <Name>GenericTools</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Formation\" />
+    <Folder Include="Codeland\" />
+    <Folder Include="AgentEvaluate\" />
+    <Folder Include="Matching\" />
+  </ItemGroup>
+</Project>

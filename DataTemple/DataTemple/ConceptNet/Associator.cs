@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using GenericTools;
+
+namespace LanguageNet.ConceptNet
+{
+    public class Associator
+    {
+        public readonly static ReversibleDictionary<string, Associator> RelationMap = new ReversibleDictionary<string, Associator>();
+        
+        public static readonly Associator MadeOf = GetRelation("MadeOf", "What is it made of?", "{0} is made of {1}");
+        public static readonly Associator IsA = GetRelation("IsA", "What kind of thing is it?", "{0} is a {1}");
+        public static readonly Associator UsedFor = GetRelation("UsedFor", "What do you use it for?", "{0} is used for {1}");
+        public static readonly Associator CapableOf = GetRelation("CapableOf", "What can it do?", "{0} can {1}");
+        public static readonly Associator PartOf = GetRelation("PartOf", "What is it part of?", "{0} is part of {1}");
+        public static readonly Associator DefinedAs = GetRelation("DefinedAs", "How do you define it?", "{0} is defined as {1}");
+        public static readonly Associator CreatedBy = GetRelation("CreatedBy", "How do you bring it into existence?", "{0} is created by {1}");
+        public static readonly Associator HasFirstSubevent = GetRelation("HasFirstSubevent", "What do you do first to accomplish it?", "The first thing you do when you {0} is {1}");
+        public static readonly Associator HasLastSubevent = GetRelation("HasLastSubevent", "What do you do last to accomplish it?", "The last thing you do when {0} is {1}");
+        public static readonly Associator HasPrerequisite = GetRelation("HasPrerequisite", "What do you need to do first?", "For {0}, you must {1}");
+        public static readonly Associator AtLocation = GetRelation("AtLocation", "Where would you find it?", "{0} is found in {1}");
+        public static readonly Associator MotivatedByGoal = GetRelation("MotivatedByGoal", "Why would you do it?", "You {0} because {1}");
+        public static readonly Associator Desires = GetRelation("Desires", "What does it want?", "{0} wants {1}");
+        public static readonly Associator HasPainCharacter = GetRelation("HasPainCharacter", "What is the character of pain associated with it?", "{0} hurts like {1}");
+        public static readonly Associator CausesDesire = GetRelation("CausesDesire", "What does it make you want to do?", "{0} would make you want to {1}");
+        public static readonly Associator Causes = GetRelation("Causes", "What does it make happen?", "{0} causes {1}");
+        public static readonly Associator HasSubevent = GetRelation("HasSubevent", "What do you do to accomplish it?", "{1} is a step of {0}");
+        public static readonly Associator HasProperty = GetRelation("HasProperty", "What properties does it have?", "{0} is {1}");
+        public static readonly Associator ReceivesAction = GetRelation("ReceivesAction", "What can you do to it?", "{0} can be {1}");
+        public static readonly Associator HasPainIntensity = GetRelation("HasPainIntensity", "What is the intensity of pain associated with it?", "{0} hurts as much as {1}");
+
+        protected string name;
+        protected string question;
+        protected string format;
+
+        protected Associator(string name, string question, string format)
+        {
+            this.name = name;
+            this.question = question;
+            this.format = format;
+        }
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+        }
+
+        public string Question
+        {
+            get
+            {
+                return question;
+            }
+        }
+
+        public static Associator GetRelation(string name, string question, string format)
+        {
+            Associator rel;
+            if (RelationMap.TryGetValue(name, out rel))
+                return rel;
+
+            rel = new Associator(name, question, format);
+            RelationMap.Add(name, rel);
+            return rel;
+        }
+
+        public string Express(string left, string right)
+        {
+            return string.Format(format, left, right);
+        }
+    }
+}

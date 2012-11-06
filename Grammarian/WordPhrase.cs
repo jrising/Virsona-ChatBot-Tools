@@ -16,7 +16,7 @@ namespace LanguageNet.Grammarian
 {
     public class WordPhrase : IParsedPhrase
     {
-        // the word contained
+		// the word contained
         protected string text;
         // the part of speech (usually a Penn Treebank tag)
         protected string part;

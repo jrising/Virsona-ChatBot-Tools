@@ -82,6 +82,7 @@ namespace LanguageNet.Grammarian
 			int i = 0;
 			while (i < which && e.MoveNext())
 				i++;
+			e.MoveNext();
 			return e.Current;
 		}
 		
@@ -105,10 +106,10 @@ namespace LanguageNet.Grammarian
 		
 		public static List<string> PhraseToTexts(IParsedPhrase phrase) {
             List<string> words = new List<string>();
-			if (phrase is WordPhrase)
+			if (phrase.IsLeaf)
 				words.Add(phrase.Text);
 			else {
-				GroupPhrase groupPhrase = (GroupPhrase) phrase;
+				GroupPhrase groupPhrase = new GroupPhrase(phrase);
 	            foreach (IParsedPhrase branch in groupPhrase.branches)
 	                words.AddRange(PhraseToTexts(branch));
 			}
