@@ -28,5 +28,11 @@ namespace LanguageNet.AgentParser
             : base("FRAG", constituents)
         {
         }
+		
+		public override bool IsWhole {
+			get {
+				return true;
+			}
+		}
     }
 }

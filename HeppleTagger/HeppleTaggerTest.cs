@@ -26,7 +26,7 @@ namespace HeppleTagger
             plugenv = new PluginEnvironment(this);
 
             string plugbase = "C:\\Documents and Settings\\All Users\\Application Data\\Virsona\\plugins\\";
-            plugenv.Initialize(plugbase + "config.xml", plugbase, null);
+            plugenv.Initialize(plugbase + "config.xml", null);
         }
 
         [Test]

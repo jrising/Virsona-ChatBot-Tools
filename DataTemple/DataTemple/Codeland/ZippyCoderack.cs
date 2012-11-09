@@ -33,14 +33,14 @@ namespace DataTemple.Codeland
         /// <summary> 
         /// Execute the coderack for a given amount of time
         /// </summary> 
-        public override void Execute(int time, double exitScore, bool debugMode)
+        public override void Execute(int time, bool debugMode)
         {
-            int origtime = time;
-            Profiler profiler = new Profiler();
+            //int origtime = time;
+            // Profiler profiler = new Profiler();
             SalienceList<Codelet> codelist = (SalienceList<Codelet>)codelets;
 
-            while (time > 0 && CountTop > 0 &&
-                   (profiler.GetTime() / 1000 < origtime))
+            while (time > 0 && CountTop > 0)
+                  // && (profiler.GetTime() / 1000 < origtime))
             {
                 // start from the end and move backwards, since new are added to end
                 LinkedListNode<double> keys = codelist.LinkedKeys.Last;
@@ -111,7 +111,7 @@ namespace DataTemple.Codeland
             }
 
             // Check if we're taking the time we say we are
-            long micros = (long)(profiler.GetTime() / 1000);
+            /*long micros = (long)(profiler.GetTime() / 1000);
             if (Math.Abs((origtime - time) - micros) > Math.Min((origtime - time), micros) / 100)
             {
                 receiver.Receive("Time Miscalculation: " + (origtime - time).ToString() + " units took " + micros.ToString(), this);
@@ -122,7 +122,7 @@ namespace DataTemple.Codeland
                     //throw new Exception(Profiler.AnnounceEach());
                     //SingleUserLog.Replace("Complete");
                 }
-            }
+            }*/
 
             if (time > 0)
                 receiver.Receive("Coderack Exhausted.", this);

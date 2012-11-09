@@ -116,12 +116,12 @@ namespace DataTemple.Codeland
         /// <summary> 
         /// Execute the coderack for a given amount of time
         /// </summary> 
-        public virtual void Execute(int time, double exitScore, bool debugMode) {
-            int origtime = time;
-            Profiler profiler = new Profiler();
+        public virtual void Execute(int time, bool debugMode) {
+            //int origtime = time;
+            //Profiler profiler = new Profiler();
 
-            while (time > 0 && CountTop > 0 &&
-                   (profiler.GetTime() / 1000 < origtime)) {
+            while (time > 0 && CountTop > 0) {
+                   // && (profiler.GetTime() / 1000 < origtime)) {
                 int used = ExecuteOne(debugMode);
                 if (used == 0) {
                     // This shouldn't happen-- we're out of executable codelets
@@ -132,7 +132,7 @@ namespace DataTemple.Codeland
             }
 
             // Check if we're taking the time we say we are
-            long micros = (long) (profiler.GetTime() / 1000);
+            /*long micros = (long) (profiler.GetTime() / 1000);
             if (Math.Abs((origtime - time) - micros) > Math.Min((origtime - time), micros) / 100) {
                 receiver.Receive("Time Miscalculation: " + (origtime - time).ToString() + " units took " + micros.ToString(), this);
                 if (debugMode) {
@@ -141,7 +141,7 @@ namespace DataTemple.Codeland
                     //throw new Exception(Profiler.AnnounceEach());
                     //SingleUserLog.Replace("Complete");
                 }
-            }
+            }*/
 
             if (time > 0)
                 receiver.Receive("Coderack Exhausted.", this);
@@ -258,14 +258,15 @@ namespace DataTemple.Codeland
 
             codelet.AddFutureCodelet(nameActive, isEvaluating);
             if (debugMode) {
-                Profiler.Start(codelet.GetType().FullName);
+                //Profiler.Start(codelet.GetType().FullName);
                 //SingleUserLog.Update(codelet.ToString(), Profiler.NumExecuted(codelet.ToString()));
                 //SingleUserLog.Replace(codelet.ToString());
             }
             receiver.Receive("EvaluateCodelet", codelet);
             int used = codelet.Evaluate();
-            if (debugMode)
-                Profiler.End(used * 1000);
+            if (debugMode) {
+                //Profiler.End(used * 1000);
+			}
 
             codelet.AdjustTime(-used);
             codelet.RemoveFutureCodelet(nameActive);

@@ -1,17 +1,36 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="AgentParserTest.cs">
+    <Files>
+      <File FileName="Sentence.cs" Line="250" Column="6" />
+      <File FileName="Paragraph.cs" Line="1" Column="1" />
+      <File FileName="SimpleDeclarativePhrase.cs" Line="91" Column="18" />
+      <File FileName="Phrase.cs" Line="124" Column="78" />
+      <File FileName="SimpleQuestion.cs" Line="31" Column="1" />
+      <File FileName="Fragment.cs" Line="36" Column="4" />
+      <File FileName="AgentParserTest.cs" Line="44" Column="30" />
+      <File FileName="StringParseHandler.cs" Line="40" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="AgentParser" expanded="True">
-            <Node name="SimpleDeclarativePhrase.cs" selected="True" />
+            <Node name="AgentParserTest.cs" selected="True" />
           </Node>
           <Node name="Grammarian" expanded="True" />
           <Node name="PluggerBase" expanded="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="ConnectionManagerPad">
+        <State selected="True" />
+      </Pad>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
         <State expanded="True" selected="True" />
       </Pad>
     </Pads>

@@ -51,7 +51,12 @@ namespace LanguageNet.AgentParser
         {
             LoadPhrases(phrases);
         }
-
+		
+		public override bool IsWhole {
+			get {
+				return true;
+			}
+		}
 
         public override bool Transform(Sentence sentence)
         {

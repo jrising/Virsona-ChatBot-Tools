@@ -121,6 +121,14 @@ namespace LanguageNet.AgentParser
 			}
 		}
 		
+		// A whole phrase can only incorporate non-whole phrases (example S, SBARQ)
+		public virtual bool IsWhole
+		{
+			get {
+				return false;
+			}
+		}
+		
 		public IEnumerable<IParsedPhrase> Branches
 		{
 			get

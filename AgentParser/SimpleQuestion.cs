@@ -22,6 +22,12 @@ namespace LanguageNet.AgentParser
             : base("SBARQ")
         {
         }
+		
+		public override bool IsWhole {
+			get {
+				return true;
+			}
+		}
 
         public override bool Transform(Sentence sentence)
         {

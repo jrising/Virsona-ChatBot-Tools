@@ -12,7 +12,7 @@ namespace TestParaphrasing
 		{
 			PluginEnvironment plugenv = new PluginEnvironment(new MainClass());
 			string plugbase = "/Users/jrising/projects/virsona/plugins/data";
-            plugenv.Initialize(plugbase + "/config.xml", plugbase, new NameValueCollection());
+            plugenv.Initialize(plugbase + "/config.xml", new NameValueCollection());
 			
 			// Test 1: POS Tagging
 			POSTagger tagger = new POSTagger(plugenv);

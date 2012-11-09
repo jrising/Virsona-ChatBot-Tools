@@ -81,7 +81,7 @@ namespace DataTemple
             foreach (PatternTemplateSource dictum in dicta)
                 dictum.Generate(coderack, phrase, main, new NopCallable(), 1.0);
 
-            coderack.Execute(1000000, 1.0, true);
+            coderack.Execute(1000000, true);
 		}		
 		
 		public MainClass(CommandLineArguments parsedArgs) {

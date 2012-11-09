@@ -18,11 +18,11 @@ namespace DataTemple.Codeland
      * The Profile class keeps track of the time used by functions, as well as
      * their expected time, and time used by other recursed timed functions
      */
-    public class Profiler
+    public class ProfilerX
     {
 		protected Stopwatch stopwatch;
 
-        public Profiler() {
+        public ProfilerX() {
 			stopwatch = new Stopwatch();
         }
 
