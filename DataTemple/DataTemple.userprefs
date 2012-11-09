@@ -1,6 +1,6 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="DataTemple/Matching/Matcher.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="DataTemple/Codeland/Profiler.cs">
     <Files>
       <File FileName="DataTemple/Main.cs" Line="112" Column="1" />
       <File FileName="DataTemple/CommandLineArguments.cs" Line="28" Column="40" />
@@ -12,7 +12,7 @@
       <File FileName="DataTemple/Variables/MathVariables.cs" Line="1" Column="1" />
       <File FileName="DataTemple/Variables/OutputVariables.cs" Line="16" Column="1" />
       <File FileName="DataTemple/Matching/StarEater.cs" Line="72" Column="1" />
-      <File FileName="DataTemple/Matching/Matcher.cs" Line="216" Column="103" />
+      <File FileName="DataTemple/Matching/Matcher.cs" Line="222" Column="10" />
       <File FileName="DataTemple/Matching/PatternTemplateSource.cs" Line="94" Column="10" />
       <File FileName="DataTemple/Matching/StarUtilities.cs" Line="122" Column="10" />
       <File FileName="DataTemple/AgentEvaluate/Interpreter.cs" Line="48" Column="57" />
@@ -33,19 +33,14 @@
       <File FileName="DataTemple/AgentEvaluate/CallAgentWrapper.cs" Line="35" Column="10" />
       <File FileName="../GenericTools/Tuples.cs" Line="27" Column="1" />
       <File FileName="DataTemple/AgentEvaluate/Context.cs" Line="73" Column="1" />
+      <File FileName="DataTemple/Codeland/Profiler.cs" Line="33" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="DataTemple" expanded="True">
-            <Node name="AgentEvaluate" expanded="True" />
+          <Node name="DataTemple" expanded="True" selected="True">
             <Node name="Codeland" expanded="True" />
-            <Node name="Matching" expanded="True">
-              <Node name="Matcher.cs" selected="True" />
-            </Node>
-            <Node name="Variables" expanded="True" />
           </Node>
-          <Node name="Grammarian" expanded="True" />
           <Node name="PluggerBase" expanded="True" />
         </State>
       </Pad>

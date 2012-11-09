@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/data/config.xml" -if ~/projects/polspeech/state_union/1946-Truman-2.txt -t "%sentence * because *" -o "@print *1, *2"</Commandlineparameters>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

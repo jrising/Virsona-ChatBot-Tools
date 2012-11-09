@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace DataTemple.Codeland
 {
@@ -20,58 +20,15 @@ namespace DataTemple.Codeland
      */
     public class Profiler
     {
-        [DllImport("KERNEL32")]
-        private static extern bool QueryPerformanceCounter(out long lpPerformanceCount);
-
-        [DllImport("Kernel32.dll")]
-        private static extern bool QueryPerformanceFrequency(out long lpFrequency);
-
-        // multiplier brings us to nanoseconds
-        public static readonly Decimal multiplier = new Decimal(1.0e9);
-        protected static long frequency;
-
-        // Basic timing, always available
-        protected long startCount;
-		
-		// If don't have QueryPerformance
-		protected static bool useQueryPerformance;
-		protected DateTime start;
-
-        static Profiler()
-        {
-            if (QueryPerformanceFrequency(out frequency) == false)
-            {
-                // Frequency not supported
-                useQueryPerformance = false;
-            } else
-				useQueryPerformance = true;
-        }
+		protected Stopwatch stopwatch;
 
         public Profiler() {
-			if (useQueryPerformance)
-	            QueryPerformanceCounter(out startCount);
-			else
-				start = DateTime.Now;
+			stopwatch = new Stopwatch();
         }
 
         public double GetTime()
         {
-			if (useQueryPerformance) {
-	            long stopCount;
-	            QueryPerformanceCounter(out stopCount);
-	
-	            long count = stopCount - startCount;
-	
-	            return Duration(count);
-			} else {
-				return (DateTime.Now - start).Milliseconds * 1e6;
-			}
-        }
-
-        // returns nanoseconds
-        public static double Duration(long count)
-        {
-            return (((double)count * (double)multiplier) / (double)frequency);
+			return stopwatch.ElapsedTicks * 1.0e9 / Stopwatch.Frequency;
         }
 
 #if PROFILE
