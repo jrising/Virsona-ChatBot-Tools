@@ -32,7 +32,7 @@ namespace DataTemple.AgentEvaluate
 
         public int Fail(string reason, IContinuation succ)
         {
-            coderack.AddCodelet((Codelet) this.Clone());
+            coderack.AddCodelet((Codelet) this.Clone(), "Fail: " + reason);
             return 1;
         }
 

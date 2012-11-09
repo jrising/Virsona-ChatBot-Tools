@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-d "/Users/jrising/projects/virsona/github/data" -i "There was a dog.  The dog ate a bone.  That is it." -t "%sentence The dog %verb %noun" -c "@print Fido is reported to %verbx %noun."</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/data/config.xml" -if ~/projects/polspeech/state_union/1946-Truman-2.txt -t "%sentence * because *" -o "@print *1, *2"</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -106,6 +106,7 @@
     <Compile Include="Matching\ValidateUtilities.cs" />
     <Compile Include="Matching\Variable.cs" />
     <Compile Include="CommandLineArguments.cs" />
+    <Compile Include="Codeland\CodeletTrace.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

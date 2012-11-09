@@ -1,17 +1,51 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="DataTemple/Main.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="DataTemple/Matching/Matcher.cs">
     <Files>
-      <File FileName="DataTemple/Main.cs" Line="54" Column="18" />
+      <File FileName="DataTemple/Main.cs" Line="112" Column="1" />
       <File FileName="DataTemple/CommandLineArguments.cs" Line="28" Column="40" />
-      <File FileName="../PluggerBase/PluggerBase/PluginEnvironment.cs" Line="139" Column="35" />
+      <File FileName="../PluggerBase/PluggerBase/PluginEnvironment.cs" Line="139" Column="1" />
+      <File FileName="../Grammarian/GrammarParser.cs" Line="125" Column="10" />
+      <File FileName="DataTemple/Variables/GrammarVariables.cs" Line="355" Column="39" />
+      <File FileName="DataTemple/Variables/AbstractVariables.cs" Line="1" Column="1" />
+      <File FileName="DataTemple/Variables/KnowledgeVariables.cs" Line="1" Column="1" />
+      <File FileName="DataTemple/Variables/MathVariables.cs" Line="1" Column="1" />
+      <File FileName="DataTemple/Variables/OutputVariables.cs" Line="16" Column="1" />
+      <File FileName="DataTemple/Matching/StarEater.cs" Line="72" Column="1" />
+      <File FileName="DataTemple/Matching/Matcher.cs" Line="216" Column="103" />
+      <File FileName="DataTemple/Matching/PatternTemplateSource.cs" Line="94" Column="10" />
+      <File FileName="DataTemple/Matching/StarUtilities.cs" Line="122" Column="10" />
+      <File FileName="DataTemple/AgentEvaluate/Interpreter.cs" Line="48" Column="57" />
+      <File FileName="DataTemple/Matching/MatchProduceAgent.cs" Line="1" Column="1" />
+      <File FileName="DataTemple/Matching/DictumMaker.cs" Line="1" Column="1" />
+      <File FileName="DataTemple/AgentEvaluate/ContextAppender.cs" Line="40" Column="1" />
+      <File FileName="DataTemple/Codeland/Codelet.cs" Line="154" Column="67" />
+      <File FileName="DataTemple/Codeland/Coderack.cs" Line="335" Column="11" />
+      <File FileName="DataTemple/AgentEvaluate/ContinueAgentCodelet.cs" Line="91" Column="1" />
+      <File FileName="DataTemple/Codeland/CodeletTrace.cs" Line="41" Column="5" />
+      <File FileName="DataTemple/AgentEvaluate/Evaluator.cs" Line="79" Column="1" />
+      <File FileName="DataTemple/AgentEvaluate/ContinueCodelet.cs" Line="38" Column="1" />
+      <File FileName="DataTemple/Codeland/RecipientCodelet.cs" Line="34" Column="16" />
+      <File FileName="DataTemple/Matching/Thinker.cs" Line="205" Column="66" />
+      <File FileName="DataTemple/AgentEvaluate/ContinueToCallAgent.cs" Line="29" Column="1" />
+      <File FileName="DataTemple/Codeland/IResultReceiver.cs" Line="9" Column="64" />
+      <File FileName="DataTemple/Codeland/ZippyCoderack.cs" Line="46" Column="1" />
+      <File FileName="DataTemple/AgentEvaluate/CallAgentWrapper.cs" Line="35" Column="10" />
+      <File FileName="../GenericTools/Tuples.cs" Line="27" Column="1" />
+      <File FileName="DataTemple/AgentEvaluate/Context.cs" Line="73" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="DataTemple" expanded="True" selected="True">
+          <Node name="DataTemple" expanded="True">
             <Node name="AgentEvaluate" expanded="True" />
+            <Node name="Codeland" expanded="True" />
+            <Node name="Matching" expanded="True">
+              <Node name="Matcher.cs" selected="True" />
+            </Node>
+            <Node name="Variables" expanded="True" />
           </Node>
+          <Node name="Grammarian" expanded="True" />
           <Node name="PluggerBase" expanded="True" />
         </State>
       </Pad>
@@ -23,6 +57,10 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/jrising/projects/virsona/github/DataTemple/DataTemple/Matcher.cs" line="23" />
+      <Breakpoint file="/Users/jrising/projects/virsona/github/DataTemple/DataTemple/AgentEvaluate/Evaluator.cs" line="162" />
+      <Breakpoint file="/Users/jrising/projects/virsona/github/DataTemple/DataTemple/AgentEvaluate/Evaluator.cs" line="137" />
+      <Breakpoint file="/Users/jrising/projects/virsona/github/DataTemple/DataTemple/AgentEvaluate/Evaluator.cs" line="77" />
+      <Breakpoint file="/Users/jrising/projects/virsona/github/DataTemple/DataTemple/Main.cs" line="106" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

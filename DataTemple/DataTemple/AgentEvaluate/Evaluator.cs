@@ -137,7 +137,7 @@ namespace DataTemple.AgentEvaluate
                     mysucc = new ContextAppender(salience, context, ii, succ);
                 List<IContent> sublst = context.Contents.GetRange(ii + 1, context.Contents.Count - ii - 1);
 
-                coderack.AddCodelet((Codelet) element);
+                coderack.AddCodelet((Codelet) element, "Codelet in content");
 
                 Evaluator eval = new Evaluator(salience, argumentMode, mysucc, aftersucc);
                 eval.Continue(new Context(context, sublst), fail);

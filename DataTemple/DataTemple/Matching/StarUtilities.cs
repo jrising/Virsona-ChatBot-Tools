@@ -31,6 +31,11 @@ namespace DataTemple.Matching
             {
                 if (content is Word)
                     result.Add(content);
+                else if (content is Special && (content.Name.StartsWith("*") || content.Name.StartsWith("_")))
+                {
+                    List<IContent> words = GetStarValue(context, content.Name);
+					result.AddRange(words);
+                }
                 else if (content is Variable)
                 {
                     IParsedPhrase phrase = ((Variable)content).Produce(context, tagger, parser);

@@ -44,8 +44,8 @@ namespace DataTemple.AgentEvaluate
                             // skip next two
                             ii += 2;
                         }
-                        else
-                            throw new Exception("Could not parse at token " + ii + ": " + commands);
+						else // nothing going on here
+							contents.Add(new Special(tokens[ii].Substring(jj)));
                     }
                     else
                     {

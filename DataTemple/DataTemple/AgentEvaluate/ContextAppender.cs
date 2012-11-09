@@ -36,7 +36,7 @@ namespace DataTemple.AgentEvaluate
 
             Context result = new Context(before, beforeContentsCopy, before.Weight * context.Weight);
             result.AddMappings(context);
-
+			
             succ.Continue(result, fail);
             return time;
         }

@@ -43,6 +43,8 @@ namespace DataTemple.Codeland
         /// A message reciever
         /// </summary> 
         protected IMessageReceiver receiver;
+		
+		protected Codelet currentEvaluating;
 #endregion
 
 #region Properties
@@ -204,11 +206,15 @@ namespace DataTemple.Codeland
         /// <summary> 
         /// Add the given codelet
         /// </summary> 
-        public virtual bool AddCodelet(Codelet codelet) {
-            // Console.WriteLine("Add " + codelet.ToString)
+        public virtual bool AddCodelet(Codelet codelet, string location) {
+            //Console.WriteLine("Add " + codelet.ToString() + ": " + location + ": " + codelets.Count);
             if (codelet.coderack != this)
                 throw new ArgumentException("codelet does not have this coderack!");
-
+			
+			if (currentEvaluating != null)
+				codelet.Trace = currentEvaluating.Trace.AppendFrame(currentEvaluating, location);
+			else
+				codelet.Trace.AppendFrame(null, location);
             codelets.Add(codelet.Salience, codelet);
             if (watching)
                 codelet.watched = true;  // we're watched if our adder was
@@ -248,6 +254,7 @@ namespace DataTemple.Codeland
         public int EvaluateCodelet(Codelet codelet, bool debugMode) {
             if (codelet.GetFutureCodelet(nameActive) != null)
                 return 0;
+			currentEvaluating = codelet;
 
             codelet.AddFutureCodelet(nameActive, isEvaluating);
             if (debugMode) {
@@ -268,6 +275,7 @@ namespace DataTemple.Codeland
                 CompleteCodelet(codelet);
                 used += 1;
             }
+			currentEvaluating = null;
 
             return used;
         }
@@ -303,25 +311,25 @@ namespace DataTemple.Codeland
 #region IArena Members
 		public int Call(ICallable callable, double salience, object value, IContinuation succ, IFailure fail)
 		{
-			AddCodelet(new CodeletEvaluableWrapper(new CallableAsEvaluable(callable, value, succ, fail), this, salience, 1, 1));
+			AddCodelet(new CodeletEvaluableWrapper(new CallableAsEvaluable(callable, value, succ, fail), this, salience, 1, 1), "Call");
 			return 1;
 		}
 		
 		public int Continue(IContinuation cont, double salience, object value, IFailure fail)
 		{
-			AddCodelet(new CodeletEvaluableWrapper(new ContinuationAsEvaluable(cont, value, fail), this, salience, 1, 1));
+			AddCodelet(new CodeletEvaluableWrapper(new ContinuationAsEvaluable(cont, value, fail), this, salience, 1, 1), "Continue");
 			return 1;
 		}
 		
 		public int Fail(IFailure fail, double salience, string reason, IContinuation skip)
 		{
-			AddCodelet(new CodeletEvaluableWrapper(new FailureAsEvaluable(fail, reason, skip), this, salience, 1, 1));
+			AddCodelet(new CodeletEvaluableWrapper(new FailureAsEvaluable(fail, reason, skip), this, salience, 1, 1), "Coderack Fail");
 			return 1;
 		}
 		
 		public int Evaluate (IEvaluable evaluable, double salience)
 		{
-			AddCodelet(new CodeletEvaluableWrapper(evaluable, this, salience, 1, 1));
+			AddCodelet(new CodeletEvaluableWrapper(evaluable, this, salience, 1, 1), "Evaluate");
 			return 1;
 		}
 #endregion

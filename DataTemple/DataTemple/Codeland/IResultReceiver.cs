@@ -6,6 +6,6 @@ namespace DataTemple.Codeland
 {
     public interface IResultReceiver<T>
     {
-        void SetResult(T result, double weight);
+        void SetResult(T result, double weight, string location);
     }
 }

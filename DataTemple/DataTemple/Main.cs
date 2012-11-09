@@ -16,14 +16,19 @@ namespace DataTemple
 	class MainClass : IMessageReceiver, IContinuation
 	{
 		protected static string DOCS_URL = "https://github.com/jrising/Virsona-ChatBot-Tools/wiki/DataTemple-Command-Line-Tool";
+		protected bool verbose;
 		
 		public static void Main(string[] args)
 		{
 			CommandLineArguments parsedArgs = new CommandLineArguments(args);
+			MainClass main = new MainClass(parsedArgs);
+			if (main.verbose)
+				Console.WriteLine("Initializing...");
+			
 			if (parsedArgs["h"] != null || parsedArgs["help"] != null)
 				Console.WriteLine("The documentation is currently at \n" + DOCS_URL);
-			if (parsedArgs["d"] == null && parsedArgs["data"] == null) {
-				Console.WriteLine("The -d/-data argument is required.  See\n" + DOCS_URL);
+			if (parsedArgs["c"] == null && parsedArgs["conf"] == null) {
+				Console.WriteLine("The -c/-conf argument is required.  See\n" + DOCS_URL);
 				return;
 			}
 			
@@ -40,18 +45,22 @@ namespace DataTemple
 				template = parsedArgs["t"];
 			
 			string command = "";
-			if (parsedArgs["c"] != null)
-				command = parsedArgs["c"];
+			if (parsedArgs["o"] != null)
+				command = parsedArgs["o"];
 						
-			MainClass main = new MainClass();
 			PluginEnvironment plugenv = new PluginEnvironment(main);
-			string plugbase = parsedArgs["d"] == null ? parsedArgs["data"] : parsedArgs["d"];
-            plugenv.Initialize(plugbase + "/config.xml", plugbase, new NameValueCollection());
+			string config = parsedArgs["c"] == null ? parsedArgs["conf"] : parsedArgs["c"];
+            plugenv.Initialize(config, new NameValueCollection());
 			
 			GrammarParser parser = new GrammarParser(plugenv);
+			if (main.verbose)
+				Console.WriteLine("Parsing input...");
 			IParsedPhrase phrase = parser.Parse(input);
 
-            ZippyCoderack coderack = new ZippyCoderack(main, 10000000);
+			if (main.verbose)
+				Console.WriteLine("Matching templates...");
+
+			ZippyCoderack coderack = new ZippyCoderack(main, 10000000);
 			Memory memory = new Memory();
 			
             Context basectx = new Context(coderack);
@@ -75,12 +84,19 @@ namespace DataTemple
             coderack.Execute(1000000, 1.0, true);
 		}		
 		
+		public MainClass(CommandLineArguments parsedArgs) {
+			verbose = (parsedArgs["v"] != null || parsedArgs["verbose"] != null);
+		}
+		
 		public MainClass() {
+			verbose = false;
 		}
 		
 		public object Clone()
 		{
-			return new MainClass();
+			MainClass clone = new MainClass();
+			clone.verbose = verbose;
+			return clone;
 		}
 		
         #region IContinuation Members
@@ -141,10 +157,12 @@ namespace DataTemple
 		// IMessageReceiver
 		
 		public bool Receive(string message, object reference) {
-			/*if (message == "EvaluateCodelet")
-				Console.WriteLine("Codelet " + reference.ToString()); //reference.GetType().Name);
-			else
-				Console.WriteLine(message);*/
+			if (verbose) {
+				if (message == "EvaluateCodelet")
+					Console.WriteLine("Codelet " + reference.ToString()); //reference.GetType().Name);
+				else
+					Console.WriteLine(message);
+			}
 			return true;
 		}
 

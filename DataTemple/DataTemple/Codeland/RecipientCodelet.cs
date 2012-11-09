@@ -37,11 +37,11 @@ namespace DataTemple.Codeland
             }
         }
 
-        public virtual void SetResult(T result, double weight) {
+        public virtual void SetResult(T result, double weight, string location) {
             this.result = result;
             this.weight = weight;
             if (weight != 0)
-                coderack.AddCodelet(this);
+                coderack.AddCodelet(this, "SetResult: " + location);
         }
 
 #region IFastSerializable Members

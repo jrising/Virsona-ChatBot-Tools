@@ -52,9 +52,18 @@ namespace DataTemple.Matching
         public override int Evaluate()
         {
             List<IContent> contents = context.Contents;
-
+			if (contents.Count == 0) {
+				if (unmatched.Count == 0)
+					succ.Continue(context, fail);
+				else
+					fail.Fail("Ran out of tokens before matched all input", succ);
+				return time;
+			}
+			
             // Does our first element match the whole thing?
             IContent first = contents[0];
+			
+			//Console.WriteLine("Checking " + first.Name);
 
             // always consider dropping interjections
             IFailure myfail = fail;
@@ -83,7 +92,7 @@ namespace DataTemple.Matching
                 if (context.Contents.Count == 1)
                 {
                     // We ran out elements, but we still have some unmatched
-                    coderack.AddCodelet(eater);
+                    coderack.AddCodelet(eater, "Evaluate *");
                     return time;
                 }
                 else
@@ -97,7 +106,7 @@ namespace DataTemple.Matching
             {
                 StarEater eater = new StarEater(coderack, salience, this, StarUtilities.NextStarName(context, "_"), true);
 
-                coderack.AddCodelet(eater);
+                coderack.AddCodelet(eater, "Evaluate _");
                 return time;
             }
             else if (first.Name == "%opt")
@@ -105,9 +114,10 @@ namespace DataTemple.Matching
                 // Try with, and if that fails, do without
                 int end = context.Contents.IndexOf(Special.EndDelimSpecial);
                 if (end == -1) {
-                    // It's all optional-- the failure is success!
+                    // It's all optional-- but on fail return to match to ensure blank
                     Context without = new Context(context, new List<IContent>());
-                    IFailure withoutfail = new ContinueCodelet(salience, without, succ, myfail);
+					Evaluator evalfail = MakeMatcherContinue(salience, without, input, unmatched, succ);
+                    IFailure withoutfail = new ContinueCodelet(salience, without, evalfail, myfail);
 
                     Context with = new Context(context, context.Contents.GetRange(1, context.Contents.Count - 1));
                     Matcher.MatchAgainst(salience, with, input, unmatched, succ, withoutfail);
@@ -218,15 +228,34 @@ namespace DataTemple.Matching
                 succ.Continue(context, fail);
                 return;
             }
-
+						
             if (context.Contents.Count == 0)
             {
                 // We ran out elements, but we still have some unmatched
-                fail.Fail("Ran out of elements before matched all", succ);
+                fail.Fail("Ran out of tokens before matched all input", succ);
                 return;
             }
 
             MatchAgainst(salience, context, unmatched[0], unmatched.GetRange(1, unmatched.Count - 1), succ, fail);
         }
+		
+		public bool CouldBeEmpty(List<IContent> contents) {
+			foreach (IContent content in contents) {
+				if (content is Special && (content.Name.StartsWith("*") || content.Name == "%end"))
+					continue;
+				return false;
+			}
+			
+			return true;
+		}
+		
+		public override string ToString()
+		{
+			GroupPhrase groupPhrase = new GroupPhrase("FRAG", unmatched);
+			StringBuilder code = new StringBuilder();
+			foreach (IContent content in context.Contents)
+				code.Append(content.Name + " ");
+			return string.Format("[Matcher: Contents={0}, Input={1}, Unmatched={2}]", code.ToString(), input.Text, groupPhrase.Text);
+		}
     }
 }

@@ -19,7 +19,7 @@ namespace DataTemple
 			PluginEnvironment plugenv = (PluginEnvironment) args[0];
 			POSTagger tagger = new POSTagger(plugenv);
 			GrammarParser parser = new GrammarParser(plugenv);
-
+			
 			Console.WriteLine(StarUtilities.ProducedCode(context, tagger, parser));
             return 10;
 		}

@@ -202,7 +202,7 @@ namespace DataTemple.Matching
         public int Fail(string reason, IContinuation succ)
         {
             // continue our work
-            coderack.AddCodelet((Codelet) this.Clone());
+            coderack.AddCodelet((Codelet) this.Clone(), "Thinker Fail");
             return 1;
         }
 

@@ -26,7 +26,7 @@ namespace DataTemple.AgentEvaluate
         public static ContinueToCallAgent Instantiate(CallAgent agent, Context context, IContinuation succ, IFailure fail)
         {
             ContinueToCallAgent continuer = new ContinueToCallAgent(agent, succ);
-            continuer.SetResult(new TwoTuple<Context, IFailure>(context, fail), context.Weight);
+            continuer.SetResult(new TwoTuple<Context, IFailure>(context, fail), context.Weight, "ContinueToCallAgent: Instantiate");
 
             return continuer;
         }

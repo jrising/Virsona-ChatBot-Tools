@@ -61,7 +61,7 @@ namespace DataTemple.Matching
                 if (eaten.Contents.Count == 0)
                 {
                     // Just add ourselves again
-                    coderack.AddCodelet(eater);
+                    coderack.AddCodelet(eater, "Evaluate empty");
                 }
                 else
                     Matcher.MatchAgainst(salience, eaten, clone.Input, clone.Unmatched, matcher.Success, eater);
@@ -74,7 +74,7 @@ namespace DataTemple.Matching
 
         public int Fail(string reason, IContinuation succ)
         {
-            coderack.AddCodelet((Codelet) this.Clone());
+            coderack.AddCodelet((Codelet) this.Clone(), "StarEater Fail");
             return 1;
         }
 				

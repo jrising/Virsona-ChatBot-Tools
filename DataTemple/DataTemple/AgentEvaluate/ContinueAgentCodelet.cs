@@ -76,11 +76,11 @@ namespace DataTemple.AgentEvaluate
 			Context context = (Context) value;
             ContinueAgentCodelet clone = (ContinueAgentCodelet)Clone();
             context.AddToSequence(clone);
-            clone.SetResult(new TwoTuple<Context, IFailure>(context, fail), context.Weight);
+            clone.SetResult(new TwoTuple<Context, IFailure>(context, fail), context.Weight, "ContinueAgentCodelet: Continue");
             return 1;
         }
 
-        public override void SetResult(TwoTuple<Context, IFailure> result, double weight)
+        public override void SetResult(TwoTuple<Context, IFailure> result, double weight, string location)
         {
             context = result.one;
             fail = result.two;
@@ -89,7 +89,7 @@ namespace DataTemple.AgentEvaluate
 
             salience *= weight;
 
-            base.SetResult(result, weight);
+            base.SetResult(result, weight, location);
         }
     }
 }

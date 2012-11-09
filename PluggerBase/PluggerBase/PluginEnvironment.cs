@@ -94,7 +94,7 @@ namespace PluggerBase
             }
         }
 
-        public void Initialize(string conffile, string plugindir, NameValueCollection args)
+        public void Initialize(string conffile, NameValueCollection args)
         {
             LoadConfigurationFile(conffile);
 
@@ -104,8 +104,7 @@ namespace PluggerBase
                     SetConfig(key, args[key]);
 
             // load all the plugins
-            LoadPlugins(plugindir);
-
+            LoadPlugins((string) GetConfig("pluginsdirectory"));
         }
 
         public object GetConfig(string key)

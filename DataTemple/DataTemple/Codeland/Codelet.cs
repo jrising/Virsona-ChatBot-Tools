@@ -32,6 +32,8 @@ namespace DataTemple.Codeland
         /// How much time do we need to be fully executed?
         /// </summary> 
         public int time;
+	
+		public CodeletTrace trace;
 
         /// <summary> 
         /// All our future codelets
@@ -77,6 +79,7 @@ namespace DataTemple.Codeland
                 salience = sl + randgen.NextDouble();
             space = sp + 8 * 4;
             time = tm;
+			trace = new CodeletTrace();
             watched = false;
             immune = false;
         }
@@ -98,6 +101,15 @@ namespace DataTemple.Codeland
             clone.Reset();
             return clone;
         }
+		
+		public CodeletTrace Trace {
+			get {
+				return trace;
+			}
+			set {
+				trace = value;
+			}
+		}
 
         /// <summary> 
         /// Check if we have a future codelet with the specified key
@@ -139,7 +151,7 @@ namespace DataTemple.Codeland
         public override bool Complete() {
             foreach (KeyValuePair<string, Codelet> kvp in children) {
                 if (kvp.Value.NeedsEvaluation)
-                    coderack.AddCodelet(kvp.Value);
+                    coderack.AddCodelet(kvp.Value, "Complete child");
             }
 
             return true;
