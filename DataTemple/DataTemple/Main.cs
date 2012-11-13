@@ -38,8 +38,38 @@ namespace DataTemple
 			else if (parsedArgs["if"] != null) {
 				StreamReader file = new StreamReader(parsedArgs["if"]);
 				input = file.ReadToEnd();
-			}	
+			}
 			
+			PluginEnvironment plugenv = new PluginEnvironment(main);
+			string config = parsedArgs["c"] == null ? parsedArgs["conf"] : parsedArgs["c"];
+			if (!File.Exists(config)) {
+				Console.WriteLine("Cannot find configuration file at " + config);
+				return;
+			}
+			
+            plugenv.Initialize(config, new NameValueCollection());
+
+			if (parsedArgs["tag"] == null && parsedArgs["parse"] == null && (parsedArgs["t"] == null || parsedArgs["o"] == null)) {
+				Console.WriteLine("Nothing to do.  Add -tag, -parse, or -t and -o");
+				return;
+			}
+
+			POSTagger tagger = new POSTagger(plugenv);
+			if (parsedArgs["tag"] != null) {
+				List<KeyValuePair<string, string>> tokens = tagger.TagString(input);
+				foreach (KeyValuePair<string, string> token in tokens)
+					Console.Write(token.Key + "/" + token.Value + " ");
+				Console.WriteLine("");
+			}
+			
+			GrammarParser parser = new GrammarParser(plugenv);
+			if (parsedArgs["parse"] != null) {
+				Console.WriteLine(parser.Parse(input));
+			}
+			
+			if (parsedArgs["t"] == null || parsedArgs["o"] == null)
+				return; // not doing any template matching
+
 			string template = "";
 			if (parsedArgs["t"] != null)
 				template = parsedArgs["t"];
@@ -47,12 +77,7 @@ namespace DataTemple
 			string command = "";
 			if (parsedArgs["o"] != null)
 				command = parsedArgs["o"];
-						
-			PluginEnvironment plugenv = new PluginEnvironment(main);
-			string config = parsedArgs["c"] == null ? parsedArgs["conf"] : parsedArgs["c"];
-            plugenv.Initialize(config, new NameValueCollection());
-			
-			GrammarParser parser = new GrammarParser(plugenv);
+									
 			if (main.verbose)
 				Console.WriteLine("Parsing input...");
 			IParsedPhrase phrase = parser.Parse(input);

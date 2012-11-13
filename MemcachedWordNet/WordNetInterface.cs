@@ -63,7 +63,7 @@ namespace LanguageNet.WordNet
         public InitializeResult Initialize(PluginEnvironment env, Assembly assembly, IMessageReceiver receiver)
         {
             // Data files contained in [datadrectory]/wordnet
-            string basedir = (string)env.GetConfig("datadirectory") + Path.DirectorySeparatorChar + "wordnet" + Path.DirectorySeparatorChar;
+            string basedir = env.GetConfigDirectory("datadirectory") + Path.DirectorySeparatorChar + "wordnet" + Path.DirectorySeparatorChar;
 			MemcachedClient cache = MemcacheSource.DefaultClient();
 			
 			nounIndexSource = new BackedMemcachedSource<Index>(new IndexFile(basedir, WordNetAccess.PartOfSpeech.Noun), "WN:I:N:", cache);

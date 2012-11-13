@@ -25,6 +25,8 @@ namespace DataTemple.Matching
             if (IsMatch(check))
             {
                 Propogate(env, check, 1.0);
+				env.Map[StarUtilities.NextStarName(env, name)] = check.Text;
+
                 return true;
             }
 
@@ -73,7 +75,7 @@ namespace DataTemple.Matching
                 env.Map["$p$" + name] = matched;
                 env.Map["$s$" + name] = strength;
             }
-
+			
             if (associate != null)
                 env.Map[associate] = this;
         }

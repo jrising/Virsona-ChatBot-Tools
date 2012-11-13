@@ -62,10 +62,11 @@ All of the policies of the Federal Government must be geared to the objective of
 For example, the kinds of tax measures we have at different times--whether we raise our revenue in a way to encourage consumer spending and business investment or to discourage it--have a vital bearing on this question. It is affected also by regular notions on consumer credit and by the money market, which is strongly influenced by the rate of interest on Government securities. It is affected by almost every step we take.
 In short, the way we handle the proper functions of government, the way we time the exercise of our traditional and legitimate governmental functions, has a vital bearing on the economic health of the Nation.
 These policies are discussed in greater detail in the accompanying Fifth Quarterly Report of the Director of War Mobilization and Reconversion.";
-
+			
 			List<KeyValuePair<string, string>> tokens = tagger.TagString(input);
 			Sentence sentence = new Sentence(tokens);
-			sentence.Parse();
+			IParsedPhrase parsed = sentence.Parse();
+			Console.WriteLine(parsed.ToString());
 		}
 		
 		public bool Receive(string message, object reference) {

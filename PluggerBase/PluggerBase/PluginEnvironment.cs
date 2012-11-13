@@ -40,6 +40,7 @@ namespace PluggerBase
         protected IMessageReceiver receiver;
 
         protected List<IPlugin> plugins;
+		protected string configPath;
         protected ArgumentTree config;
 
         // tree of sources
@@ -104,9 +105,18 @@ namespace PluggerBase
                     SetConfig(key, args[key]);
 
             // load all the plugins
-            LoadPlugins((string) GetConfig("pluginsdirectory"));
+            LoadPlugins(GetConfigDirectory("pluginsdirectory"));
         }
-
+		
+		public string GetConfigDirectory(string key) {
+            ArgumentTree node = null;
+            if (!config.Children.TryGetValue(key, out node))
+                return null;
+            else {
+				return Path.Combine(Directory.GetParent(configPath).FullName, (string) node.Value).ToString();
+			}
+		}
+		
         public object GetConfig(string key)
         {
             ArgumentTree node = null;
@@ -127,6 +137,7 @@ namespace PluggerBase
 
         protected void LoadConfigurationFile(string conffile)
         {
+			configPath = conffile;
             // first load the config file
             XmlDocument doc = new XmlDocument();
             doc.Load(conffile);
@@ -135,6 +146,11 @@ namespace PluggerBase
 
         protected void LoadPlugins(string plugindir)
         {
+			if (!Directory.Exists(plugindir)) {
+				Console.WriteLine("Plugin directory not found at " + plugindir + ": check config.xml");
+				return;
+			}
+				
             // First load all dlls
             string[] dlls = Directory.GetFiles(plugindir, "*.dll");
 
@@ -188,6 +204,8 @@ namespace PluggerBase
                 InitializeResult result = plugin.Initialize(this, toload.Value, receiver);
                 if (result.IsSuccess)
                 {
+					receiver.Receive("Plugin " + plugin.ToString() + " loaded", plugin);
+
                     plugins.Add(plugin);
                     sinceSuccess = 0;
                 }

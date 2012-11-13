@@ -24,8 +24,9 @@ namespace DataTemple.Variables
             context.Map.Add("%do", new IrregularVerbVariable("%do", memory, Verbs.IsToDo, Verbs.ComposeToDo));
 
             context.Map.Add("%noun", new NounVariable());
-            context.Map.Add("%adj", new AdjectiveVariable());
-            context.Map.Add("%adv", new AdverbVariable());
+			context.Map.Add("%pronoun", new PartListVariable("%pronoun", new string[] {"PRP", "WP"}));
+            context.Map.Add("%adj", new PartListVariable("%adj", new string[] {"JJ", "JP"}));
+            context.Map.Add("%adv", new PartListVariable("%adv", new string[] {"RB", "ADVP"}));
             context.Map.Add("%verb", new VerbVariable(verbs));
             context.Map.Add("%verbx", new VerbSubVariable("%verbx", verbs, "VBP", Verbs.Convert.ext_V));
             context.Map.Add("%verben", new VerbSubVariable("%verben", verbs, "VBN", Verbs.Convert.ext_Ven));
@@ -127,33 +128,27 @@ namespace DataTemple.Variables
             return concept.IsEntity;
         }
     }
-
-    public class AdjectiveVariable : Variable
-    {
-        public AdjectiveVariable()
-            : base("%adj")
-        {
-        }
-
+	
+	public class PartListVariable: Variable
+	{
+		protected string[] parts;
+		
+		public PartListVariable(string name, string[] parts)
+			: base(name) {
+			this.parts = parts;
+		}
+		
         public override bool IsMatch(IParsedPhrase check)
         {
-            return (check.Part == "JJ" || check.Part == "JP");
-        }
-    }
-
-    public class AdverbVariable : Variable
-    {
-        public AdverbVariable()
-            : base("%adv")
-        {
+			foreach (string part in parts)
+				if (check.Part == part)
+					return true;
+			
+			return false;
         }
 
-        public override bool IsMatch(IParsedPhrase check)
-        {
-            return (check.Part == "RB" || check.Part == "ADVP");
-        }
-    }
-
+	}
+			
     public class VerbVariable : Variable
     {
         protected Verbs verbs;

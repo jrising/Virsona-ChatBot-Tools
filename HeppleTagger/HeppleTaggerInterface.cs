@@ -28,7 +28,7 @@ namespace HeppleTagger
         public InitializeResult Initialize(PluginEnvironment env, Assembly assembly, IMessageReceiver receiver)
         {
             // Data files contained in [datadrectory]/parser
-            string parserdir = (string)env.GetConfig("datadirectory") + Path.DirectorySeparatorChar + "parser" + Path.DirectorySeparatorChar;
+            string parserdir = env.GetConfigDirectory("datadirectory") + Path.DirectorySeparatorChar + "parser" + Path.DirectorySeparatorChar;
             POSTagger tagger = new POSTagger(parserdir + "lexicon_all", parserdir + "ruleset", assembly, null);
 
             env.SetDataSource<string, string[]>(LanguageNet.Grammarian.POSTagger.PartsSourceName, tagger);

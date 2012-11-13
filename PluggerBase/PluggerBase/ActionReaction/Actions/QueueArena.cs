@@ -25,7 +25,7 @@ namespace PluggerBase.ActionReaction.Actions
             LastFailure getlast = new LastFailure();
 
             arena.Call(callable, 100.0, value, getbest.GetContinue(), getlast.GetFail());
-
+						
             while (maxtime > 0 && getbest.Salience <= exitscore && !arena.IsEmpty)
                 maxtime -= arena.EvaluateOne();
 

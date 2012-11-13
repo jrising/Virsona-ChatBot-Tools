@@ -47,7 +47,7 @@ namespace LanguageNet.Morphologer
         public InitializeResult Initialize(PluginEnvironment env, Assembly assembly, IMessageReceiver receiver)
         {
             // Data files contained in [datadrectory]/wordnet
-            string basedir = (string)env.GetConfig("datadirectory") + Path.DirectorySeparatorChar + "morpho" + Path.DirectorySeparatorChar;
+            string basedir = env.GetConfigDirectory("datadirectory") + Path.DirectorySeparatorChar + "morpho" + Path.DirectorySeparatorChar;
 			
 			InitializeNouns(env, basedir);
 			InitializeVerbs(env, basedir);

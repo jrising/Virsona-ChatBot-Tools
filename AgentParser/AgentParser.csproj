@@ -32,7 +32,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
-    <Reference Include="nunit.framework" />
+    <Reference Include="nunit.framework">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adjective.cs" />
@@ -124,6 +126,10 @@
     <ProjectReference Include="..\Grammarian\Grammarian.csproj">
       <Project>{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}</Project>
       <Name>Grammarian</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExamineTools\ExamineTools\ExamineTools.csproj">
+      <Project>{F96D3B75-4055-40C7-A03C-ECE015E77BBC}</Project>
+      <Name>ExamineTools</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
