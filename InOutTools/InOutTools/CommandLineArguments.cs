@@ -9,7 +9,7 @@ using System;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
-namespace DataTemple
+namespace InOutTools
 {
     /// <summary>
     /// Arguments class

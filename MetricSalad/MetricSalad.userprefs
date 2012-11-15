@@ -1,0 +1,45 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../InOutTools/InOutTools/HandleQuotesStream.cs">
+    <Files>
+      <File FileName="MetricSalad/Main.cs" Line="22" Column="1" />
+      <File FileName="MetricSalad/WordFrequencies.cs" Line="91" Column="35" />
+      <File FileName="../Grammarian/StringUtilities.cs" Line="1" Column="1" />
+      <File FileName="../GenericTools/DataSources/MemcacheSource.cs" Line="27" Column="30" />
+      <File FileName="../GenericTools/DataSources/BackedMemcachedSource.cs" Line="24" Column="44" />
+      <File FileName="../GenericTools/DataSources/AlphabeticFileDict.cs" Line="33" Column="1" />
+      <File FileName="../GenericTools/DataSources/AlphabeticFile.cs" Line="1" Column="1" />
+      <File FileName="MetricSalad/WordFrequencyFileSource.cs" Line="25" Column="2" />
+      <File FileName="MetricSalad/Moods/EmotionWords.cs" Line="11" Column="39" />
+      <File FileName="MetricSalad/LexicalHistogram.cs" Line="30" Column="4" />
+      <File FileName="MetricSalad/FrequencyTools.cs" Line="8" Column="12" />
+      <File FileName="../InOutTools/InOutTools/ToolArguments.cs" Line="33" Column="28" />
+      <File FileName="../InOutTools/InOutTools/CommandLineArguments.cs" Line="120" Column="43" />
+      <File FileName="MetricSalad/PorterStemmer.cs" Line="6" Column="1" />
+      <File FileName="MetricSalad/AssemblyInfo.cs" Line="8" Column="1" />
+      <File FileName="../InOutTools/InOutTools/DataReader.cs" Line="17" Column="81" />
+      <File FileName="../InOutTools/InOutTools/HandleQuotesStream.cs" Line="27" Column="16" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Grammarian" expanded="True" />
+          <Node name="InOutTools" expanded="True">
+            <Node name="HandleQuotesStream.cs" selected="True" />
+          </Node>
+          <Node name="MetricSalad" expanded="True">
+            <Node name="Moods" expanded="True" />
+          </Node>
+          <Node name="PluggerBase" expanded="True" />
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
