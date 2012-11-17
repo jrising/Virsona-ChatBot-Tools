@@ -110,7 +110,7 @@ namespace DataTemple.Matching
         {
 			Context context = (Context) value;
             // Did we successfully match everything?  If so, evaluate the template
-            if (context.IsEmpty || (context.Contents.Count == 1 && context.Contents[0].Name.StartsWith("*")))
+            if (Matcher.IsRemainderOptional(context.Contents))
             {
                 Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, succ, new NopCallable());
                 Context child = new Context(context, template.Contents);

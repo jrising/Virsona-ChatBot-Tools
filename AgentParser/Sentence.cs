@@ -37,6 +37,7 @@ namespace LanguageNet.AgentParser
     public class Sentence : IDataSource<string, Type>
     {
         protected static Dictionary<string, Type> posClassLookup;
+		protected static List<string> abbreviations;
 
         static Sentence()
         {
@@ -96,6 +97,9 @@ namespace LanguageNet.AgentParser
             posClassLookup.Add("\"", typeof(StraightDoubleQuote));
             posClassLookup.Add("'", typeof(StraightSingleQuote));
             posClassLookup.Add("??", typeof(UnknownPart));
+			
+			abbreviations = new List<string>();
+			abbreviations.AddRange(new string[] {"Dr", "Mr", "Ms", "Mrs", "Esq", "Prof", "Gen", "Rep", "Sen", "St", "Sr", "Jr"});
         }
 
         // token is word, pos
@@ -188,55 +192,65 @@ namespace LanguageNet.AgentParser
 
         public Phrase Parse() {
             while (!Complete()) {
-                bool active = false;
+				bool active = false;
                 // Sift the phrases into precedence classes
-                Dictionary<int, List<Phrase>> pclasses = new Dictionary<int, List<Phrase>>();
+                Dictionary<int, List<KeyValuePair<int, Phrase>>> pclasses = new Dictionary<int, List<KeyValuePair<int, Phrase>>>();
+				int phraseindex = 0;
                 foreach (Phrase phrase in phrases)
                 {
-                    List<Phrase> pclass;
+                    List<KeyValuePair<int, Phrase>> pclass;
                     if (!pclasses.TryGetValue(phrase.Precedence, out pclass))
-                        pclasses.Add(phrase.Precedence, pclass = new List<Phrase>());
+                        pclasses.Add(phrase.Precedence, pclass = new List<KeyValuePair<int, Phrase>>());
 
-                    pclass.Insert(0, phrase);   // put in reverse order
+                    pclass.Insert(0, new KeyValuePair<int, Phrase>(phraseindex, phrase));   // put in reverse order
+					phraseindex++;
                 }
 
                 List<int> precedenceOrder = new List<int>(pclasses.Keys);
                 precedenceOrder.Sort();
                 precedenceOrder.Reverse();
-
-                foreach (int precedence in precedenceOrder) {
-                    List<Phrase> pclass = pclasses[precedence];
-                    foreach (Phrase phrase in pclass)
+				
+				foreach (int precedence in precedenceOrder) {
+                    List<KeyValuePair<int, Phrase>> pclass = pclasses[precedence];
+					int skipToSentenceBefore = -1;
+                    foreach (KeyValuePair<int, Phrase> kvp in pclass)
                     {
-                        int iters = 20;
+						int index = kvp.Key;
+						if (skipToSentenceBefore >= 0) {
+							if (ProbablyDifferentSentence(index, skipToSentenceBefore))
+								skipToSentenceBefore = -1;
+							else {
+								skipToSentenceBefore = index;
+								continue;
+							}
+						}
+						
+						int iters = 20;
+						Phrase phrase = kvp.Value;
                         if (RecursiveTransform(phrase, ref iters))
                         {
                             active = true;
-                            break;
+							skipToSentenceBefore = index;
                         }
                     }
 
                     if (active)
                         break;
                 }
-
+			
                 if (!active && !Complete()) {
                     // None of the phrases can decide what to do next.
                     bool found = false;
                     // Look for the next punctuation
                     for (int ii = 0; ii < phrases.Count; ii++)
                     {
-                        if (phrases[ii] is Period || phrases[ii] is QuestionMark || phrases[ii] is Exclamation)
-                        {
-                            if (ii == 0 || phrases[ii - 1].Text.Length > 1)   // don't cut at A.
-                            {
-                                // Cut this off!
-                                Combine(phrases.GetRange(0, ii + 1), new Fragment());
-                                AddFirstToCompletes();
-                                found = true;
-                                break;
-                            }
-                        }
+						if (ProbablyEndOfSentence(ii)) {
+                            // Cut this off!
+                            Combine(phrases.GetRange(0, ii + 1), new Fragment());
+                            AddFirstToCompletes();
+                            found = true;
+                            break;							
+						}
                     }
                     if (found)
                         continue;   // more processing to do!
@@ -271,7 +285,7 @@ namespace LanguageNet.AgentParser
                 } else
                     phrases.Add(completes[0]);  // no need for a paragraph
             }
-
+			
             return phrases[0];
         }
 
@@ -289,20 +303,22 @@ namespace LanguageNet.AgentParser
                 int newindex = phrases.IndexOf(phrase);
                 if (newindex != -1)
                     index = newindex;
+				Phrase newphrase = phrases[index];
 
                 // Do after first
-                if (index < phrases.Count - 1 && phrases[index + 1].Precedence >= phrase.Precedence)
+                if (index < phrases.Count - 1 && phrases[index + 1].Precedence >= newphrase.Precedence)
                     RecursiveTransform(phrases[index + 1], ref iters);
 
                 newindex = phrases.IndexOf(phrase);
                 if (newindex != -1)
                     index = newindex;
+				newphrase = phrases[index];
 
-                if (index > 0 && phrases[index - 1].Precedence > phrase.Precedence)
+                if (index > 0 && phrases[index - 1].Precedence > newphrase.Precedence)
                     RecursiveTransform(phrases[index - 1], ref iters);
 
                 // Do it again, if it's still here
-                if (phrases.Contains(phrase))
+                if (phrases.Contains(phrase)) // is the original phrase still here?
                     RecursiveTransform(phrase, ref iters);
             }
 
@@ -378,9 +394,47 @@ namespace LanguageNet.AgentParser
             this.phrases.RemoveAt(location);
             this.phrases.InsertRange(location, phrases);
         }
+
+		// Without parsing, see if these are probably in different sentences
+		public bool ProbablyDifferentSentence(int index1, int index2) {
+			// Look for end of sentence
+			for (int ii = index1+1; ii < index2; ii++) {
+				if (phrases[ii] is SimpleDeclarativePhrase || phrases[ii] is SimpleQuestion || phrases[ii] is Fragment)
+					return true;
+				if (ProbablyEndOfSentence(ii))
+					return true;
+			}
+			
+			return false;
+		}
+		
+		public bool ProbablyEndOfSentence(int ii) {
+			Phrase phrase = phrases[ii];
+            if (phrase is Period || phrase is QuestionMark || phrase is Exclamation)
+            {
+                if (ii == 0 || !PossiblyAbbreviation(phrases[ii - 1].Text))   // don't cut at A.
+					return true;
+            }
+			
+			return false;
+		}
+
+		// Only call when need to-- for example, if the next character is a period
+		public bool PossiblyAbbreviation(string text) {
+			if (text.Length > 5)
+				return false;
+			
+			if (text.Length == 1 || text.ToUpper() == text)
+				return true;
+			
+			if (abbreviations.Contains(text))
+				return true;
+			
+			return false;
+		}
 	
 	    // The data source of part of speech tags to object types
-	
+			
 	    #region IDataSource<string,Type> Members
 	
 	    public bool TryGetValue(string key, out Type value)

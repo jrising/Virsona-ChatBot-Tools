@@ -14,6 +14,7 @@ using System.Collections.Specialized;
 using NUnit.Framework;
 using PluggerBase;
 using LanguageNet.Grammarian;
+using ExamineTools;
 
 namespace LanguageNet.AgentParser
 {
@@ -24,7 +25,7 @@ namespace LanguageNet.AgentParser
 		public void TestLongParse()
 		{
 			PluginEnvironment plugenv = new PluginEnvironment(this);
-            plugenv.Initialize("/Users/jrising/projects/virsona/github/data/config.xml", new NameValueCollection());
+            plugenv.Initialize("/Users/jrising/projects/virsona/github/config.xml", new NameValueCollection());
 			
 			POSTagger tagger = new POSTagger(plugenv);
 			
@@ -63,10 +64,13 @@ For example, the kinds of tax measures we have at different times--whether we ra
 In short, the way we handle the proper functions of government, the way we time the exercise of our traditional and legitimate governmental functions, has a vital bearing on the economic health of the Nation.
 These policies are discussed in greater detail in the accompanying Fifth Quarterly Report of the Director of War Mobilization and Reconversion.";
 			
+			Console.WriteLine(Profiler.AnnounceEach());
 			List<KeyValuePair<string, string>> tokens = tagger.TagString(input);
 			Sentence sentence = new Sentence(tokens);
+			Profiler timer = new Profiler();
 			IParsedPhrase parsed = sentence.Parse();
 			Console.WriteLine(parsed.ToString());
+			Console.WriteLine("Time: " + timer.GetTime());
 		}
 		
 		public bool Receive(string message, object reference) {

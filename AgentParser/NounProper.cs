@@ -47,7 +47,7 @@ namespace LanguageNet.AgentParser
                 phrases.Insert(0, prev);
                 prev = sentence.PhraseBefore(prev);
             }
-
+			
             sentence.Combine(phrases, new NounPhrase());
             return true;
         }

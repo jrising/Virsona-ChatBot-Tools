@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c "/Users/jrising/projects/virsona/DataTemple/config.xml" -if ~/projects/polspeech/state_union/1946-Truman-2.txt -t "%sentence * because *" -o "@print *1, *2"</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -i  "He ate meat" -t "%sentence He *" -o "@print ok *1"</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -106,7 +106,6 @@
     <Compile Include="Matching\Thinker.cs" />
     <Compile Include="Matching\ValidateUtilities.cs" />
     <Compile Include="Matching\Variable.cs" />
-    <Compile Include="CommandLineArguments.cs" />
     <Compile Include="Codeland\CodeletTrace.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -122,6 +121,10 @@
     <ProjectReference Include="..\..\GenericTools\GenericTools.csproj">
       <Project>{7AEB4A15-8603-4675-B636-98DA6292291A}</Project>
       <Name>GenericTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\InOutTools\InOutTools\InOutTools.csproj">
+      <Project>{19407319-EC07-4562-92BE-1A7F86D90ECF}</Project>
+      <Name>InOutTools</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

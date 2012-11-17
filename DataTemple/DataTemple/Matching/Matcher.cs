@@ -50,20 +50,17 @@ namespace DataTemple.Matching
         }
 		
         public override int Evaluate()
-        {
+        {			
             List<IContent> contents = context.Contents;
 			if (contents.Count == 0) {
-				if (unmatched.Count == 0)
-					succ.Continue(context, fail);
-				else
-					fail.Fail("Ran out of tokens before matched all input", succ);
+				fail.Fail("Ran out of tokens before matched all input", succ);
 				return time;
 			}
 			
             // Does our first element match the whole thing?
             IContent first = contents[0];
 			
-			//Console.WriteLine("Checking " + first.Name);
+			//Console.WriteLine("Match " + first.Name + " against " + input.Text + " + " + unmatched.Count);
 
             // always consider dropping interjections
             IFailure myfail = fail;
@@ -238,9 +235,17 @@ namespace DataTemple.Matching
 
             MatchAgainst(salience, context, unmatched[0], unmatched.GetRange(1, unmatched.Count - 1), succ, fail);
         }
-		
-		public bool CouldBeEmpty(List<IContent> contents) {
-			foreach (IContent content in contents) {
+				
+		public static bool IsRemainderOptional(List<IContent> contents) {
+			for (int ii = 0; ii < contents.Count; ii++) {
+				IContent content = contents[ii];
+				if (content.Name == "%opt") {
+					int end = contents.IndexOf(Special.EndDelimSpecial, ii);
+                	if (end == -1)
+						return true;
+					ii = end;
+					continue;
+				}
 				if (content is Special && (content.Name.StartsWith("*") || content.Name == "%end"))
 					continue;
 				return false;

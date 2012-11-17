@@ -11,7 +11,7 @@ namespace TestParaphrasing
 		public static void Main (string[] args)
 		{
 			PluginEnvironment plugenv = new PluginEnvironment(new MainClass());
-			string plugbase = "/Users/jrising/projects/virsona/DataTemple";
+			string plugbase = "/Users/jrising/projects/virsona/github";
             plugenv.Initialize(plugbase + "/config.xml", new NameValueCollection());
 			
 			// Test 1: POS Tagging

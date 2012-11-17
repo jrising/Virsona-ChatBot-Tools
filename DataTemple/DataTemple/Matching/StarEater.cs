@@ -36,17 +36,22 @@ namespace DataTemple.Matching
 
             List<IContent> elements = matcher.Context.LookupDefaulted<List<IContent>>(name, new List<IContent>());
             elements.Add(new Word(input.Text));
-            Context eaten;
+			Console.WriteLine("Let * take " + input.Text);
+
+        	Context eaten;
             if (needRemoval)
                 eaten = new Context(matcher.Context, matcher.Context.Contents.GetRange(1, matcher.Context.Contents.Count - 1));
             else
                 eaten = new Context(matcher.Context, matcher.Context.Contents);
             eaten.Map.Add(name, elements);
-
+			
             // Continue matcher
             if (unmatched.Count == 0)
             {
-                matcher.Success.Continue(eaten, matcher.Failure);
+				if (eaten.Contents.Count == 0 || Matcher.IsRemainderOptional(eaten.Contents))
+	                matcher.Success.Continue(eaten, matcher.Failure);
+				else
+					matcher.Failure.Fail("Ran out of input after *.", matcher.Success);
             }
             else
             {

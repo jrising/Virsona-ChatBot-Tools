@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemcachedWordNet", "..\Memc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Morphologer", "..\Morphologer\Morphologer.csproj", "{6F541755-110A-4E99-9D8A-764F894D2AC7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExamineTools", "..\ExamineTools\ExamineTools\ExamineTools.csproj", "{F96D3B75-4055-40C7-A03C-ECE015E77BBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -61,6 +63,10 @@ Global
 		{EFDCF9D4-CD29-4FD4-8CCF-8A13A8DE95D3}.Debug|x86.Build.0 = Debug|Any CPU
 		{EFDCF9D4-CD29-4FD4-8CCF-8A13A8DE95D3}.Release|x86.ActiveCfg = Release|Any CPU
 		{EFDCF9D4-CD29-4FD4-8CCF-8A13A8DE95D3}.Release|x86.Build.0 = Release|Any CPU
+		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Debug|x86.Build.0 = Debug|Any CPU
+		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Release|x86.ActiveCfg = Release|Any CPU
+		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Test Paraphrasing\Test Paraphrasing.csproj

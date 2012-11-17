@@ -34,8 +34,8 @@ namespace LanguageNet.AgentParser
 
         public override bool Transform(Sentence sentence)
         {
- 	         if (!sentence.phrases.Contains(this))
-                 return false;
+ 	        if (!sentence.phrases.Contains(this))
+                return false;
 
             bool success = false;
 
@@ -57,20 +57,23 @@ namespace LanguageNet.AgentParser
                     success = true;
             }
 
-            if (NeighborKinds(sentence).Key == "DT" || NeighborKinds(sentence).Key == "PRP$") {
+			KeyValuePair<string, string> neighbors = NeighborKinds(sentence);
+            if (neighbors.Key == "DT" || neighbors.Key == "PRP$") {
                 sentence.AbsorbPrevious(this);
+				neighbors = NeighborKinds(sentence);
                 success = true;
             }
 
-            if (NeighborKinds(sentence).Key == "ADJP") {
+            if (neighbors.Key == "ADJP") {
                 List<Phrase> phrases = new List<Phrase>();
                 phrases.Add(sentence.PhraseBefore(this));
                 phrases.Add(this);
                 sentence.Combine(phrases, new NounPhrase());
+				neighbors = NeighborKinds(sentence);
                 success = true;
             }
 
-            if (NeighborKinds(sentence).Value == "PP")
+            if (neighbors.Value == "PP")
             {
                 Phrase after = sentence.PhraseAfter(this);
                 if (after.Constituents.Count > 1 && after.Constituents[0].Text.ToLower() == "of")
@@ -79,7 +82,7 @@ namespace LanguageNet.AgentParser
                     return true;
                 }
             }
-
+			
             return success;
         }
 
