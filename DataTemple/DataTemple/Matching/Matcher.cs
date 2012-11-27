@@ -155,6 +155,7 @@ namespace DataTemple.Matching
             else if (first is Value && ((Value) first).Data is MatchProduceAgent)
             {
                 IContinuation mysucc = succ;
+				// Check if we have values to match later
                 if (unmatched.Count != 0)
                     mysucc = new Matcher(salience, unmatched[0], unmatched.GetRange(1, unmatched.Count - 1), succ);
                 ContextAppender appender = new ContextAppender(salience, context, -1, mysucc);

@@ -1,3 +1,13 @@
+/******************************************************************\
+ *      Class Name:     MatchProduceAgent
+ *      Written By:     James Rising
+ *      Copyright:      2009, Virsona, Inc.
+ *                      GNU Lesser General Public License, Ver. 3
+ *                      (see license.txt and license.lesser.txt)
+ *      -----------------------------------------------------------
+ * A CallAgent which upon calling, calls a match function with
+ * a value previously added to the context.
+\******************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,16 +21,26 @@ namespace DataTemple.Matching
     {
         protected POSTagger tagger;
 		protected GrammarParser parser;
+		protected bool breakpointCall;
 
         public MatchProduceAgent(ArgumentMode argmode, double salience, int space, int time, POSTagger tagger, GrammarParser parser)
             : base(argmode, salience, space, time)
         {
             this.tagger = tagger;
 			this.parser = parser;
+			this.breakpointCall = false;
         }
+		
+		public bool BreakpointCall {
+			set {
+				breakpointCall = value;
+			}
+		}
 
         public override int Call(object value, IContinuation succ, IFailure fail)
         {
+			if (breakpointCall)
+				Console.WriteLine("Breakpoint in MatchProduceAgent");
 			Context context = (Context) value;
             bool production = context.LookupDefaulted<bool>("$production", false);
             if (!production)

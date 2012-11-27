@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -i  "He ate meat" -t "%sentence He *" -o "@print ok *1"</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -i "Who is to blame? Frank is." -t "%sentences Who is * / %noun *" -o "@print %noun is *1" -v</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -if ~/projects/polspeech/state_union/1946-Truman-2.txt -t "%sentence * because *" -o "@print *1, *2"</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -i "Who is to blame? Frank is." -t "%sentences Who is * / %noun *" -o "@print %noun is *1"</Commandlineparameters>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -107,6 +107,7 @@
     <Compile Include="Matching\ValidateUtilities.cs" />
     <Compile Include="Matching\Variable.cs" />
     <Compile Include="Codeland\CodeletTrace.cs" />
+    <Compile Include="AgentEvaluate\ContinueAgentWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

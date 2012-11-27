@@ -36,7 +36,6 @@ namespace DataTemple.Matching
 
             List<IContent> elements = matcher.Context.LookupDefaulted<List<IContent>>(name, new List<IContent>());
             elements.Add(new Word(input.Text));
-			Console.WriteLine("Let * take " + input.Text);
 
         	Context eaten;
             if (needRemoval)

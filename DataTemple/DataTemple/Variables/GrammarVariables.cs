@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using GenericTools;
 using DataTemple.AgentEvaluate;
 using DataTemple.Matching;
 using LanguageNet.Grammarian;
@@ -47,6 +48,7 @@ namespace DataTemple.Variables
             context.Map.Add("%paren", new ParentheticalVariable(salience, tagger, parser));
             context.Map.Add("%clause", new ClauseVariable(salience, tagger, parser));  // Like %sentence ... %opt .
             //context.Map.Add("%xconj", new ConjugationVariable(coderack, salience, null));
+			context.Map.Add("%sentences", new SentenceSequenceVariable(salience, tagger, parser));
 
             context.Map.Add("%opt", new Special("%opt"));
         }
@@ -557,5 +559,85 @@ namespace DataTemple.Variables
         {
             return ProducePropogated(context, "%clause");
         }
+    }
+	
+    public class SentenceSequenceVariable : MatchProduceAgent
+    {
+        public SentenceSequenceVariable(double salience, POSTagger tagger, GrammarParser parser)
+            : base(ArgumentMode.RemainderUnevaluated, salience, 8, 10, tagger, parser)
+        {
+			//this.breakpointCall = true;
+        }
+
+        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        {
+			if (!(check is IParsedPhrase)) {
+				fail.Fail("Cannot match a " + check.GetType(), succ);
+				return time;
+			}
+			
+			IParsedPhrase phrase = (IParsedPhrase) check;
+			if (phrase.Part != "=P") {
+				fail.Fail("Can only match a paragraph", succ);
+				return time;
+			}
+			
+			context.Map["$sentences.check"] = check;
+			TwoTuple<List<IContent>, IContinuation> parts = SplitArguments(context, succ);
+			List<IContent> chunk = parts.one;
+			
+            // Match against each element
+			int sentenceStart = 0;
+			foreach (IParsedPhrase constituent in phrase.Branches) {
+	            Context first = new Context(context, chunk);
+				first.Map["$sentences.index"] = sentenceStart + 1;
+				
+                Matcher.MatchAgainst(salience, first, constituent, new List<IParsedPhrase>(), parts.two, fail);
+			}
+
+            return time;
+        }
+		
+		public void NextSentence(Context context, IContinuation succ, IFailure fail, params object[] args) {
+			int? sentenceStart = context.LookupDefaulted<int?>("$sentences.index", null);
+			
+			TwoTuple<List<IContent>, IContinuation> parts = SplitArguments(context, succ);
+			List<IContent> chunk = parts.one;
+
+            Context first = new Context(context, chunk);
+			first.Map["$sentences.index"] = sentenceStart + 1;
+				
+			GroupPhrase groupPhrase = new GroupPhrase((IParsedPhrase) context.Lookup("$sentences.check"));
+            Matcher.MatchAgainst(salience, first, groupPhrase.GetBranch(sentenceStart.Value), new List<IParsedPhrase>(), parts.two, fail);
+		}
+
+		// Take first sentence and return remainder as second element of tuple
+		public TwoTuple<List<IContent>, IContinuation> SplitArguments(Context context, IContinuation succ) {
+			// Construct a %sentence for the first segment
+			List<IContent> sentence = new List<IContent>();
+            sentence.Add(new Special("%sentence"));
+			
+			int index = 0;
+			while (index < context.Contents.Count && context.Contents[index].Name != "/") {
+				sentence.Add(context.Contents[index]);
+				index++;
+			}
+			List<IContent> remains = new List<IContent>();
+			if (index < context.Contents.Count) {
+				index++;
+				while (index < context.Contents.Count) {
+					remains.Add(context.Contents[index]);
+					index++;
+				}
+			}
+			
+			IContinuation mysucc = succ;
+			if (remains.Count > 0) {
+				mysucc = new ContinueAgentWrapper(NextSentence, succ);
+				mysucc = new ContextAppender(salience, new Context(context, remains), null, mysucc);
+			}
+
+			return new TwoTuple<List<IContent>, IContinuation>(sentence, mysucc);
+		}
     }
 }

@@ -1,3 +1,13 @@
+/******************************************************************\
+ *      Class Name:     ContinueAgentCodelet
+ *      Written By:     James Rising
+ *      Copyright:      2009, Virsona, Inc.
+ *                      GNU Lesser General Public License, Ver. 3
+ *                      (see license.txt and license.lesser.txt)
+ *      -----------------------------------------------------------
+ * Agent as Continuation that adds itself as a codelet when called
+ * as continuation.
+\******************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
