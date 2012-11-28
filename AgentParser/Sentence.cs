@@ -266,7 +266,7 @@ namespace LanguageNet.AgentParser
                     break;
                 }
             }
-
+			
             // Combine the various completes
             if (completes.Count > 0)
             {
@@ -303,6 +303,8 @@ namespace LanguageNet.AgentParser
                 int newindex = phrases.IndexOf(phrase);
                 if (newindex != -1)
                     index = newindex;
+				if (index >= phrases.Count - 1)
+					return active;
 				Phrase newphrase = phrases[index];
 
                 // Do after first
@@ -312,6 +314,8 @@ namespace LanguageNet.AgentParser
                 newindex = phrases.IndexOf(phrase);
                 if (newindex != -1)
                     index = newindex;
+				if (index >= phrases.Count || index == 0)
+					return active;
 				newphrase = phrases[index];
 
                 if (index > 0 && phrases[index - 1].Precedence > newphrase.Precedence)

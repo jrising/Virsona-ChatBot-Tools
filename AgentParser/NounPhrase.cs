@@ -43,7 +43,7 @@ namespace LanguageNet.AgentParser
             while (lastFound) {
                 KeyValuePair<string, string> nks = NeighborKinds(sentence);
                 if (nks.Value == "." && constituents[constituents.Count - 1].Text.Length == 1)
-                    sentence.MergeNext(this);   // eat the period
+                    sentence.AbsorbNext(this);   // eat the period
                 else if (nks.Key == "" && nks.Value == "NP")
                     sentence.MergeNext(this);
                 else if (nks.Key == "NP" && nks.Value == "NP")
