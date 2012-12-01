@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericTools", "..\GenericT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InOutTools", "..\InOutTools\InOutTools\InOutTools.csproj", "{19407319-EC07-4562-92BE-1A7F86D90ECF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathematicTools", "..\MathematicTools\MathematicTools.csproj", "{6F393411-923C-41BF-B1A7-8C55FF98790C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -29,6 +31,10 @@ Global
 		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Debug|x86.Build.0 = Debug|Any CPU
 		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Release|x86.ActiveCfg = Release|Any CPU
 		{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}.Release|x86.Build.0 = Release|Any CPU
+		{6F393411-923C-41BF-B1A7-8C55FF98790C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6F393411-923C-41BF-B1A7-8C55FF98790C}.Debug|x86.Build.0 = Debug|Any CPU
+		{6F393411-923C-41BF-B1A7-8C55FF98790C}.Release|x86.ActiveCfg = Release|Any CPU
+		{6F393411-923C-41BF-B1A7-8C55FF98790C}.Release|x86.Build.0 = Release|Any CPU
 		{7AEB4A15-8603-4675-B636-98DA6292291A}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{7AEB4A15-8603-4675-B636-98DA6292291A}.Debug|x86.Build.0 = Debug|Any CPU
 		{7AEB4A15-8603-4675-B636-98DA6292291A}.Release|x86.ActiveCfg = Release|Any CPU

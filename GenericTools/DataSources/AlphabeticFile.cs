@@ -125,11 +125,13 @@ namespace GenericTools.DataSources
             if (comparison != 0)
             {
                 value = default(T);
+				fs.Close();
                 return false;
             }
 
             fs.Seek(fs.Position - lastReadCount, SeekOrigin.Begin);
             value = ReadStreamEntry(fs);
+			fs.Close();
             return true;
 		}
 		#endregion

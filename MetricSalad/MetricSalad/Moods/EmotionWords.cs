@@ -11,10 +11,10 @@ namespace MetricSalad
 		public EmotionWords(string filename)
 		{
 			StreamReader file = new StreamReader(filename);
-			equivalents = Equivalents(file.ReadToEnd());
+			equivalents = ReadEquivalents(file.ReadToEnd());
 		}
 		
-		public static Dictionary<string, string[]> Equivalents(string text) {
+		public static Dictionary<string, string[]> ReadEquivalents(string text) {
 			Dictionary<string, string[]> equivalence = new Dictionary<string, string[]>();
 			
 			string[] lines = text.Split('\n');
@@ -29,6 +29,12 @@ namespace MetricSalad
 			}
 			
 			return equivalence;
+		}
+		
+		public Dictionary<string, string[]> Equivalents {
+			get {
+				return equivalents;
+			}
 		}
 	}
 }

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{19407319-EC07-4562-92BE-1A7F86D90ECF}</ProjectGuid>
+    <ProjectGuid>{6F393411-923C-41BF-B1A7-8C55FF98790C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>InOutTools</RootNamespace>
-    <AssemblyName>InOutTools</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <RootNamespace>MathematicTools</RootNamespace>
+    <AssemblyName>MathematicTools</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,23 +31,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Microsoft.VisualBasic" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="CommandLineArguments.cs" />
-    <Compile Include="ToolArguments.cs" />
-    <Compile Include="DataReader.cs" />
-    <Compile Include="HandleQuotesStream.cs" />
+    <Compile Include="Distributions\ClippedGaussianDistribution.cs" />
+    <Compile Include="Distributions\ContinuousDistribution.cs" />
+    <Compile Include="Distributions\DiscretesAsNormal.cs" />
+    <Compile Include="Distributions\FlatDistribution.cs" />
+    <Compile Include="Distributions\GaussianDistribution.cs" />
+    <Compile Include="Distributions\TransformedDistribution.cs" />
+    <Compile Include="Statistics\Matrix.cs" />
+    <Compile Include="Statistics\OLS.cs" />
+    <Compile Include="Statistics\RandomMatrix.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\..\PluggerBase\PluggerBase\PluggerBase.csproj">
-      <Project>{4D2297C0-FE51-4056-80CD-A72469075B10}</Project>
-      <Name>PluggerBase</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Econometrics\" />
-  </ItemGroup>
 </Project>

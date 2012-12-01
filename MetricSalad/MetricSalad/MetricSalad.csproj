@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c ~/projects/virsona/github/config.xml -f ~/projects/twitter/sandy/loctweets.csv -freqrows "sandy"</Commandlineparameters>
+    <Commandlineparameters>-c ~/projects/virsona/github/config.xml -emorows -f ~/projects/twitter/sandy/loctweets.csv</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -44,6 +44,8 @@
     <Compile Include="LexicalHistogram.cs" />
     <Compile Include="FrequencyTools.cs" />
     <Compile Include="PorterStemmer.cs" />
+    <Compile Include="Moods\ANEWFileSource.cs" />
+    <Compile Include="Moods\ANEWEmotionSensor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -62,6 +64,10 @@
     <ProjectReference Include="..\..\PluggerBase\PluggerBase\PluggerBase.csproj">
       <Project>{4D2297C0-FE51-4056-80CD-A72469075B10}</Project>
       <Name>PluggerBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MathematicTools\MathematicTools.csproj">
+      <Project>{6F393411-923C-41BF-B1A7-8C55FF98790C}</Project>
+      <Name>MathematicTools</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
