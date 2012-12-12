@@ -43,8 +43,6 @@ namespace MetricSalad
 					if (!double.IsNaN(emotions[0]))
 						valids++;
 				}
-				
-				Console.WriteLine(valids + " of " + rows);
 			}
 
 		}

@@ -68,18 +68,21 @@ namespace MetricSalad.Moods
 		}
 		
 		public double[] EstimateEmotions(string text) {
-			List<string> words = StringUtilities.SplitWords(text, true);			
+			List<string> words = StringUtilities.SplitWords(text.ToLower(), true);			
 			// 3. Look up each word in ANEWFileSource
 			double[] numer = new double[(int) Emotions.COUNT], denom = new double[(int) Emotions.COUNT];
 			for (int ii = 0; ii < (int) Emotions.COUNT; ii++)
 				numer[ii] = denom[ii] = 0;
 			
 			foreach (string word in words) {
+				if (word.StartsWith(" ") || word.Length <= 2)
+					continue;
+				
 				ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution> vad;
 				if (!source.TryGetValue(word, out vad)) {
 					// try stemmed word
 					string stem = stemmer.stemTerm(word);
-					if (!source.TryGetValue(stem, out vad))
+					if (stem == word || !source.TryGetValue(stem, out vad))
 						continue;
 				}
 				

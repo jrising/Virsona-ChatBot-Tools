@@ -72,14 +72,14 @@ namespace MathematicTools.Distributions
 			                                variance * two.Variance / (variance + two.Variance));*/
 		}
 		
-		// Approximate as normal (poor approximation)
+		// Approximate as normal (poor approximation) - from (mu1 + s1) * (mu2 + s2)
 		public override ContinuousDistribution Times(ContinuousDistribution two) {
-			return new GaussianDistribution(mean * two.Mean, variance + two.Variance);			
+			return new GaussianDistribution(mean * two.Mean, Math.Abs(mean) * two.Variance + Math.Abs(two.Mean) * variance);
 		}
 		
-		// Approximate as normal-- very poor approximation
+		// Approximate as normal-- very poor approximation -- assume far from 0
 		public override ContinuousDistribution DividedBy(ContinuousDistribution two) {
-			return Times(new GaussianDistribution(1/two.Mean, two.Variance));
+			return Times(new GaussianDistribution(1/two.Mean, two.Variance / (two.Mean*two.Mean))) ;
 		}
 
 		public override ContinuousDistribution Negate() {
