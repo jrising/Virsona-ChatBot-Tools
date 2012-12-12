@@ -399,7 +399,7 @@ namespace LanguageNet.Morphologer
                 //base ends (consonant [or qu] + vowel + consonant)
                 } else if (AuxString.IsConsonant(verb, ilen - 1) && AuxString.IsVowel(verb, ilen - 2) &&
                     (AuxString.IsConsonant(verb, ilen - 3) ||
-                     (verb[ilen - 4] == 'q' && verb[ilen - 3] == 'u'))) {
+                     (ilen > 3 && verb[ilen - 4] == 'q' && verb[ilen - 3] == 'u'))) {
                     if (last == 'c')
                         return verb + "king";
                     else if ((last == 'x') || (last == 'y') || (last=='w'))
