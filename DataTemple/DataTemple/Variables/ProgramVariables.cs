@@ -36,7 +36,7 @@ namespace DataTemple.Variables
             double salience = (double) args[0];
             Context definition = (Context)args[1];
 
-            Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, succ, new NopCallable());
+            Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, succ, new NopCallable(), true);
             eval.Continue(definition, fail);
 
             return 10;

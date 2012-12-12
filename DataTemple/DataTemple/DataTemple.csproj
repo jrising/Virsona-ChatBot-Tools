@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -i "Who is to blame? Frank is." -t "%sentences Who is * / %noun *" -o "@print %noun is *1" -v</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -i "Jimmy eats world" -t "%noun %verb *" -o "@print %verb:ing" -v</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -93,7 +93,6 @@
     <Compile Include="Matching\ConceptTranslator.cs" />
     <Compile Include="Matching\Datum.cs" />
     <Compile Include="Matching\DictumMaker.cs" />
-    <Compile Include="Matching\IDeclinable.cs" />
     <Compile Include="Matching\KnowledgeUtilities.cs" />
     <Compile Include="Matching\Matcher.cs" />
     <Compile Include="Matching\MatchProduceAgent.cs" />
@@ -108,6 +107,8 @@
     <Compile Include="Matching\Variable.cs" />
     <Compile Include="Codeland\CodeletTrace.cs" />
     <Compile Include="AgentEvaluate\ContinueAgentWrapper.cs" />
+    <Compile Include="Matching\IDeclinable.cs" />
+    <Compile Include="Matching\DeclinedVariable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

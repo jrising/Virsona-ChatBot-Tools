@@ -181,26 +181,29 @@ namespace DataTemple.AgentEvaluate
 
             if (!name.StartsWith("%"))
                 throw new Exception(name + " not found");
-
-            // Does this have a suffix?
-            string front = name.TrimEnd("0123456789".ToCharArray());
-            if (front == name)
+			
+            // Does this have suffixes?
+			string[] parts = name.Split(':');
+			if (parts.Length == 1)
                 throw new Exception(name + " not found");
-
-            string suffix = name.Substring(front.Length);
-
-            // Look up this as a mutable object
-            object declinable = LookupSimple(front);
-            if (declinable == null)
+			
+            string front = parts[0];
+            Variable variable = LookupDefaulted<Variable>(front, null);
+            if (variable == null)
                 throw new Exception(front + " not found");
-            if (!(declinable is IDeclinable))
-                throw new Exception(front + " is not declinable");
-
-            value = LookupDefaulted<IDeclinable>(suffix, null);
-            if (value == null)
-                return ((IDeclinable)declinable).Associate("%" + suffix);
-            else
-                return ((IDeclinable)value).Decline((IDeclinable)declinable);
+			
+			StringBuilder declinedName = new StringBuilder();
+			declinedName.Append(front);
+			for (int ii = 1; ii < parts.Length; ii++) {
+	            IDeclination declination = LookupDefaulted<IDeclination>(":" + parts[ii], null);
+	            if (declination == null)
+	                throw new Exception(":" + parts[ii] + " not found");
+			
+				declinedName.Append(":" + parts[ii]);
+				variable = new DeclinedVariable(declinedName.ToString(), variable, declination);
+			}
+			
+			return variable;
         }
 
         public T LookupDefaulted<T>(string name, T defval)

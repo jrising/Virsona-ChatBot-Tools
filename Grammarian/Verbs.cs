@@ -241,7 +241,7 @@ namespace LanguageNet.Grammarian
                     ConjugationResultType, 2, 1000);
             }
 
-            return verb + "ing";
+            return verb + "en";
         }
 
         // inflect according to the given conversion

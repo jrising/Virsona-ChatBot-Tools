@@ -5,6 +5,7 @@ using DataTemple.Variables;
 using DataTemple.AgentEvaluate;
 using LanguageNet.Grammarian;
 using PluggerBase.ActionReaction.Evaluations;
+using InOutTools;
 
 namespace DataTemple.Matching
 {
@@ -53,6 +54,7 @@ namespace DataTemple.Matching
         {			
             List<IContent> contents = context.Contents;
 			if (contents.Count == 0) {
+				Unilog.Notice(this, "Ran out of template before input");
 				fail.Fail("Ran out of tokens before matched all input", succ);
 				return time;
 			}
@@ -139,6 +141,7 @@ namespace DataTemple.Matching
                 else if (input.IsLeaf)
                 {
                     // we didn't match-- fail!
+					Unilog.Notice(this, first.Name + " does not match " + input.Text);
                     fail.Fail("Initial variable didn't match", succ);
                     return time;
                 }
@@ -211,7 +214,7 @@ namespace DataTemple.Matching
 
             ContinuationAppender appender = new ContinuationAppender(context, matcheval);
 
-            Evaluator eval = new Evaluator(salience, ArgumentMode.SingleArgument, appender, appender);
+            Evaluator eval = new Evaluator(salience, ArgumentMode.SingleArgument, appender, appender, true);
             eval.Lineage = NewLineage();
             appender.RegisterCaller(eval.Lineage);
             appender.RegisterCaller(eval.Lineage);
@@ -230,6 +233,7 @@ namespace DataTemple.Matching
             if (context.Contents.Count == 0)
             {
                 // We ran out elements, but we still have some unmatched
+				Unilog.Notice(this, "Ran out of tokens before input");
                 fail.Fail("Ran out of tokens before matched all input", succ);
                 return;
             }

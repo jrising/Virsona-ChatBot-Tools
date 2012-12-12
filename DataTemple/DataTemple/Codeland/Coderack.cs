@@ -12,6 +12,7 @@ using PluggerBase;
 using PluggerBase.ActionReaction.Evaluations;
 using PluggerBase.FastSerializer;
 using DataTemple.Codeland.SearchTree;
+using InOutTools;
 
 namespace DataTemple.Codeland
 {
@@ -168,6 +169,18 @@ namespace DataTemple.Codeland
             {
                 used = EvaluateCodelet(codelet, debugMode) + 1;
             }
+			catch (UserException e) {
+                receiver.Receive(e.Message, codelet);
+                if (!codelet.immune)
+                {
+                    // Remove the bad codelet
+                    DeleteCodelet(codelet);
+                }
+                else
+                    codelet.RemoveFutureCodelet(nameActive);
+                if (debugMode)
+                    throw new Exception(e.Message + " - " + e.StackTrace, e);
+			}
             catch (Exception e)
             {
                 // Record exception here!

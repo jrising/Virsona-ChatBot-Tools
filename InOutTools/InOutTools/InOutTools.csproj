@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -39,6 +40,8 @@
     <Compile Include="ToolArguments.cs" />
     <Compile Include="DataReader.cs" />
     <Compile Include="HandleQuotesStream.cs" />
+    <Compile Include="Unilog.cs" />
+    <Compile Include="UserException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -46,8 +49,9 @@
       <Project>{4D2297C0-FE51-4056-80CD-A72469075B10}</Project>
       <Name>PluggerBase</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Econometrics\" />
+    <ProjectReference Include="..\..\GenericTools\GenericTools.csproj">
+      <Project>{7AEB4A15-8603-4675-B636-98DA6292291A}</Project>
+      <Name>GenericTools</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -107,7 +107,9 @@ namespace DataTemple
             foreach (PatternTemplateSource dictum in dicta)
                 dictum.Generate(coderack, phrase, main, new NopCallable(), 1.0);
 
-            coderack.Execute(1000000, true);
+            coderack.Execute(1000000, false);
+			if (main.verbose && Unilog.HasEntries)
+				Console.WriteLine(Unilog.FlushToStringShort());
 		}		
 		
 		public MainClass(CommandLineArguments parsedArgs) {
@@ -184,8 +186,11 @@ namespace DataTemple
 		
 		public bool Receive(string message, object reference) {
 			if (verbose) {
-				if (message == "EvaluateCodelet")
+				if (message == "EvaluateCodelet") {
+					if (Unilog.HasEntries)
+						Console.WriteLine(Unilog.FlushToStringShort());
 					Console.WriteLine("Codelet " + reference.ToString()); //reference.GetType().Name);
+				}
 				else
 					Console.WriteLine(message);
 			}

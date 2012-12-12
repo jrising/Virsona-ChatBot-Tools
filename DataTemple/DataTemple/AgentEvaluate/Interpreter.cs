@@ -39,10 +39,23 @@ namespace DataTemple.AgentEvaluate
                         {
                             if (jj == 1 && ii != 0)
                                 contents.Add(new Word(" "));  // no space!
+							
+							// Collect any suffixes
+							int skip = 2;
+							StringBuilder suffixes = new StringBuilder();
+							while (tokens.Count > ii + skip + 3) {
+								if (tokens[ii + skip + 1] == " :" && tokens[ii + skip + 2] == " ") {
+									suffixes.Append(":");
+									suffixes.Append(tokens[ii + skip + 3]);
+									skip += 3;
+								} else
+									break;
+							}
+							
                             // This is part of our name!
-                            contents.Add(new Special(tokens[ii].Substring(jj) + tokens[ii + 2]));
+                            contents.Add(new Special(tokens[ii].Substring(jj) + tokens[ii + 2] + suffixes.ToString()));
                             // skip next two
-                            ii += 2;
+                            ii += skip;
                         }
 						else // nothing going on here
 							contents.Add(new Special(tokens[ii].Substring(jj)));

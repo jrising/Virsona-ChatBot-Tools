@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using PluggerBase.ActionReaction.Evaluations;
 using DataTemple.Codeland;
+using InOutTools;
 
 namespace DataTemple.AgentEvaluate
 {
@@ -18,12 +19,14 @@ namespace DataTemple.AgentEvaluate
     {
         protected ArgumentMode argumentMode;
         protected IContinuation aftersucc;
+		protected bool isUserInput;
         
-        public Evaluator(double salience, ArgumentMode argumentMode, IContinuation valuesucc, IContinuation aftersucc)
+        public Evaluator(double salience, ArgumentMode argumentMode, IContinuation valuesucc, IContinuation aftersucc, bool isUserInput)
             : base(salience, 2 * 4, 100, valuesucc)
         {
             this.argumentMode = argumentMode;
             this.aftersucc = aftersucc;
+			this.isUserInput = isUserInput;
         }
 
         public override int Evaluate()
@@ -68,8 +71,16 @@ namespace DataTemple.AgentEvaluate
             }
 
             IContent content = contents[ii];
-
-            object element = context.Lookup(content.Name);
+			
+			object element = null;
+			try {
+	            element = context.Lookup(content.Name);
+			} catch (Exception ex) {
+				if (isUserInput)
+					throw new UserException("The variable '" + content.Name + "' is unknown", ex);
+				else
+					throw ex;
+			}
             if (element is CallAgent)
             {
                 IContinuation mysucc = succ;
@@ -93,7 +104,7 @@ namespace DataTemple.AgentEvaluate
                         contagent.Lineage = NewLineage();
                         evalappend.RegisterCaller(contagent.Lineage);
 
-                        Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, evalappend, aftersucc);
+                        Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, evalappend, aftersucc, isUserInput);
                         eval.lineage = NewLineage();
                         evalappend.RegisterCaller(eval.lineage);
                         eval.Continue(new Context(context, sublst), fail);
@@ -110,7 +121,7 @@ namespace DataTemple.AgentEvaluate
                     if (argumentMode == ArgumentMode.SingleArgument)
                     {
                         ContinueToCallAgent callagent = new ContinueToCallAgent((CallAgent)element, mysucc);
-                        Evaluator eval = new Evaluator(salience, ((CallAgent) element).ArgumentOptions, callagent, aftersucc);
+                        Evaluator eval = new Evaluator(salience, ((CallAgent) element).ArgumentOptions, callagent, aftersucc, isUserInput);
                         eval.Continue(new Context(context, sublst), fail);
                         return time;
                     }
@@ -122,11 +133,11 @@ namespace DataTemple.AgentEvaluate
                         callagent.Lineage = NewLineage();
                         evalappend.RegisterCaller(callagent.Lineage);
 
-                        Evaluator aftereval = new Evaluator(salience, ArgumentMode.ManyArguments, evalappend, aftersucc);
+                        Evaluator aftereval = new Evaluator(salience, ArgumentMode.ManyArguments, evalappend, aftersucc, isUserInput);
                         aftereval.lineage = NewLineage();
                         evalappend.RegisterCaller(aftereval.lineage);
 
-                        Evaluator eval = new Evaluator(salience, ((CallAgent) element).ArgumentOptions, callagent, aftereval);
+                        Evaluator eval = new Evaluator(salience, ((CallAgent) element).ArgumentOptions, callagent, aftereval, isUserInput);
                         eval.Continue(new Context(context, sublst), fail);
                         return time;
                     }
@@ -139,7 +150,7 @@ namespace DataTemple.AgentEvaluate
 
                 coderack.AddCodelet((Codelet) element, "Codelet in content");
 
-                Evaluator eval = new Evaluator(salience, argumentMode, mysucc, aftersucc);
+                Evaluator eval = new Evaluator(salience, argumentMode, mysucc, aftersucc, isUserInput);
                 eval.Continue(new Context(context, sublst), fail);
                 return time;
             } else {
@@ -162,7 +173,7 @@ namespace DataTemple.AgentEvaluate
                     IContinuation appender = new ContextAppender(salience, result, result.Contents.Count, succ);
                     List<IContent> sublst = context.Contents.GetRange(ii + 1, context.Contents.Count - ii - 1);
 
-                    Evaluator eval = new Evaluator(salience, argumentMode, appender, aftersucc);
+                    Evaluator eval = new Evaluator(salience, argumentMode, appender, aftersucc, isUserInput);
                     eval.Continue(new Context(context, sublst), fail);
                     return time;
                 }

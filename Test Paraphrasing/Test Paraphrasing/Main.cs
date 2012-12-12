@@ -24,6 +24,13 @@ namespace TestParaphrasing
 			GrammarParser parser = new GrammarParser(plugenv);
 			IParsedPhrase before = parser.Parse("This is a rug and a keyboard.");
 			Console.WriteLine(before.ToString());
+			
+			// Test 5: Pluralize nouns and conjugate verbs
+			Nouns nouns = new Nouns(plugenv);
+			Console.WriteLine("person becomes " + nouns.Pluralize("person"));
+			Verbs verbs = new Verbs(plugenv);
+			Console.WriteLine("goes becomes " + verbs.ComposePast("goes"));
+			Console.WriteLine("eats becomes " + verbs.ComposePrespart(verbs.InputToBase("eats")));
 
 			// Test 3: Paraphrasing
 			Random randgen = new Random();
@@ -33,12 +40,6 @@ namespace TestParaphrasing
 			// Test 4: Look up some indices
 			WordNetAccess wordnet = new WordNetAccess(plugenv);
 			Console.WriteLine("Synonyms: " + string.Join(", ", wordnet.GetExactSynonyms("rug", WordNetAccess.PartOfSpeech.Noun).ToArray()));
-
-			// Test 5: Pluralize nouns and conjugate verbs
-			Nouns nouns = new Nouns(plugenv);
-			Console.WriteLine("person becomes " + nouns.Pluralize("person"));
-			Verbs verbs = new Verbs(plugenv);
-			Console.WriteLine("goes becomes " + verbs.ComposePast("goes"));
 		}
 		
 		public MainClass() {

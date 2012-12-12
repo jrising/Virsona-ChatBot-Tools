@@ -96,7 +96,7 @@ namespace DataTemple.Matching
 
             ContinuationAppender appender = new ContinuationAppender(pattern, checker);
 
-            Evaluator eval = new Evaluator(maxSalience * weight, ArgumentMode.ManyArguments, appender, appender);
+            Evaluator eval = new Evaluator(maxSalience * weight, ArgumentMode.ManyArguments, appender, appender, true);
             eval.Lineage = ContinueAgentCodelet.NewLineage();
             appender.RegisterCaller(eval.Lineage);
             appender.RegisterCaller(eval.Lineage);
@@ -112,7 +112,7 @@ namespace DataTemple.Matching
             // Did we successfully match everything?  If so, evaluate the template
             if (Matcher.IsRemainderOptional(context.Contents))
             {
-                Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, succ, new NopCallable());
+                Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, succ, new NopCallable(), true);
                 Context child = new Context(context, template.Contents);
                 child.Map["$production"] = true;
                 return eval.Continue(child, fail) + 1;

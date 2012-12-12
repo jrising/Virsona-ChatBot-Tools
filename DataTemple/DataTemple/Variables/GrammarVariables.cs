@@ -49,8 +49,16 @@ namespace DataTemple.Variables
             context.Map.Add("%clause", new ClauseVariable(salience, tagger, parser));  // Like %sentence ... %opt .
             //context.Map.Add("%xconj", new ConjugationVariable(coderack, salience, null));
 			context.Map.Add("%sentences", new SentenceSequenceVariable(salience, tagger, parser));
-
+			
             context.Map.Add("%opt", new Special("%opt"));
+
+			context.Map.Add(":lower", new LowercaseDeclination());
+			context.Map.Add(":capital", new CapitalizeDeclination());
+			context.Map.Add(":x", new VerbSubDeclination(verbs, "VBP", Verbs.Convert.ext_V));
+			context.Map.Add(":en", new VerbSubDeclination(verbs, "VBN", Verbs.Convert.ext_Ven));
+			context.Map.Add(":ing", new VerbSubDeclination(verbs, "VBG", Verbs.Convert.ext_Ving));
+			context.Map.Add(":ed", new VerbSubDeclination(verbs, "VBD", Verbs.Convert.ext_Vs));
+			context.Map.Add(":s", new VerbSubDeclination(verbs, "VBZ", Verbs.Convert.ext_V));
         }
     }
 
@@ -122,7 +130,7 @@ namespace DataTemple.Variables
 
         public override bool IsMatch(IParsedPhrase check)
         {
-            return (check.Part == "NN" || check.Part == "NP");
+            return (check.Part == "NN" || check.Part == "NNS" || check.Part == "NP" || check.Part == "NNP" || check.Part == "NNPS");
         }
 
         public override bool IsMatch(Concept concept)
@@ -390,7 +398,7 @@ namespace DataTemple.Variables
 
             ContinuationAppender appender = new ContinuationAppender(context, cont);
 
-            Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, appender, appender);
+            Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, appender, appender, true);
             eval.Lineage = ContinueAgentCodelet.NewLineage();
             appender.RegisterCaller(eval.Lineage);
             appender.RegisterCaller(eval.Lineage);
@@ -458,7 +466,7 @@ namespace DataTemple.Variables
         public override int Match(object check, Context context, IContinuation succ, IFailure fail)
         {
             if (check is IParsedPhrase && ((IParsedPhrase) check).IsLeaf)
-                return 1;
+                return time;
 
             // Match against each element
             foreach (IParsedPhrase constituent in ((IParsedPhrase) check).Branches)
@@ -506,7 +514,7 @@ namespace DataTemple.Variables
             else
             {
                 fail.Fail("check is not parenthetical", succ);
-                return 1;
+                return time;
             }
         }
 
@@ -638,6 +646,110 @@ namespace DataTemple.Variables
 			}
 
 			return new TwoTuple<List<IContent>, IContinuation>(sentence, mysucc);
+		}
+	}
+
+	public class LowercaseDeclination : IDeclination
+    {
+		public bool IsInDeclination(object value)
+		{
+            if (value is IParsedPhrase) {
+				IParsedPhrase phrase = (IParsedPhrase) value;
+				return (phrase.Text.ToLower() == phrase.Text);
+			}
+			
+			return false;
+		}
+
+		public object Decline(object value)
+		{
+            if (value is IParsedPhrase) {
+				IParsedPhrase phrase = (IParsedPhrase) value;
+				if (phrase.IsLeaf)
+					return new WordPhrase(phrase.Text.ToLower(), phrase.Part);
+				
+				List<IParsedPhrase> branches = new List<IParsedPhrase>();
+				foreach (IParsedPhrase branch in phrase.Branches)
+					branches.Add((IParsedPhrase) Decline(branch));
+				
+				return new GroupPhrase(phrase.Part, branches);
+			}
+			
+			return value;
+		}
+	}
+	
+	public class CapitalizeDeclination : IDeclination
+    {
+		public bool IsInDeclination(object value)
+		{
+            if (value is IParsedPhrase) {
+				IParsedPhrase phrase = (IParsedPhrase) value;
+				string[] words = phrase.Text.Split(' ');
+				for (int ii = 0; ii < words.Length; ii++) {
+					if (words[ii] == "of" || words[ii] == "the" || words[ii] == "a" || words[ii] == "and")
+						continue;
+					if (words[ii].Substring(0, 1).ToUpper() != words[ii].Substring(0, 1))
+						return false;
+				}
+				return true;
+			}
+			
+			return false;
+		}
+
+		public object Decline(object value)
+		{
+            if (value is IParsedPhrase) {
+				IParsedPhrase phrase = (IParsedPhrase) value;
+				if (phrase.IsLeaf)
+					return new WordPhrase(phrase.Text.Substring(0, 1).ToUpper() + phrase.Text.Substring(1), phrase.Part);
+				
+				List<IParsedPhrase> branches = new List<IParsedPhrase>();
+				foreach (IParsedPhrase branch in phrase.Branches)
+					branches.Add((IParsedPhrase) Decline(branch));
+				
+				return new GroupPhrase(phrase.Part, branches);
+			}
+			
+			return value;
+		}
+	}
+	
+    public class VerbSubDeclination : IDeclination
+    {
+        protected Verbs verbs;
+        protected string pos;
+        Verbs.Convert inflection;
+
+        public VerbSubDeclination(Verbs verbs, string pos, Verbs.Convert inflection)
+        {
+            this.verbs = verbs;
+            this.pos = pos;
+            this.inflection = inflection;
+        }
+		
+		public bool IsInDeclination(object value) {
+            if (value is IParsedPhrase) {
+				IParsedPhrase phrase = (IParsedPhrase) value;
+				
+				VerbSubVariable checker = new VerbSubVariable("decliner", verbs, pos, inflection);
+				return checker.IsMatch(phrase);
+			}
+			
+			return false;
+		}
+
+		public object Decline(object value)
+		{
+			if (value is IParsedPhrase) {
+				IParsedPhrase phrase = (IParsedPhrase) value;
+				
+				string inflected = verbs.InflectVerb(verbs.InputToBase(phrase.Text), inflection);
+				return new WordPhrase(inflected, pos);
+			}
+			
+			return value;
 		}
     }
 }

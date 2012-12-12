@@ -7,17 +7,13 @@ using GenericTools;
 
 namespace DataTemple.Matching
 {
-    public class Variable : Special, IDeclinable
+    public class Variable : Special
     {
-        // When called as part of a declination
-        protected string associate;
-
         public delegate object GetValue(object defval, params object[] args);
 
         public Variable(string name)
             : base(name)
         {
-            associate = null;
         }
 
         public virtual bool Match(Context env, IParsedPhrase check)
@@ -75,9 +71,6 @@ namespace DataTemple.Matching
                 env.Map["$p$" + name] = matched;
                 env.Map["$s$" + name] = strength;
             }
-			
-            if (associate != null)
-                env.Map[associate] = this;
         }
 
         public virtual bool IsMatch(IParsedPhrase check)
@@ -114,21 +107,5 @@ namespace DataTemple.Matching
 
             return concept.ToPhrase(tagger, parser);
         }
-
-        #region IDeclinable Members
-
-        public object Decline(IDeclinable into)
-        {
-            return this;
-        }
-
-        public IDeclinable Associate(string name)
-        {
-            Variable copy = (Variable) this.MemberwiseClone();
-            copy.associate = name;
-            return copy;
-        }
-
-        #endregion
     }
 }
