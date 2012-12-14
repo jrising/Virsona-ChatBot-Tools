@@ -41,19 +41,19 @@ namespace DataTemple.Variables
             assertionSource = plugenv.GetDataSource<KeyValuePair<Notion, string>, List<Assertion>>(ConceptNetUtilities.AssertionSourceName);
         }
 
-        public override int Call(object value, IContinuation succ, IFailure fail)
+        public override bool Call(object value, IContinuation succ, IFailure fail)
         {
 			Context context = (Context) value;
             if (principleSource == null || assertionSource == null) {
                 fail.Fail("ConceptNet sources missing", succ);
-                return time;
+                return true;
             }
 
             Notion concept;
             if (!principleSource.TryGetValue(StarUtilities.ContentsCode(context, tagger, parser), out concept))
             {
                 fail.Fail("Could not find produced in ConceptNet", succ);
-                return time;
+                return true;
             }
 
             List<Assertion> assertions;
@@ -69,7 +69,7 @@ namespace DataTemple.Variables
             }
 
             succ.Continue(new Context(context, contents), fail);
-            return time;
+            return true;
         }
     }
 }

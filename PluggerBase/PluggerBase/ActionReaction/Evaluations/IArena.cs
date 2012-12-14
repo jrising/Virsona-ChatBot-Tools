@@ -17,12 +17,12 @@ namespace PluggerBase.ActionReaction.Evaluations
 {
     public interface IArena : IFastSerializable
     {
-        int Evaluate(IEvaluable evaluable, double salience);
+        bool Evaluate(IEvaluable evaluable, double salience);
 
-        int Call(ICallable callable, double salience, object value, IContinuation succ, IFailure fail);
+        bool Call(ICallable callable, double salience, object value, IContinuation succ, IFailure fail);
         // Clone the continuation on calling, so we can handle multiple calls
-        int Continue(IContinuation cont, double salience, object value, IFailure fail);
+        bool Continue(IContinuation cont, double salience, object value, IFailure fail);
         // Clone the failure on calling, so we can handle multiple calls
-        int Fail(IFailure fail, double salience, string reason, IContinuation skip);
+        bool Fail(IFailure fail, double salience, string reason, IContinuation skip);
     }
 }

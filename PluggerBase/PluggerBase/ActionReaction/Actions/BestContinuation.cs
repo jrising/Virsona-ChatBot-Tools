@@ -68,7 +68,7 @@ namespace PluggerBase.ActionReaction.Actions
 
             #region IContinuation Members
 
-            public int Continue(object value, IFailure fail)
+            public bool Continue(object value, IFailure fail)
             {
                 if (parent.salience <= salience)
                 {
@@ -77,7 +77,7 @@ namespace PluggerBase.ActionReaction.Actions
                     parent.fail = fail;
                 }
 
-                return 1;
+                return true;
             }
 
             public object Clone()

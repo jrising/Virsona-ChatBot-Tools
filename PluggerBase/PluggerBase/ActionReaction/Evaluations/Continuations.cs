@@ -16,10 +16,10 @@ namespace PluggerBase.ActionReaction.Evaluations
 {
     public interface IContinuation : ICloneable
     {
-        int Continue(object value, IFailure fail);
+        bool Continue(object value, IFailure fail);
     }
 
-    public delegate int Continuelet(IArena arena, double salience, object value, IFailure fail, params object[] args);
+    public delegate bool Continuelet(IArena arena, double salience, object value, IFailure fail, params object[] args);
 
     public class ContinueletWrapper : AgentBase, IContinuation
     {
@@ -34,7 +34,7 @@ namespace PluggerBase.ActionReaction.Evaluations
 
         #region IContinuation Members
 
-        public int Continue(object value, IFailure fail)
+        public bool Continue(object value, IFailure fail)
         {
             return continuelet(arena, salience, value, fail, args);
         }
@@ -78,7 +78,7 @@ namespace PluggerBase.ActionReaction.Evaluations
 
         #region IEvaluable Members
 
-        public int Evaluate()
+        public bool Evaluate()
         {
             return continuation.Continue(value, fail);
         }

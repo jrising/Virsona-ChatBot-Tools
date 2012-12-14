@@ -80,7 +80,7 @@ namespace DataTemple.Codeland
                     // Console.WriteLine("=(" + CountPrime.ToString + "/" + codelets.Count.ToString + ")=> " + codelet.ToString())
                     try
                     {
-                        time -= EvaluateCodelet(codelet, debugMode) + 1;
+                        EvaluateCodelet(codelet, debugMode);
                     }
 					catch (UserException e) {
 		                receiver.Receive(e.Message, codelet);
@@ -143,7 +143,7 @@ namespace DataTemple.Codeland
                 receiver.Receive("Time Limit Reached.", this);
         }
 
-        public override int ExecuteOne(bool debugMode)
+        public override bool ExecuteOne(bool debugMode)
         {
             SalienceList<Codelet> codelist = (SalienceList<Codelet>)codelets;
 
@@ -151,7 +151,7 @@ namespace DataTemple.Codeland
             LinkedListNode<double> keys = codelist.LinkedKeys.Last;
             LinkedListNode<Codelet> values = codelist.LinkedValues.Last;
             if (values == null)
-                return 0;   // nothing to do!
+                return true;   // nothing to do!
 
             Codelet codelet = values.Value;
             if (values.Previous != null)
@@ -162,21 +162,21 @@ namespace DataTemple.Codeland
             }
 
             if (codelet == null)
-                return 0;   // nothing to do!
+                return true;   // nothing to do!
 
             if (!codelet.NeedsEvaluation)
             {
                 // Skip it!
-                return 1;
+                return true;
             }
 
             watching = codelet.watched;
-            int used = 1;
+            bool done = false;
 
             // Console.WriteLine("=(" + CountPrime.ToString + "/" + codelets.Count.ToString + ")=> " + codelet.ToString())
             try
             {
-                used = EvaluateCodelet(codelet, debugMode) + 1;
+                done = EvaluateCodelet(codelet, debugMode);
             }
             catch (Exception e)
             {
@@ -205,7 +205,7 @@ namespace DataTemple.Codeland
                 keys = keys.Previous;
             }
 
-            return used;
+            return done;
         }
         #endregion
     }

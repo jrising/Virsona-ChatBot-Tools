@@ -21,19 +21,19 @@ namespace DataTemple.AgentEvaluate
             this.fail = fail;
         }
 
-        public override int Evaluate()
+        public override bool Evaluate()
         {
             succ.Continue(context, fail);
 
-            return time;
+            return true;
         }
 
         #region IFailure Members
 
-        public int Fail(string reason, IContinuation succ)
+        public bool Fail(string reason, IContinuation succ)
         {
             coderack.AddCodelet((Codelet) this.Clone(), "Fail: " + reason);
-            return 1;
+            return true;
         }
 
         #endregion

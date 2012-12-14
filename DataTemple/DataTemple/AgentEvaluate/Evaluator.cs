@@ -29,7 +29,7 @@ namespace DataTemple.AgentEvaluate
 			this.isUserInput = isUserInput;
         }
 
-        public override int Evaluate()
+        public override bool Evaluate()
         {
             List<IContent> contents = context.Contents;
 
@@ -37,7 +37,7 @@ namespace DataTemple.AgentEvaluate
                 // nothing to do!
                 succ.Continue(context, fail);
                 aftersucc.Continue(new Context(context, null), fail);
-                return time;
+                return true;
             }
 
             // Look ahead until first recursion
@@ -49,7 +49,7 @@ namespace DataTemple.AgentEvaluate
             if (ii > 0 && argumentMode == ArgumentMode.SingleArgument) {
                 succ.Continue(new Context(context, contents.GetRange(0, 1)), fail);
                 aftersucc.Continue(new Context(context, contents.GetRange(1, contents.Count - 1)), fail);
-                return time;
+                return true;
             }
 
             if (ii == contents.Count)
@@ -57,7 +57,7 @@ namespace DataTemple.AgentEvaluate
                 // everything was done
                 succ.Continue(context, fail);
                 aftersucc.Continue(new Context(context, null), fail);
-                return time;
+                return true;
             }
 
             if (contents[ii] == Special.EndDelimSpecial)
@@ -67,7 +67,7 @@ namespace DataTemple.AgentEvaluate
                 Context after = new Context(context, contents.GetRange(ii + 1, contents.Count - ii - 1));
                 succ.Continue(value, fail);
                 aftersucc.Continue(after, fail);
-                return time;
+                return true;
             }
 
             IContent content = contents[ii];
@@ -94,7 +94,7 @@ namespace DataTemple.AgentEvaluate
                     {
                         ContinueToCallAgent.Instantiate((CallAgent)element, new Context(context, null), mysucc, fail);
                         aftersucc.Continue(new Context(context, sublst), fail);
-                        return time;
+                        return true;
                     }
                     else
                     {
@@ -109,21 +109,21 @@ namespace DataTemple.AgentEvaluate
                         evalappend.RegisterCaller(eval.lineage);
                         eval.Continue(new Context(context, sublst), fail);
 
-                        return time;
+                        return true;
                     }
                 }
                 else if (((CallAgent)element).ArgumentOptions == ArgumentMode.RemainderUnevaluated)
                 {
                     ContinueToCallAgent.Instantiate((CallAgent) element, new Context(context, sublst), mysucc, fail);
                     aftersucc.Continue(new Context(context, new List<IContent>()), fail);
-                    return time;
+                    return true;
                 } else {
                     if (argumentMode == ArgumentMode.SingleArgument)
                     {
                         ContinueToCallAgent callagent = new ContinueToCallAgent((CallAgent)element, mysucc);
                         Evaluator eval = new Evaluator(salience, ((CallAgent) element).ArgumentOptions, callagent, aftersucc, isUserInput);
                         eval.Continue(new Context(context, sublst), fail);
-                        return time;
+                        return true;
                     }
                     else
                     {
@@ -139,7 +139,7 @@ namespace DataTemple.AgentEvaluate
 
                         Evaluator eval = new Evaluator(salience, ((CallAgent) element).ArgumentOptions, callagent, aftereval, isUserInput);
                         eval.Continue(new Context(context, sublst), fail);
-                        return time;
+                        return true;
                     }
                 }
             } else if (element is Codelet) {
@@ -152,7 +152,7 @@ namespace DataTemple.AgentEvaluate
 
                 Evaluator eval = new Evaluator(salience, argumentMode, mysucc, aftersucc, isUserInput);
                 eval.Continue(new Context(context, sublst), fail);
-                return time;
+                return true;
             } else {
                 Context result = new Context(context, new List<IContent>(context.Contents.GetRange(0, ii)));
                 if (element is IContent)
@@ -166,7 +166,7 @@ namespace DataTemple.AgentEvaluate
                 {
                     succ.Continue(result, fail);
                     aftersucc.Continue(new Context(context, contents.GetRange(1, contents.Count - 1)), fail);
-                    return time;
+                    return true;
                 }
                 else
                 {
@@ -175,7 +175,7 @@ namespace DataTemple.AgentEvaluate
 
                     Evaluator eval = new Evaluator(salience, argumentMode, appender, aftersucc, isUserInput);
                     eval.Continue(new Context(context, sublst), fail);
-                    return time;
+                    return true;
                 }
             }
         }

@@ -37,7 +37,7 @@ namespace DataTemple.Matching
 			}
 		}
 
-        public override int Call(object value, IContinuation succ, IFailure fail)
+        public override bool Call(object value, IContinuation succ, IFailure fail)
         {
 			if (breakpointCall)
 				Console.WriteLine("Breakpoint in MatchProduceAgent");
@@ -57,7 +57,7 @@ namespace DataTemple.Matching
                     child.Map["$argctx"] = context;
                     
                     succ.Continue(child, fail);
-                    return 4;
+                    return true;
                 }
 
                 Context argctx = context.LookupDefaulted<Context>("$argctx", context);
@@ -68,18 +68,18 @@ namespace DataTemple.Matching
                 return Produce(context, succ, fail);
         }
 
-        public virtual int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public virtual bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
-            return time;
+            return true;
         }
 
-        public virtual int Produce(Context context, IContinuation succ, IFailure fail)
+        public virtual bool Produce(Context context, IContinuation succ, IFailure fail)
         {
-            return time;
+            return true;
         }
 
         // This will call success either way, but only propogate if context is empty
-        public int PropogateOnClear(Context context, IContinuation succ, IFailure fail, params object[] args)
+        public bool PropogateOnClear(Context context, IContinuation succ, IFailure fail, params object[] args)
         {
             if (context.IsEmpty || (context.Contents.Count == 1 && context.Contents[0].Name.StartsWith("*")))
             {
@@ -92,17 +92,17 @@ namespace DataTemple.Matching
 
             succ.Continue(context, fail);
 
-            return 10;
+            return true;
         }
 
         // Called by various Produce functions
-        public int ProducePropogated(Context env, string name)
+        public bool ProducePropogated(Context env, string name)
         {
             IParsedPhrase propogated = GetPropogated(env, name);
             if (propogated != null)
                 env.Contents.Add(new Value(propogated));
 
-            return 10;
+            return true;
         }
 
         public IParsedPhrase GetPropogated(Context env, string name)

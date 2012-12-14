@@ -81,13 +81,13 @@ namespace DataTemple.AgentEvaluate
             return randgen.Next().ToString();
         }
 
-        public virtual int Continue(object value, IFailure fail)
+        public virtual bool Continue(object value, IFailure fail)
         {
 			Context context = (Context) value;
             ContinueAgentCodelet clone = (ContinueAgentCodelet)Clone();
             context.AddToSequence(clone);
             clone.SetResult(new TwoTuple<Context, IFailure>(context, fail), context.Weight, "ContinueAgentCodelet: Continue");
-            return 1;
+            return true;
         }
 
         public override void SetResult(TwoTuple<Context, IFailure> result, double weight, string location)

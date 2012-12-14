@@ -17,10 +17,10 @@ namespace PluggerBase.ActionReaction.Evaluations
     // The Evaluable framework allow for salience-based execuation of delayed operations
     public interface IEvaluable
     {
-        int Evaluate();
+        bool Evaluate();
     }
 
-    public delegate int Evaluatelet(IArena arena, double salience, params object[] args);
+    public delegate bool Evaluatelet(IArena arena, double salience, params object[] args);
 
     public class EvaluableWrapper : AgentBase, IEvaluable
     {
@@ -43,7 +43,7 @@ namespace PluggerBase.ActionReaction.Evaluations
 
         #region IEvaluable Members
 
-        public int Evaluate()
+        public bool Evaluate()
         {
             if (evaluable != null)
                 return evaluable.Evaluate();

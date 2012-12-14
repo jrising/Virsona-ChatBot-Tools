@@ -366,7 +366,7 @@ namespace DataTemple.Variables
             this.final = final;
         }
 
-        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
             // Add optional punctuation to end
             Context childctx = new Context(context, context.Contents);
@@ -388,13 +388,13 @@ namespace DataTemple.Variables
 	            }
 			}
 
-            return time;
+            return true;
         }
 
-        public override int Produce(Context context, IContinuation succ, IFailure fail)
+        public override bool Produce(Context context, IContinuation succ, IFailure fail)
         {
             // Evaluate all children
-            ContinueToCallAgent cont = CallAgentWrapper.MakeContinuation(ConstructSentence, succ, 100.0, 0, 10);
+            ContinueToCallAgent cont = CallAgentWrapper.MakeContinuation(ConstructSentence, succ, 100.0, 10, 10);
 
             ContinuationAppender appender = new ContinuationAppender(context, cont);
 
@@ -405,17 +405,17 @@ namespace DataTemple.Variables
 
             eval.Continue(context, fail);
 
-            return time;
+            return true;
         }
 
-        public int ConstructSentence(Context context, IContinuation succ, IFailure fail, params object[] args) {
+        public bool ConstructSentence(Context context, IContinuation succ, IFailure fail, params object[] args) {
             // Need to produce all my contents!
             IParsedPhrase phrase = StarUtilities.ProducedPhrase(context, tagger, parser);
             if (phrase == null)
             {
                 // oops, we failed to produce
                 fail.Fail("Context could not be produced", succ);
-                return time;
+                return true;
             }
 
             if (!(phrase.Part == "=P"))
@@ -449,7 +449,7 @@ namespace DataTemple.Variables
             Context child = new Context(context, contents);
             succ.Continue(child, fail);
 
-            return time;
+            return true;
         }
     }
 
@@ -463,10 +463,10 @@ namespace DataTemple.Variables
             this.variable = variable;
         }
 
-        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
             if (check is IParsedPhrase && ((IParsedPhrase) check).IsLeaf)
-                return time;
+                return true;
 
             // Match against each element
             foreach (IParsedPhrase constituent in ((IParsedPhrase) check).Branches)
@@ -484,10 +484,10 @@ namespace DataTemple.Variables
                 }
             }
 
-            return time;
+            return true;
         }
 
-        public override int Produce(Context context, IContinuation succ, IFailure fail)
+        public override bool Produce(Context context, IContinuation succ, IFailure fail)
         {
             return ProducePropogated(context, "%phrase");
         }
@@ -500,7 +500,7 @@ namespace DataTemple.Variables
         {
         }
 
-        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
             if (check is IParsedPhrase && ((IParsedPhrase) check).Part == "PRN")
             {
@@ -509,16 +509,16 @@ namespace DataTemple.Variables
 
                 // Do a match using my contents
                 Matcher.MatchAgainst(salience, context, (IParsedPhrase) check, new List<IParsedPhrase>(), cont, fail);
-                return time;
+                return true;
             }
             else
             {
                 fail.Fail("check is not parenthetical", succ);
-                return time;
+                return true;
             }
         }
 
-        public override int Produce(Context context, IContinuation succ, IFailure fail)
+        public override bool Produce(Context context, IContinuation succ, IFailure fail)
         {
             return ProducePropogated(context, "%paren");
         }
@@ -531,7 +531,7 @@ namespace DataTemple.Variables
         {
         }
 
-        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
 			if (check is IParsedPhrase) {
 				IParsedPhrase phrase = (IParsedPhrase) check;
@@ -560,10 +560,10 @@ namespace DataTemple.Variables
 	            }
 			}
 
-            return time;
+            return true;
         }
 
-        public override int Produce(Context context, IContinuation succ, IFailure fail)
+        public override bool Produce(Context context, IContinuation succ, IFailure fail)
         {
             return ProducePropogated(context, "%clause");
         }
@@ -577,17 +577,17 @@ namespace DataTemple.Variables
 			//this.breakpointCall = true;
         }
 
-        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
 			if (!(check is IParsedPhrase)) {
 				fail.Fail("Cannot match a " + check.GetType(), succ);
-				return time;
+				return true;
 			}
 			
 			IParsedPhrase phrase = (IParsedPhrase) check;
 			if (phrase.Part != "=P") {
 				fail.Fail("Can only match a paragraph", succ);
-				return time;
+				return true;
 			}
 			
 			context.Map["$sentences.check"] = check;
@@ -603,7 +603,7 @@ namespace DataTemple.Variables
                 Matcher.MatchAgainst(salience, first, constituent, new List<IParsedPhrase>(), parts.two, fail);
 			}
 
-            return time;
+            return true;
         }
 		
 		public void NextSentence(Context context, IContinuation succ, IFailure fail, params object[] args) {

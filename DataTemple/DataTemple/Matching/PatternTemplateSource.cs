@@ -106,7 +106,7 @@ namespace DataTemple.Matching
 
         #region IContinuation Members
 
-        public int Continue(object value, IFailure fail)
+        public bool Continue(object value, IFailure fail)
         {
 			Context context = (Context) value;
             // Did we successfully match everything?  If so, evaluate the template
@@ -115,13 +115,13 @@ namespace DataTemple.Matching
                 Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, succ, new NopCallable(), true);
                 Context child = new Context(context, template.Contents);
                 child.Map["$production"] = true;
-                return eval.Continue(child, fail) + 1;
+                return eval.Continue(child, fail);
             }
             else
             {
                 // we didn't match everything
                 fail.Fail("Context is not empty", succ);
-                return 1;
+                return true;
             }
         }
 		

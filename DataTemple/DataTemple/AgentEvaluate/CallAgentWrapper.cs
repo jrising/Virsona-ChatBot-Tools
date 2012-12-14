@@ -7,7 +7,7 @@ namespace DataTemple.AgentEvaluate
 {
     public class CallAgentWrapper : CallAgent
     {
-        public delegate int Agentlet(Context context, IContinuation succ, IFailure fail, params object[] args);
+        public delegate bool Agentlet(Context context, IContinuation succ, IFailure fail, params object[] args);
 
         protected Agentlet agentlet;
         protected ArgumentMode argmode;
@@ -21,7 +21,7 @@ namespace DataTemple.AgentEvaluate
             this.args = args;
         }
 
-        public override int Call(object value, IContinuation succ, IFailure fail)
+        public override bool Call(object value, IContinuation succ, IFailure fail)
         {
 			Context context = (Context) value;
 

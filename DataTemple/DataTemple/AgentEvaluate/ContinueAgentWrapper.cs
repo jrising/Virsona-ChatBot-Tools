@@ -18,10 +18,10 @@ namespace DataTemple.AgentEvaluate
             this.args = args;
         }
 		
-		public int Continue(object value, IFailure fail)
+		public bool Continue(object value, IFailure fail)
 		{
 			agentlet((Context) value, succ, fail, args);
-			return 1;
+			return true;
 		}
 		
 		public object Clone()

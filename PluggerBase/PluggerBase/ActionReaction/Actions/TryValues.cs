@@ -26,27 +26,27 @@ namespace PluggerBase.ActionReaction.Actions
 
         #region ICallable Members
 
-        public int Call(object value, IContinuation succ, IFailure fail)
+        public bool Call(object value, IContinuation succ, IFailure fail)
         {
             enumerator = ((IEnumerable<T>)value).GetEnumerator();
-            return 1 + ContinueNext(arena, salience, "no values", succ, succ, fail);
+            return ContinueNext(arena, salience, "no values", succ, succ, fail);
         }
 
         #endregion
 
         // faillet: called each time we need to try the next option
-        public int ContinueNext(IArena arena, double salience, string reason, IContinuation skip, params object[] args)
+        public bool ContinueNext(IArena arena, double salience, string reason, IContinuation skip, params object[] args)
         { // params: IContinuation succ, IFailure fail
             IContinuation succ = (IContinuation)args[0];
             IFailure fail = (IFailure)args[1];
 
             // Try the next value!
             if (enumerator.MoveNext())
-                return 2 + arena.Continue(succ, salience, enumerator.Current, new FailletWrapper(ContinueNext, succ, fail));
+                return arena.Continue(succ, salience, enumerator.Current, new FailletWrapper(ContinueNext, succ, fail));
             else
             {
                 // nothing more to try!
-                return 2 + arena.Fail(fail, salience, reason, succ);
+                return arena.Fail(fail, salience, reason, succ);
             }
         }
     }

@@ -18,6 +18,9 @@ namespace DataTemple
 	{
 		protected static string DOCS_URL = "https://github.com/jrising/Virsona-ChatBot-Tools/wiki/DataTemple-Command-Line-Tool";
 		protected bool verbose;
+		protected PluginEnvironment plugenv;
+		protected POSTagger tagger;
+		protected GrammarParser parser;
 		
 		public static void Main(string[] args)
 		{
@@ -41,60 +44,85 @@ namespace DataTemple
 				input = file.ReadToEnd();
 			}
 			
-			PluginEnvironment plugenv = new PluginEnvironment(main);
+			main.plugenv = new PluginEnvironment(main);
 			string config = parsedArgs["c"] == null ? parsedArgs["conf"] : parsedArgs["c"];
 			if (!File.Exists(config)) {
 				Console.WriteLine("Cannot find configuration file at " + config);
 				return;
 			}
 			
-            plugenv.Initialize(config, new NameValueCollection());
+            main.plugenv.Initialize(config, new NameValueCollection());
 
 			if (parsedArgs["tag"] == null && parsedArgs["parse"] == null && (parsedArgs["t"] == null || parsedArgs["o"] == null)) {
 				Console.WriteLine("Nothing to do.  Add -tag, -parse, or -t and -o");
 				return;
 			}
 
-			POSTagger tagger = new POSTagger(plugenv);
+			main.tagger = new POSTagger(main.plugenv);
 			if (parsedArgs["tag"] != null) {
-				List<KeyValuePair<string, string>> tokens = tagger.TagString(input);
+				List<KeyValuePair<string, string>> tokens = main.tagger.TagString(input);
 				foreach (KeyValuePair<string, string> token in tokens)
 					Console.Write(token.Key + "/" + token.Value + " ");
 				Console.WriteLine("");
 			}
 			
-			GrammarParser parser = new GrammarParser(plugenv);
+			main.parser = new GrammarParser(main.plugenv);
 			if (parsedArgs["parse"] != null) {
-				Console.WriteLine(parser.Parse(input));
+				Console.WriteLine(main.parser.Parse(input));
 			}
 			
 			if (parsedArgs["t"] == null || parsedArgs["o"] == null)
 				return; // not doing any template matching
-
-			string template = "";
-			if (parsedArgs["t"] != null)
-				template = parsedArgs["t"];
 			
-			string command = "";
-			if (parsedArgs["o"] != null)
-				command = parsedArgs["o"];
-									
-			if (main.verbose)
-				Console.WriteLine("Parsing input...");
-			IParsedPhrase phrase = parser.Parse(input);
+			main.DoMatching(parsedArgs["p"], parsedArgs["t"], parsedArgs["o"], input);
+		}
+		
+		public MainClass(CommandLineArguments parsedArgs) {
+			verbose = (parsedArgs["v"] != null || parsedArgs["verbose"] != null);
+		}
+		
+		public MainClass() {
+			verbose = false;
+		}
 
-			if (main.verbose)
-				Console.WriteLine("Matching templates...");
-
-			ZippyCoderack coderack = new ZippyCoderack(main, 10000000);
+		void DoMatching(string preproc, string template, string command, string input) {
+			ZippyCoderack coderack = new ZippyCoderack(this, 10000000);
 			Memory memory = new Memory();
 			
             Context basectx = new Context(coderack);
 			GrammarVariables.LoadVariables(basectx, 100.0, memory, plugenv);
 			OutputVariables.LoadVariables(basectx, 100.0, plugenv);
+			ProgramVariables.LoadVariables(basectx, 100.0);
+			
+			IContinuation cont = new ContinueAgentWrapper(ContinueToMatching, this, coderack, template, command, input);
+			Context context = basectx;
+			if (preproc != null) {
+				context = Interpreter.ParseCommands(basectx, preproc);
+                cont = new Evaluator(100.0, ArgumentMode.ManyArguments, cont, new NopCallable(), true);
+			}
+
+            cont.Continue(context, new NopCallable());
+
+            coderack.Execute(1000000, false);
+			if (verbose && Unilog.HasEntries)
+				Console.WriteLine(Unilog.FlushToStringShort());
+		}
+		
+		void ContinueToMatching(Context context, IContinuation succ, IFailure fail, params object[] args) {
+			Coderack coderack = (Coderack) args[0];
+			string template = (string) args[1];
+			string command = (string) args[2];
+			string input = (string) args[3];
+			
+			if (verbose)
+				Console.WriteLine("Parsing input...");
+			IParsedPhrase phrase = parser.Parse(input);
+
+			if (verbose)
+				Console.WriteLine("Matching templates...");
 			
             List<PatternTemplateSource> dicta = new List<PatternTemplateSource>();
-            DictumMaker maker = new DictumMaker(basectx, "testing");
+            DictumMaker maker = new DictumMaker(context, "testing");
             dicta.Add(maker.MakeDictum(template, command));
             /*dicta.Add(maker.MakeDictum("%sentence %noun %is %adj", "@know %noun @HasProperty %adj @SubjectTense %is"));
             dicta.Add(maker.MakeDictum("%sentence %event %attime", "@know %event @AtTime %attime"));
@@ -105,21 +133,9 @@ namespace DataTemple
 			
             // Add a codelet for each of these, to match the input
             foreach (PatternTemplateSource dictum in dicta)
-                dictum.Generate(coderack, phrase, main, new NopCallable(), 1.0);
-
-            coderack.Execute(1000000, false);
-			if (main.verbose && Unilog.HasEntries)
-				Console.WriteLine(Unilog.FlushToStringShort());
-		}		
-		
-		public MainClass(CommandLineArguments parsedArgs) {
-			verbose = (parsedArgs["v"] != null || parsedArgs["verbose"] != null);
+                dictum.Generate(coderack, phrase, this, new NopCallable(), 1.0);
 		}
-		
-		public MainClass() {
-			verbose = false;
-		}
-		
+				
 		public object Clone()
 		{
 			MainClass clone = new MainClass();
@@ -129,13 +145,13 @@ namespace DataTemple
 		
         #region IContinuation Members
 
-        public int Continue(object value, IFailure fail)
+        public bool Continue(object value, IFailure fail)
         {
 			Context context = (Context) value;
             if (!context.IsEmpty)
 				Console.WriteLine(context.ContentsCode());
 			
-			return 1;
+			return true;
         }
 
         #endregion

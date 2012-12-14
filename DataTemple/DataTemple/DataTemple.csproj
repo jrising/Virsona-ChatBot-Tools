@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -i "Jimmy eats world" -t "%noun %verb *" -o "@print %verb:ing" -v</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -p "@defwc %defeats defeats beats conquers" -t "%sentence %noun %defeats *" -o "@print %noun defeats *" -i "Might beats right." -v</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>

@@ -22,7 +22,7 @@ namespace DataTemple.Variables
         {
         }
 
-        public override int Call(object value, IContinuation succ, IFailure fail)
+        public override bool Call(object value, IContinuation succ, IFailure fail)
         {
 			Context context = (Context) value;
 
@@ -36,7 +36,7 @@ namespace DataTemple.Variables
                 else
                 {
                     fail.Fail("Argument isn't number", succ);
-                    return time;
+                    return true;
                 }
             }
 
@@ -44,7 +44,7 @@ namespace DataTemple.Variables
             cntres.Add(new Word(result.ToString()));
             succ.Continue(new Context(context, cntres), fail);
 
-            return time;
+            return true;
         }
     }
 
@@ -55,7 +55,7 @@ namespace DataTemple.Variables
         {
         }
 
-        public override int Call(object value, IContinuation succ, IFailure fail)
+        public override bool Call(object value, IContinuation succ, IFailure fail)
         {
 			Context context = (Context) value;
             IContent content = context.Contents[0];
@@ -70,7 +70,7 @@ namespace DataTemple.Variables
             else
                 fail.Fail("Argument isn't number", succ);
 
-            return time;
+            return true;
         }
     }
 }

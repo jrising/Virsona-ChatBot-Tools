@@ -58,12 +58,12 @@ namespace PluggerBase.ActionReaction.Actions
 
             #region IFailure Members
 
-            public int Fail(string reason, IContinuation skip)
+            public bool Fail(string reason, IContinuation skip)
             {
                 parent.reason = reason;
                 parent.skip = skip;
 
-                return 1;
+                return true;
             }
 
             public object Clone()

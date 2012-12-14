@@ -18,25 +18,25 @@ namespace PluggerBase.ActionReaction.Evaluations
     {
         #region IArena Members
 
-        public int Evaluate(IEvaluable evaluable, double salience)
+        public bool Evaluate(IEvaluable evaluable, double salience)
         {
             if (evaluable is IAgent)
                 ((IAgent)evaluable).Initialize(this, salience);
             if (salience > 0)
                 return evaluable.Evaluate();
-            return 1;
+            return true;
         }
 
-        public int Call(ICallable callable, double salience, object value, IContinuation succ, IFailure fail)
+        public bool Call(ICallable callable, double salience, object value, IContinuation succ, IFailure fail)
         {
             if (callable is IAgent)
                 ((IAgent)callable).Initialize(this, salience);
             if (salience > 0)
                 return callable.Call(value, succ, fail);
-            return 1;
+            return true;
         }
 
-        public int Continue(IContinuation cont, double salience, object value, IFailure fail)
+        public bool Continue(IContinuation cont, double salience, object value, IFailure fail)
         {
             // Clone it!
             cont = (IContinuation)cont.Clone();
@@ -44,10 +44,10 @@ namespace PluggerBase.ActionReaction.Evaluations
                 ((IAgent)cont).Initialize(this, salience);
             if (salience > 0)
                 return cont.Continue(value, fail);
-            return 1;
+            return true;
         }
 
-        public int Fail(IFailure fail, double salience, string reason, IContinuation skip)
+        public bool Fail(IFailure fail, double salience, string reason, IContinuation skip)
         {
             // Clone it!
             fail = (IFailure)fail.Clone();
@@ -55,7 +55,7 @@ namespace PluggerBase.ActionReaction.Evaluations
                 ((IAgent)fail).Initialize(this, salience);
             if (salience > 0)
                 return fail.Fail(reason, skip);
-            return 1;
+            return true;
         }
 
         #endregion

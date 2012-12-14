@@ -141,8 +141,8 @@ namespace DataTemple.Codeland
         /// <summary> 
         /// Do whatever processing we do
         /// </summary> 
-        public virtual int Evaluate() {
-            return time;
+        public virtual bool Evaluate() {
+            return true;
         }
 
         /// <summary>
@@ -170,13 +170,6 @@ namespace DataTemple.Codeland
         /// </summary>
         public void Deactivate() {
             AdjustSalience(-salience);
-        }
-
-        /// <summary> 
-        /// Adjust the amount of time, space, salience we're allotted
-        /// </summary> 
-        public void AdjustTime(int delta) {
-            time += delta;
         }
 
         public void AdjustSalience(double delta) {

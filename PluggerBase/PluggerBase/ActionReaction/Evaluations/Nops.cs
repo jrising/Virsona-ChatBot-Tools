@@ -21,27 +21,27 @@ namespace PluggerBase.ActionReaction.Evaluations
 
         #region ICallable Members
 
-        public int Call(object value, IContinuation succ, IFailure fail)
+        public bool Call(object value, IContinuation succ, IFailure fail)
         {
-            return 1;
+            return true;
         }
 
         #endregion
 
         #region IContinuation Members
 
-        public int Continue(object value, IFailure fail)
+        public bool Continue(object value, IFailure fail)
         {
-            return 1;
+            return true;
         }
 
         #endregion
 
         #region IFailure Members
 
-        public int Fail(string reason, IContinuation succ)
+        public bool Fail(string reason, IContinuation succ)
         {
-            return 1;
+            return true;
         }
 
         #endregion
@@ -57,9 +57,9 @@ namespace PluggerBase.ActionReaction.Evaluations
 		
         #region IEvaluable Members
 
-        public int Evaluate()
+        public bool Evaluate()
         {
-            return 1;
+            return true;
         }
 
         #endregion

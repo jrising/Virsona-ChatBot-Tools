@@ -134,16 +134,16 @@ namespace PluggerBase.ActionReaction.Actions
 
         #region ICallable Members
 
-        public override int Call(object value, IContinuation succ, IFailure fail)
+        public override bool Call(object value, IContinuation succ, IFailure fail)
         {
             try
             {
                 ArgumentTree result = Handle((ArgumentTree)value);
-                return time + arena.Continue(succ, salience, result, fail);
+                return arena.Continue(succ, salience, result, fail);
             }
             catch (Exception ex)
             {
-                return time + 2 + arena.Fail(fail, salience, ex.Message, succ);
+                return arena.Fail(fail, salience, ex.Message, succ);
             }
         }
 

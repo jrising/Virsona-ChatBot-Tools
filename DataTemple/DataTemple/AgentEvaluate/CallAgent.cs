@@ -70,9 +70,9 @@ namespace DataTemple.AgentEvaluate
             }
         }
 
-        public virtual int Call(object value, IContinuation succ, IFailure fail)
+        public virtual bool Call(object value, IContinuation succ, IFailure fail)
         {
-            return 0;
+            return false;
         }
     }
 }

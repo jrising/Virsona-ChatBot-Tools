@@ -123,13 +123,11 @@ namespace DataTemple.Codeland
 
             while (time > 0 && CountTop > 0) {
                    // && (profiler.GetTime() / 1000 < origtime)) {
-                int used = ExecuteOne(debugMode);
-                if (used == 0) {
+                bool done = ExecuteOne(debugMode);
+                if (!done) {
                     // This shouldn't happen-- we're out of executable codelets
                     break;
                 }
-
-                time -= used;
             }
 
             // Check if we're taking the time we say we are
@@ -150,24 +148,24 @@ namespace DataTemple.Codeland
                 receiver.Receive("Time Limit Reached.", this);
         }
 
-        public virtual int ExecuteOne(bool debugMode)
+        public virtual bool ExecuteOne(bool debugMode)
         {
             Codelet codelet = SelectSalientCodelet();
             if (codelet == null)
-                return 0; // nothing to do!
+                return false; // nothing to do!
 
             if (!codelet.NeedsEvaluation)
             {
                 // Skip it!
-                return 1;
+                return true;
             }
 
             watching = codelet.watched;
-            int used = 1;
+            bool done = false;
 
             try
             {
-                used = EvaluateCodelet(codelet, debugMode) + 1;
+                done = EvaluateCodelet(codelet, debugMode);
             }
 			catch (UserException e) {
                 receiver.Receive(e.Message, codelet);
@@ -199,7 +197,7 @@ namespace DataTemple.Codeland
 
             watching = false;
 
-            return used;
+            return done;
         }
 
         /// <summary> 
@@ -264,9 +262,9 @@ namespace DataTemple.Codeland
         /// <summary> 
         /// Request to evaluate the codelet with given time
         /// </summary> 
-        public int EvaluateCodelet(Codelet codelet, bool debugMode) {
+        public bool EvaluateCodelet(Codelet codelet, bool debugMode) {
             if (codelet.GetFutureCodelet(nameActive) != null)
-                return 0;
+                return false;
 			currentEvaluating = codelet;
 
             codelet.AddFutureCodelet(nameActive, isEvaluating);
@@ -276,22 +274,20 @@ namespace DataTemple.Codeland
                 //SingleUserLog.Replace(codelet.ToString());
             }
             receiver.Receive("EvaluateCodelet", codelet);
-            int used = codelet.Evaluate();
+            bool done = codelet.Evaluate();
             if (debugMode) {
                 //Profiler.End(used * 1000);
 			}
 
-            codelet.AdjustTime(-used);
             codelet.RemoveFutureCodelet(nameActive);
 
-            if (codelet.time <= 0 && codelet.Salience > 0) {
+            if (done && codelet.Salience > 0) {
                 // Complete it!
                 CompleteCodelet(codelet);
-                used += 1;
             }
 			currentEvaluating = null;
 
-            return used;
+            return done;
         }
 
         /// <summary> 
@@ -323,28 +319,28 @@ namespace DataTemple.Codeland
 #endregion
 		
 #region IArena Members
-		public int Call(ICallable callable, double salience, object value, IContinuation succ, IFailure fail)
+		public bool Call(ICallable callable, double salience, object value, IContinuation succ, IFailure fail)
 		{
 			AddCodelet(new CodeletEvaluableWrapper(new CallableAsEvaluable(callable, value, succ, fail), this, salience, 1, 1), "Call");
-			return 1;
+			return true;
 		}
 		
-		public int Continue(IContinuation cont, double salience, object value, IFailure fail)
+		public bool Continue(IContinuation cont, double salience, object value, IFailure fail)
 		{
 			AddCodelet(new CodeletEvaluableWrapper(new ContinuationAsEvaluable(cont, value, fail), this, salience, 1, 1), "Continue");
-			return 1;
+			return true;
 		}
 		
-		public int Fail(IFailure fail, double salience, string reason, IContinuation skip)
+		public bool Fail(IFailure fail, double salience, string reason, IContinuation skip)
 		{
 			AddCodelet(new CodeletEvaluableWrapper(new FailureAsEvaluable(fail, reason, skip), this, salience, 1, 1), "Coderack Fail");
-			return 1;
+			return true;
 		}
 		
-		public int Evaluate (IEvaluable evaluable, double salience)
+		public bool Evaluate (IEvaluable evaluable, double salience)
 		{
 			AddCodelet(new CodeletEvaluableWrapper(evaluable, this, salience, 1, 1), "Evaluate");
-			return 1;
+			return true;
 		}
 #endregion
     }

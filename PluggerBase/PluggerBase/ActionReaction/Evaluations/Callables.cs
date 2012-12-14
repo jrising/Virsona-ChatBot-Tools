@@ -20,10 +20,10 @@ namespace PluggerBase.ActionReaction.Evaluations
 
     public interface ICallable
     {
-        int Call(object value, IContinuation succ, IFailure fail);
+        bool Call(object value, IContinuation succ, IFailure fail);
     }
 
-    public delegate int Calllet(IArena arena, double salience, object value, IContinuation succ, IFailure fail, params object[] args);
+    public delegate bool Calllet(IArena arena, double salience, object value, IContinuation succ, IFailure fail, params object[] args);
 
     public class CallletWrapper : AgentBase, ICallable
     {
@@ -38,7 +38,7 @@ namespace PluggerBase.ActionReaction.Evaluations
 
         #region ICallable Members
 
-        public int Call(object value, IContinuation succ, IFailure fail)
+        public bool Call(object value, IContinuation succ, IFailure fail)
         {
             return calllet(arena, salience, value, succ, fail, args);
         }
@@ -79,7 +79,7 @@ namespace PluggerBase.ActionReaction.Evaluations
 
         #region IEvaluable Members
 
-        public int Evaluate()
+        public bool Evaluate()
         {
             return callable.Call(value, succ, fail);
         }

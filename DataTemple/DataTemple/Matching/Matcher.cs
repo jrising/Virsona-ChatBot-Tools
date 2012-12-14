@@ -50,13 +50,13 @@ namespace DataTemple.Matching
             }
         }
 		
-        public override int Evaluate()
+        public override bool Evaluate()
         {			
             List<IContent> contents = context.Contents;
 			if (contents.Count == 0) {
 				Unilog.Notice(this, "Ran out of template before input");
 				fail.Fail("Ran out of tokens before matched all input", succ);
-				return time;
+				return true;
 			}
 			
             // Does our first element match the whole thing?
@@ -92,13 +92,13 @@ namespace DataTemple.Matching
                 {
                     // We ran out elements, but we still have some unmatched
                     coderack.AddCodelet(eater, "Evaluate *");
-                    return time;
+                    return true;
                 }
                 else
                 {
                     Context newctx = new Context(context, contents.GetRange(1, contents.Count - 1));
                     MatchAgainst(salience, newctx, input, unmatched, succ, eater);
-                    return time;
+                    return true;
                 }
             }
             else if (first.Name == "_")
@@ -106,7 +106,7 @@ namespace DataTemple.Matching
                 StarEater eater = new StarEater(coderack, salience, this, StarUtilities.NextStarName(context, "_"), true);
 
                 coderack.AddCodelet(eater, "Evaluate _");
-                return time;
+                return true;
             }
             else if (first.Name == "%opt")
             {
@@ -129,21 +129,21 @@ namespace DataTemple.Matching
                     with.Contents.AddRange(without.Contents);
                     Matcher.MatchAgainst(salience, with, input, unmatched, succ, withoutfail);
                 }
-                return time;
+                return true;
             }
             else if (first is Variable)
             {
                 if (((Variable)first).Match(context, input))
                 {
                     ContinueNextUnmatched(new Context(context, contents.GetRange(1, contents.Count - 1)));
-                    return time;
+                    return true;
                 }
                 else if (input.IsLeaf)
                 {
                     // we didn't match-- fail!
 					Unilog.Notice(this, first.Name + " does not match " + input.Text);
                     fail.Fail("Initial variable didn't match", succ);
-                    return time;
+                    return true;
                 }
                 else
                 {
@@ -152,7 +152,7 @@ namespace DataTemple.Matching
                     // Call again with the same evaluated first argument
                     Matcher matchrest = new Matcher(salience, groupPhrase.GetBranch(0), unmatched, succ);
                     matchrest.Continue(context, myfail);
-                    return time;
+                    return true;
                 }
             }
             else if (first is Value && ((Value) first).Data is MatchProduceAgent)
@@ -168,7 +168,7 @@ namespace DataTemple.Matching
                 ContinueToCallAgent codelet = new ContinueToCallAgent(agent, appender);
 
                 codelet.Continue(context, fail);
-                return time;
+                return true;
             }
 
             if (first is Word && input.IsLeaf)
@@ -176,26 +176,26 @@ namespace DataTemple.Matching
                 if (input.Text == first.Name)
                 {
                     ContinueNextUnmatched(new Context(context, contents.GetRange(1, contents.Count - 1)));
-                    return time;
+                    return true;
                 }
                 else
                 {
                     // failure!
                     fail.Fail(string.Format("Pattern [{0}] does not match [{1}]", first.Name, input.Text), succ);
-                    return time;
+                    return true;
                 }
             } else if (first is Word) {
 				GroupPhrase groupPhrase = new GroupPhrase(input);
                 unmatched.InsertRange(0, groupPhrase.GetRange(1));
                 Matcher matchcont = new Matcher(salience, groupPhrase.GetBranch(0), unmatched, succ);
                 matchcont.Continue(context, myfail);
-                return time;
+                return true;
             }
 
             // We can't handle this!  fail
             fail.Fail("Unknown first element", succ);
 
-            return time;
+            return true;
         }
 
         public static void MatchAgainst(double salience, Context context, IParsedPhrase input, List<IParsedPhrase> unmatched, IContinuation succ, IFailure fail)

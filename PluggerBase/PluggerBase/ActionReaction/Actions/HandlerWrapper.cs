@@ -90,16 +90,16 @@ namespace PluggerBase.ActionReaction.Actions
 
         #region ICallable Members
 
-        public int Call(object value, IContinuation succ, IFailure fail)
+        public bool Call(object value, IContinuation succ, IFailure fail)
         {
             try
             {
                 object results = method.Invoke(obj, new object[] { value });
-                return time + arena.Continue(succ, salience, results, fail);
+                return arena.Continue(succ, salience, results, fail);
             }
             catch (Exception ex)
             {
-                return time + 2 + arena.Fail(fail, salience, ex.Message, succ);
+                return arena.Fail(fail, salience, ex.Message, succ);
             }
         }
 

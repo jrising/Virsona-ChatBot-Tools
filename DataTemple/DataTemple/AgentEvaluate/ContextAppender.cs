@@ -28,7 +28,7 @@ namespace DataTemple.AgentEvaluate
 			}
 		}
 		
-        public override int Evaluate()
+        public override bool Evaluate()
         {
             List<IContent> beforeContentsCopy = new List<IContent>(before.Contents);
 			if (insert.HasValue) {
@@ -51,7 +51,7 @@ namespace DataTemple.AgentEvaluate
             result.AddMappings(context);
 			
             succ.Continue(result, fail);
-            return time;
+            return true;
         }
     }
 }

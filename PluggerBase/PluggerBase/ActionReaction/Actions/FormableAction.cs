@@ -67,7 +67,7 @@ namespace PluggerBase.ActionReaction.Actions
 
         public abstract IArgumentType Input { get; }
         public abstract IArgumentType Output { get; }
-        public abstract int Call(object value, IContinuation succ, IFailure fail);
+        public abstract bool Call(object value, IContinuation succ, IFailure fail);
 
         #endregion
     }

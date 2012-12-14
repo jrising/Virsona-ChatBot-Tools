@@ -26,7 +26,7 @@ namespace PluggerBase.ActionReaction.Evaluations
 
         #region IContinuation Members
 
-        public int Continue(object value, IFailure fail)
+        public bool Continue(object value, IFailure fail)
         {
             return callable.Call(value, succ, fail);
         }

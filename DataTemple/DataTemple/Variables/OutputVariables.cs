@@ -14,14 +14,14 @@ namespace DataTemple
             env.Map.Add("@print", new CallAgentWrapper(PrintContents, ArgumentMode.ManyArguments, basesal, 4, 10, plugenv));
 		}
 
-        public static int PrintContents(Context context, IContinuation succ, IFailure fail, params object[] args)
+        public static bool PrintContents(Context context, IContinuation succ, IFailure fail, params object[] args)
         {
 			PluginEnvironment plugenv = (PluginEnvironment) args[0];
 			POSTagger tagger = new POSTagger(plugenv);
 			GrammarParser parser = new GrammarParser(plugenv);
 			
 			Console.WriteLine(StarUtilities.ProducedCode(context, tagger, parser));
-            return 10;
+            return true;
 		}
 	}
 }

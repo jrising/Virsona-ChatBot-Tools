@@ -13,7 +13,7 @@ namespace DataTemple.Codeland
 			this.evaluable = evaluable;
 		}
 		
-		public override int Evaluate()
+		public override bool Evaluate()
 		{
 			return evaluable.Evaluate();
 		}

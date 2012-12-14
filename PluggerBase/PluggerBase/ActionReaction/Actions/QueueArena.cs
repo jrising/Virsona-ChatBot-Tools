@@ -26,8 +26,8 @@ namespace PluggerBase.ActionReaction.Actions
 
             arena.Call(callable, 100.0, value, getbest.GetContinue(), getlast.GetFail());
 						
-            while (maxtime > 0 && getbest.Salience <= exitscore && !arena.IsEmpty)
-                maxtime -= arena.EvaluateOne();
+            while (getbest.Salience <= exitscore && !arena.IsEmpty)
+                arena.EvaluateOne();
 
             if (getbest.Value == null && getlast.Reason != null)
                 return new Exception(getlast.Reason);
@@ -50,17 +50,15 @@ namespace PluggerBase.ActionReaction.Actions
             }
         }
 
-        public int EvaluateOne()
+        public bool EvaluateOne()
         {
             IEvaluable evaluable = evaluables.Dequeue();
-            int used = evaluable.Evaluate();
+            bool done = evaluable.Evaluate();
             if (evaluable is IAgent)
                 if (!((IAgent) evaluable).Complete())
                     evaluables.Enqueue(evaluable);
-
-            used++;
-
-            return used;
+			
+            return done;
         }
 
         #region IFastSerializable Members
@@ -89,25 +87,25 @@ namespace PluggerBase.ActionReaction.Actions
 
         #region IArena Members
 
-        public int Evaluate(IEvaluable evaluable, double salience)
+        public bool Evaluate(IEvaluable evaluable, double salience)
         {
             if (evaluable is IAgent)
                 ((IAgent)evaluable).Initialize(this, salience);
             evaluables.Enqueue(evaluable);
-            return 1;
+            return true;
         }
 
-        public int Call(ICallable callable, double salience, object value, IContinuation succ, IFailure fail)
+        public bool Call(ICallable callable, double salience, object value, IContinuation succ, IFailure fail)
         {
             return Evaluate(new CallableAsEvaluable(callable, value, succ, fail), salience);
         }
 
-        public int Continue(IContinuation cont, double salience, object value, IFailure fail)
+        public bool Continue(IContinuation cont, double salience, object value, IFailure fail)
         {
             return Evaluate(new ContinuationAsEvaluable((IContinuation) cont.Clone(), value, fail), salience);
         }
 
-        public int Fail(IFailure fail, double salience, string reason, IContinuation skip)
+        public bool Fail(IFailure fail, double salience, string reason, IContinuation skip)
         {
             return Evaluate(new FailureAsEvaluable((IFailure) fail.Clone(), reason, skip), salience);
         }

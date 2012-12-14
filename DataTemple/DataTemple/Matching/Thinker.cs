@@ -39,7 +39,7 @@ namespace DataTemple.Matching
             this.propargs = propargs;
         }
 
-        public override int Evaluate()
+        public override bool Evaluate()
         {
             // Look through my concepts for a possible match
             List<IContent> contents = context.Contents;
@@ -62,13 +62,13 @@ namespace DataTemple.Matching
                                 completes.Add(datum);
 
                                 succ.Continue(new Context(context, new List<IContent>()), fail);
-                                return time;
+                                return true;
                             }
                         }
 
                         // Can't match anything!
                         fail.Fail("Initial variable didn't match anything", succ);
-                        return time;
+                        return true;
                     }
 
                     // Does anything here match?
@@ -92,7 +92,7 @@ namespace DataTemple.Matching
 
                             // Make a clone of ourselves, if this fails
                             succ.Continue(child, MakeContinuingFailure(ii));
-                            return time;
+                            return true;
                         }
                     }
                 }
@@ -116,13 +116,13 @@ namespace DataTemple.Matching
                                 completes.Add(datum);
 
                                 succ.Continue(new Context(context, new List<IContent>()), fail);
-                                return time;
+                                return true;
                             }
                         }
 
                         // Can't match anything!
                         fail.Fail("Could not find a matching datum", succ);
-                        return time;
+                        return true;
                     }
 
                     // Does anything here match?
@@ -141,7 +141,7 @@ namespace DataTemple.Matching
                             completes.Add(directchecks[ii]);
 
                             succ.Continue(child, MakeContinuingFailure(ii));
-                            return time;
+                            return true;
                         }
                 }
 
@@ -151,7 +151,7 @@ namespace DataTemple.Matching
                     Concept parent = parentchecks.Dequeue();
                     directchecks = memory.GetData(parent);
                     Continue(new Context(context, context.Contents, context.Weight * 0.95), fail);
-                    return time;
+                    return true;
                 }
             }
 
@@ -164,11 +164,11 @@ namespace DataTemple.Matching
                 child.Map.Add(StarUtilities.NextStarName(child, contents[0].Name), empty);
 
                 succ.Continue(child, fail);
-                return time;
+                return true;
             }
 
             fail.Fail("No data matches", succ);
-            return time;
+            return true;
         }
 
         public static void SearchForMatch(double salience, Memory memory, List<Relations.Relation> kinds, Datum check, Context context, IContinuation succ, IFailure fail)
@@ -199,11 +199,11 @@ namespace DataTemple.Matching
 
         #region IFailure Members
 
-        public int Fail(string reason, IContinuation succ)
+        public bool Fail(string reason, IContinuation succ)
         {
             // continue our work
             coderack.AddCodelet((Codelet) this.Clone(), "Thinker Fail");
-            return 1;
+            return true;
         }
 
         #endregion

@@ -34,10 +34,10 @@ namespace PluggerBase.ActionReaction.Actions
 
         #region ICallable Members
 
-        public int Call(object value, IContinuation succ, IFailure fail)
+        public bool Call(object value, IContinuation succ, IFailure fail)
         {
             if (aborter.IsAborted)
-                return 1;   // abort!
+                return true;   // abort!
 
             List<IAction> namedacts = plugenv.GetNamedActions(resultType.Name);
             // Remove all actions that have already been used
@@ -60,18 +60,18 @@ namespace PluggerBase.ActionReaction.Actions
             IFailure more = new FailletWrapper(RecurseConversionAttempt, value, namedacts, succ);
 
             if (namedacts.Count == 1)
-                return arena.Continue(next, salience, namedacts[0], more) + 2;
+                return arena.Continue(next, salience, namedacts[0], more);
 
             TryValues<IAction> tryeach = new TryValues<IAction>();
-            return arena.Call(tryeach, salience * .9, namedacts, next, more) + 3;
+            return arena.Call(tryeach, salience * .9, namedacts, next, more);
         }
 
         #endregion
 
-        public int CheckAction(IArena arena, double salience, object value, IFailure fail, params object[] args)
+        public bool CheckAction(IArena arena, double salience, object value, IFailure fail, params object[] args)
         { // params: object oldval, IContinuation succ
             if (aborter.IsAborted)
-                return 1;   // abort!
+                return true;   // abort!
 
             ArgumentTree argtree = new ArgumentTree(args[0]);
             IContinuation succ = (IContinuation)args[1];
@@ -90,26 +90,25 @@ namespace PluggerBase.ActionReaction.Actions
         }
 
         // faillet: Look for ways to get to these inputs, to get that result type
-        public int RecurseConversionAttempt(IArena arena, double salience, string reason, IContinuation skip, params object[] args)
+        public bool RecurseConversionAttempt(IArena arena, double salience, string reason, IContinuation skip, params object[] args)
         { // params: object value, IEnumerable<IAction> actions, IContinuation succ
             if (aborter.IsAborted)
-                return 1;   // abort!
+                return true;   // abort!
 
             // Can we go down another level?
             Aborter next = new Aborter(aborter);
             if (next.IsAborted)
-                return 1;
+                return true;
 
             object value = args[0];
             IEnumerable<IAction> actions = (IEnumerable<IAction>)args[1];
             IContinuation succ = (IContinuation)args[2];
 
-            int used = 1;
             foreach (IAction action in actions)
-                used += arena.Call(new ActionConversion(plugenv, action.Input, searched, next), salience * .9, value,
+                arena.Call(new ActionConversion(plugenv, action.Input, searched, next), salience * .9, value,
                     new CallableAsContinuation(action, succ), new NopCallable());
 
-            return used;
+            return true;
         }
     }
 }

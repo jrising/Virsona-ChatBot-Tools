@@ -22,7 +22,7 @@ namespace DataTemple.Matching
             this.needRemoval = needRemoval;
         }
 
-        public override int Evaluate()
+        public override bool Evaluate()
         {
             // Drill down to a single POSPhrase
             List<IParsedPhrase> unmatched = new List<IParsedPhrase>(matcher.Unmatched);
@@ -71,15 +71,15 @@ namespace DataTemple.Matching
                     Matcher.MatchAgainst(salience, eaten, clone.Input, clone.Unmatched, matcher.Success, eater);
             }
 
-            return time;
+            return true;
         }
 
         #region IFailure Members
 
-        public int Fail(string reason, IContinuation succ)
+        public bool Fail(string reason, IContinuation succ)
         {
             coderack.AddCodelet((Codelet) this.Clone(), "StarEater Fail");
-            return 1;
+            return true;
         }
 				
         #endregion

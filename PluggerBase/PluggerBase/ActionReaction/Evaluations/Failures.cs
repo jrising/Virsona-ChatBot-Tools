@@ -15,10 +15,10 @@ namespace PluggerBase.ActionReaction.Evaluations
 {
     public interface IFailure : ICloneable
     {
-        int Fail(string reason, IContinuation skip);
+        bool Fail(string reason, IContinuation skip);
     }
 
-    public delegate int Faillet(IArena arena, double salience, string reason, IContinuation skip, params object[] args);
+    public delegate bool Faillet(IArena arena, double salience, string reason, IContinuation skip, params object[] args);
 
     public class FailletWrapper : AgentBase, IFailure
     {
@@ -33,7 +33,7 @@ namespace PluggerBase.ActionReaction.Evaluations
 
         #region IFailure Members
 
-        public int Fail(string reason, IContinuation skip)
+        public bool Fail(string reason, IContinuation skip)
         {
             return faillet(arena, salience, reason, skip, args);
         }
@@ -77,7 +77,7 @@ namespace PluggerBase.ActionReaction.Evaluations
 
         #region IEvaluable Members
 
-        public int Evaluate()
+        public bool Evaluate()
         {
             return fail.Fail(reason, skip);
         }

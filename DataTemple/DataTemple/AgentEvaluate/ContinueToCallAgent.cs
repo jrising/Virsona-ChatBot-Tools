@@ -26,11 +26,10 @@ namespace DataTemple.AgentEvaluate
             this.agent = agent;
         }
 
-        public override int Evaluate()
+        public override bool Evaluate()
         {
-            int used = agent.Call(context, succ, fail);
-            AdjustTime(used - time);
-            return used;
+            bool done = agent.Call(context, succ, fail);
+            return done;
         }
         
         public static ContinueToCallAgent Instantiate(CallAgent agent, Context context, IContinuation succ, IFailure fail)

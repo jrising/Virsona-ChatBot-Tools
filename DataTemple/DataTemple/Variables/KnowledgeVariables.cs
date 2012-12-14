@@ -57,17 +57,17 @@ namespace DataTemple.Variables
             this.tagger = tagger;
         }
 
-        public override int Produce(Context context, IContinuation succ, IFailure fail)
+        public override bool Produce(Context context, IContinuation succ, IFailure fail)
         {
             Concept concept = CompletePartials(context);
             if (concept == null)
             {
                 fail.Fail("Nothing to complete partials", succ);
-                return time;
+                return true;
             }
 
             succ.Continue(new Context(context, new List<IContent>()), fail);
-            return time;
+            return true;
         }
 
         public Concept CompletePartials(Context context)
@@ -95,7 +95,7 @@ namespace DataTemple.Variables
             return concept;
         }
 
-        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
             Concept concept = (Concept) context.Lookup("$knowConcept");
             if (context.Contents.Count == 1)
@@ -107,7 +107,7 @@ namespace DataTemple.Variables
                         succ.Continue(new Context(context, new List<IContent>()), fail);
                     else
                         fail.Fail("Left doesn't match context", succ);
-                    return time;
+                    return true;
                 }
                 else if (context.Contents[0].Name == "*" || context.Contents[0].Name == "_")
                 {
@@ -116,12 +116,12 @@ namespace DataTemple.Variables
                     context.Map.Add(StarUtilities.NextStarName(context, context.Contents[0].Name), words);
 
                     succ.Continue(new Context(context, new List<IContent>()), fail);
-                    return time;
+                    return true;
                 }
             }
 
             fail.Fail("Know given multiple values", succ);
-            return time;
+            return true;
         }
     }
 
@@ -132,13 +132,13 @@ namespace DataTemple.Variables
         {
         }
 
-        public override int Produce(Context context, IContinuation succ, IFailure fail)
+        public override bool Produce(Context context, IContinuation succ, IFailure fail)
         {
             Concept concept = CompletePartials(context);
             if (concept == null)
             {
                 fail.Fail("Nothing to complete partials", succ);
-                return time;
+                return true;
             }
 
             IParsedPhrase phrase = ((ClauseVariable)context.Lookup("%clause")).GetPropogated(context, "%clause");
@@ -149,7 +149,7 @@ namespace DataTemple.Variables
             }
 
             succ.Continue(new Context(context, new List<IContent>()), fail);
-            return time;
+            return true;
         }
     }
 
@@ -169,13 +169,13 @@ namespace DataTemple.Variables
             this.tagger = tagger;
         }
 
-        public override int Produce(Context context, IContinuation succ, IFailure fail)
+        public override bool Produce(Context context, IContinuation succ, IFailure fail)
         {
             IParsedPhrase other = StarUtilities.ProducedPhrase(context, tagger, parser);
             if (other == null)
             {
                 succ.Continue(new Context(context, new List<IContent>()), fail);
-                return time; // cannot do!
+                return true; // cannot do!
             }
 
             Concept concept = produceTranslator.GetConcept(other);
@@ -185,17 +185,17 @@ namespace DataTemple.Variables
             context.LookupAndAdd<List<Datum>>("$knowPartials", new List<Datum>()).Add(datum);
 
             succ.Continue(new Context(context, new List<IContent>()), fail);
-            return time;
+            return true;
         }
 
-        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
             List<Relations.Relation> kinds = new List<Relations.Relation>();
             kinds.Add(kind);
 
             Thinker.SearchForMatch(salience, memory, kinds, (Datum) check, context, succ, fail);
 
-            return time;
+            return true;
         }
 
         public static void Know(Memory memory, Context context, Relations.Relation kind, IParsedPhrase phrase, double weight, ConceptTranslator produceTranslator)
@@ -219,19 +219,19 @@ namespace DataTemple.Variables
             this.tagger = tagger;
         }
 
-        public override int Produce(Context context, IContinuation succ, IFailure fail)
+        public override bool Produce(Context context, IContinuation succ, IFailure fail)
         {
             IParsedPhrase phrase = StarUtilities.ProducedPhrase(context, tagger, parser);
             if (phrase == null)
             {
                 succ.Continue(new Context(context, new List<IContent>()), fail);
-                return time; // cannot do!
+                return true; // cannot do!
             }
 
             KnowPhrase(phrase, context, memory);
 
             succ.Continue(new Context(context, new List<IContent>()), fail);
-            return time;
+            return true;
         }
 
         public static bool KnowPhrase(IParsedPhrase phrase, Context context, Memory memory)
@@ -246,14 +246,14 @@ namespace DataTemple.Variables
             return true;
         }
 
-        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
             List<Relations.Relation> kinds = new List<Relations.Relation>();
             kinds.Add(Relations.Relation.AtTime);
 
             Thinker.SearchForMatch(salience, memory, kinds, (Datum) check, context, succ, fail);
 
-            return time;
+            return true;
         }
     }
 
@@ -270,19 +270,19 @@ namespace DataTemple.Variables
             this.tagger = tagger;
         }
 
-        public override int Produce(Context context, IContinuation succ, IFailure fail)
+        public override bool Produce(Context context, IContinuation succ, IFailure fail)
         {
             IParsedPhrase phrase = StarUtilities.ProducedPhrase(context, tagger, parser);
             if (phrase == null)
             {
                 succ.Continue(new Context(context, new List<IContent>()), fail);
-                return time; // cannot do!
+                return true; // cannot do!
             }
 
             KnowPhrase(phrase, context, memory);
 
             succ.Continue(new Context(context, new List<IContent>()), fail);
-            return time;
+            return true;
         }
 
         public static bool KnowPhrase(IParsedPhrase phrase, Context context, Memory memory)
@@ -299,14 +299,14 @@ namespace DataTemple.Variables
             return false;
         }
 
-        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
             List<Relations.Relation> kinds = new List<Relations.Relation>();
             kinds.Add(Relations.Relation.InLocation);
 
             Thinker.SearchForMatch(salience, memory, kinds, (Datum)check, context, succ, fail);
 
-            return time;
+            return true;
         }
     }
 
@@ -424,13 +424,13 @@ namespace DataTemple.Variables
             this.tagger = tagger;
         }
 
-        public override int Produce(Context context, IContinuation succ, IFailure fail)
+        public override bool Produce(Context context, IContinuation succ, IFailure fail)
         {
             IParsedPhrase phrase = StarUtilities.ProducedPhrase(context, tagger, parser);
             if (phrase == null)
             {
                 succ.Continue(new Context(context, new List<IContent>()), fail);
-                return time; // cannot do!
+                return true; // cannot do!
             }
 
             if (phrase.Part == "PP")
@@ -440,10 +440,10 @@ namespace DataTemple.Variables
             }
 
             succ.Continue(new Context(context, new List<IContent>()), fail);
-            return time;
+            return true;
         }
 
-        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
             List<Relations.Relation> kinds = new List<Relations.Relation>();
             kinds.Add(Relations.Relation.InLocation);
@@ -451,7 +451,7 @@ namespace DataTemple.Variables
 
             Thinker.SearchForMatch(salience, memory, kinds, (Datum)check, context, succ, fail);
 
-            return time;
+            return true;
         }
     }
 
@@ -473,7 +473,7 @@ namespace DataTemple.Variables
             this.nouns = nouns;
         }
 
-        public override int Produce(Context context, IContinuation succ, IFailure fail)
+        public override bool Produce(Context context, IContinuation succ, IFailure fail)
         {
             string word = StarUtilities.ProducedCode(context, tagger, parser);
             Datum datum;
@@ -494,17 +494,17 @@ namespace DataTemple.Variables
             context.LookupAndAdd<List<Datum>>("$knowPartials", new List<Datum>()).Add(datum);
 
             succ.Continue(new Context(context, new List<IContent>()), fail);
-            return time;
+            return true;
         }
 
-        public override int Match(object check, Context context, IContinuation succ, IFailure fail)
+        public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
             List<Relations.Relation> kinds = new List<Relations.Relation>();
             kinds.Add(Relations.Relation.Tense);
 
             Thinker.SearchForMatch(salience, memory, kinds, (Datum)check, context, succ, fail, DecideValue, check);
 
-            return time;
+            return true;
         }
 
         protected object DecideValue(object defval, object[] args)

@@ -38,13 +38,13 @@ namespace DataTemple.AgentEvaluate
 
         #region IContinuation Members
 
-        public int Continue(object value, IFailure fail)
+        public bool Continue(object value, IFailure fail)
         {
 			Context context = (Context) value;
             completes.Add(context);
 
             if (completes.Count < callers.Count)
-                return 1; // still waiting!
+                return true; // still waiting!
             if (completes.Count > callers.Count)
             {
                 // remove the closest complete to the most recent
@@ -92,7 +92,7 @@ namespace DataTemple.AgentEvaluate
                 result.Weight *= complete.Weight;
             }
 
-            return succ.Continue(result, fail) + 10;
+            return succ.Continue(result, fail);
         }
 
         protected double MatchCompleteCaller(int completeIndex, int callerIndex, object shared)
