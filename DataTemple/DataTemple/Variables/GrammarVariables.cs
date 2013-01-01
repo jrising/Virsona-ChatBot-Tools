@@ -368,6 +368,7 @@ namespace DataTemple.Variables
 
         public override bool Match(object check, Context context, IContinuation succ, IFailure fail)
         {
+			// XXX: How does childctx get used???
             // Add optional punctuation to end
             Context childctx = new Context(context, context.Contents);
             childctx.Contents.Add(new Special("%opt"));
@@ -398,10 +399,7 @@ namespace DataTemple.Variables
 
             ContinuationAppender appender = new ContinuationAppender(context, cont);
 
-            Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, appender, appender, true);
-            eval.Lineage = ContinueAgentCodelet.NewLineage();
-            appender.RegisterCaller(eval.Lineage);
-            appender.RegisterCaller(eval.Lineage);
+            Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, appender.AsIndex(0), appender.AsIndex(1), true);
 
             eval.Continue(context, fail);
 

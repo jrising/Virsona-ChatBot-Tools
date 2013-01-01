@@ -96,8 +96,7 @@ namespace DataTemple.Matching
                 }
                 else
                 {
-                    Context newctx = new Context(context, contents.GetRange(1, contents.Count - 1));
-                    MatchAgainst(salience, newctx, input, unmatched, succ, eater);
+                    MatchAgainst(salience, context.ChildRange(1), input, unmatched, succ, eater);
                     return true;
                 }
             }
@@ -135,7 +134,7 @@ namespace DataTemple.Matching
             {
                 if (((Variable)first).Match(context, input))
                 {
-                    ContinueNextUnmatched(new Context(context, contents.GetRange(1, contents.Count - 1)));
+                    ContinueNextUnmatched(context.ChildRange(1));
                     return true;
                 }
                 else if (input.IsLeaf)
@@ -166,8 +165,18 @@ namespace DataTemple.Matching
                 MatchProduceAgent agent = (MatchProduceAgent)((Value) first).Data;
                 context.Map["$check"] = input;
                 ContinueToCallAgent codelet = new ContinueToCallAgent(agent, appender);
-
-                codelet.Continue(context, fail);
+				
+				IFailure deepenfail = myfail;
+				if (!input.IsLeaf) {
+					// Continue to deeper
+					GroupPhrase groupPhrase = new GroupPhrase(input);
+		            unmatched.InsertRange(0, groupPhrase.GetRange(1));
+		            // Call again with the same evaluated first argument
+		            Matcher matchrest = new Matcher(salience, groupPhrase.GetBranch(0), unmatched, succ);
+					deepenfail = new FailToContinue(context, matchrest, myfail);
+				}
+				
+                codelet.Continue(context, deepenfail);
                 return true;
             }
 
@@ -175,7 +184,7 @@ namespace DataTemple.Matching
             {
                 if (input.Text == first.Name)
                 {
-                    ContinueNextUnmatched(new Context(context, contents.GetRange(1, contents.Count - 1)));
+                    ContinueNextUnmatched(context.ChildRange(1));
                     return true;
                 }
                 else
@@ -214,14 +223,11 @@ namespace DataTemple.Matching
 
             ContinuationAppender appender = new ContinuationAppender(context, matcheval);
 
-            Evaluator eval = new Evaluator(salience, ArgumentMode.SingleArgument, appender, appender, true);
-            eval.Lineage = NewLineage();
-            appender.RegisterCaller(eval.Lineage);
-            appender.RegisterCaller(eval.Lineage);
+            Evaluator eval = new Evaluator(salience, ArgumentMode.SingleArgument, appender.AsIndex(0), appender.AsIndex(1), true);
 
             return eval;
         }
-
+		
         public void ContinueNextUnmatched(Context context)
         {
             if (unmatched.Count == 0)
@@ -266,6 +272,34 @@ namespace DataTemple.Matching
 			foreach (IContent content in context.Contents)
 				code.Append(content.Name + " ");
 			return string.Format("[Matcher: Contents={0}, Input={1}, Unmatched={2}]", code.ToString(), input.Text, groupPhrase.Text);
+		}
+		
+		public override string TraceTitle {
+			get {
+				return "Matcher";
+			}
+		}
+		
+		protected class FailToContinue : IFailure {
+			protected Context context;
+			protected IContinuation succ;
+			protected IFailure fail;
+			
+			public FailToContinue(Context context, IContinuation succ, IFailure fail) {
+				this.context = context;
+				this.succ = succ;
+				this.fail = fail;
+			}
+			
+			public bool Fail(string reason, IContinuation skip)
+			{
+				return succ.Continue(context, fail);
+			}
+			
+			public object Clone()
+			{
+				return new FailToContinue(context, succ, fail);
+			}
 		}
     }
 }

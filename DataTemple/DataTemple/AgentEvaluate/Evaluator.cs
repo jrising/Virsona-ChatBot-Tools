@@ -48,7 +48,7 @@ namespace DataTemple.AgentEvaluate
 
             if (ii > 0 && argumentMode == ArgumentMode.SingleArgument) {
                 succ.Continue(new Context(context, contents.GetRange(0, 1)), fail);
-                aftersucc.Continue(new Context(context, contents.GetRange(1, contents.Count - 1)), fail);
+                aftersucc.Continue(context.ChildRange(1), fail);
                 return true;
             }
 
@@ -100,13 +100,9 @@ namespace DataTemple.AgentEvaluate
                     {
                         ContinuationAppender evalappend = new ContinuationAppender(context, mysucc);
 
-                        ContinueToCallAgent contagent = ContinueToCallAgent.Instantiate((CallAgent)element, new Context(context, null), evalappend, fail);
-                        contagent.Lineage = NewLineage();
-                        evalappend.RegisterCaller(contagent.Lineage);
+                        ContinueToCallAgent.Instantiate((CallAgent)element, new Context(context, null), evalappend.AsIndex(0), fail);
 
-                        Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, evalappend, aftersucc, isUserInput);
-                        eval.lineage = NewLineage();
-                        evalappend.RegisterCaller(eval.lineage);
+                        Evaluator eval = new Evaluator(salience, ArgumentMode.ManyArguments, evalappend.AsIndex(1), aftersucc, isUserInput);
                         eval.Continue(new Context(context, sublst), fail);
 
                         return true;
@@ -129,13 +125,9 @@ namespace DataTemple.AgentEvaluate
                     {
                         ContinuationAppender evalappend = new ContinuationAppender(context, mysucc);
 
-                        ContinueToCallAgent callagent = new ContinueToCallAgent((CallAgent)element, evalappend);
-                        callagent.Lineage = NewLineage();
-                        evalappend.RegisterCaller(callagent.Lineage);
+                        ContinueToCallAgent callagent = new ContinueToCallAgent((CallAgent)element, evalappend.AsIndex(0));
 
-                        Evaluator aftereval = new Evaluator(salience, ArgumentMode.ManyArguments, evalappend, aftersucc, isUserInput);
-                        aftereval.lineage = NewLineage();
-                        evalappend.RegisterCaller(aftereval.lineage);
+                        Evaluator aftereval = new Evaluator(salience, ArgumentMode.ManyArguments, evalappend.AsIndex(1), aftersucc, isUserInput);
 
                         Evaluator eval = new Evaluator(salience, ((CallAgent) element).ArgumentOptions, callagent, aftereval, isUserInput);
                         eval.Continue(new Context(context, sublst), fail);
@@ -165,7 +157,7 @@ namespace DataTemple.AgentEvaluate
                 if (argumentMode == ArgumentMode.SingleArgument)
                 {
                     succ.Continue(result, fail);
-                    aftersucc.Continue(new Context(context, contents.GetRange(1, contents.Count - 1)), fail);
+                    aftersucc.Continue(context.ChildRange(1), fail);
                     return true;
                 }
                 else
@@ -178,6 +170,12 @@ namespace DataTemple.AgentEvaluate
                     return true;
                 }
             }
-        }
+		}
+		
+		public override string TraceTitle {
+			get {
+				return "Evaluator";
+			}
+		}
     }
 }

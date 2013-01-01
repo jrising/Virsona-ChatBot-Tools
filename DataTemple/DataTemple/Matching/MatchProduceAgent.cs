@@ -49,6 +49,7 @@ namespace DataTemple.Matching
 
                 if (check == null)
                 {
+					// Matcher did not call us
                     List<IContent> contents = new List<IContent>();
                     Context child = new Context(context, contents);
                     // Put us into content stream, for matcher to find
@@ -61,6 +62,8 @@ namespace DataTemple.Matching
                 }
 
                 Context argctx = context.LookupDefaulted<Context>("$argctx", context);
+				// Add our context after argctx
+				argctx.AddMappings(context);
 
                 return Match(check, argctx, succ, fail);
             }

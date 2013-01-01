@@ -14,10 +14,11 @@ using System.Text;
 using DataTemple.Codeland;
 using PluggerBase.ActionReaction.Evaluations;
 using GenericTools;
+using ExamineTools;
 
 namespace DataTemple.AgentEvaluate
 {
-    public class ContinueAgentCodelet : RecipientCodelet<TwoTuple<Context, IFailure>>, IContinuation
+    public class ContinueAgentCodelet : RecipientCodelet<TwoTuple<Context, IFailure>>, IContinuation, ITraceEvaluation
     {
         protected IContinuation succ;
 
@@ -65,22 +66,6 @@ namespace DataTemple.AgentEvaluate
             }
         }
 
-        public string Lineage
-        {
-            get
-            {
-                return lineage;
-            }
-            set
-            {
-                lineage = value;
-            }
-        }
-
-        public static string NewLineage() {
-            return randgen.Next().ToString();
-        }
-
         public virtual bool Continue(object value, IFailure fail)
         {
 			Context context = (Context) value;
@@ -101,5 +86,13 @@ namespace DataTemple.AgentEvaluate
 
             base.SetResult(result, weight, location);
         }
+		
+		// ExamineTools.ITraceEvaluation
+		
+		public virtual string TraceTitle {
+			get {
+				return "ContinueAgent";
+			}
+		}
     }
 }

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericTools", "..\GenericT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InOutTools", "..\InOutTools\InOutTools\InOutTools.csproj", "{19407319-EC07-4562-92BE-1A7F86D90ECF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExamineTools", "..\ExamineTools\ExamineTools\ExamineTools.csproj", "{F96D3B75-4055-40C7-A03C-ECE015E77BBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -37,6 +39,10 @@ Global
 		{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}.Debug|x86.Build.0 = Debug|x86
 		{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}.Release|x86.ActiveCfg = Release|x86
 		{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}.Release|x86.Build.0 = Release|x86
+		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Debug|x86.Build.0 = Debug|Any CPU
+		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Release|x86.ActiveCfg = Release|Any CPU
+		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = DataTemple\DataTemple.csproj

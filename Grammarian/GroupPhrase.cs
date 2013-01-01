@@ -93,6 +93,12 @@ namespace LanguageNet.Grammarian
 					return e.Current;
 			return null;
 		}
+		
+		public GroupPhrase AddBranch(IParsedPhrase branch) {
+			List<IParsedPhrase> allbranches = new List<IParsedPhrase>(branches);
+			allbranches.Add(branch);
+			return new GroupPhrase(part, allbranches);
+		}
 				
 		public int Count {
 			get {

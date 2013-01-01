@@ -225,7 +225,13 @@ namespace DataTemple.AgentEvaluate
 
             return before;
         }
-
+		
+		public Context ChildRange(int startsat) {
+			if (contents.Count > startsat)
+				return new Context(this, contents.GetRange(startsat, contents.Count - startsat));
+			return new Context(this, new List<IContent>());
+		}
+		
         public string ContentsCode()
         {
             StringBuilder result = new StringBuilder();

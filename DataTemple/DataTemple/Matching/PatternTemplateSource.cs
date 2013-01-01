@@ -96,10 +96,7 @@ namespace DataTemple.Matching
 
             ContinuationAppender appender = new ContinuationAppender(pattern, checker);
 
-            Evaluator eval = new Evaluator(maxSalience * weight, ArgumentMode.ManyArguments, appender, appender, true);
-            eval.Lineage = ContinueAgentCodelet.NewLineage();
-            appender.RegisterCaller(eval.Lineage);
-            appender.RegisterCaller(eval.Lineage);
+            Evaluator eval = new Evaluator(maxSalience * weight, ArgumentMode.ManyArguments, appender.AsIndex(0), appender.AsIndex(1), true);
 
             eval.Continue(pattern, fail);
         }

@@ -92,7 +92,7 @@ namespace DataTemple
             Context basectx = new Context(coderack);
 			GrammarVariables.LoadVariables(basectx, 100.0, memory, plugenv);
 			OutputVariables.LoadVariables(basectx, 100.0, plugenv);
-			ProgramVariables.LoadVariables(basectx, 100.0);
+			ProgramVariables.LoadVariables(basectx, 100.0, plugenv);
 			
 			IContinuation cont = new ContinueAgentWrapper(ContinueToMatching, this, coderack, template, command, input);
 			Context context = basectx;
