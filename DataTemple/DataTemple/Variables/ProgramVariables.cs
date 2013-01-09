@@ -15,9 +15,9 @@ namespace DataTemple.Variables
         public static void LoadVariables(Context env, double basesal, PluginEnvironment plugenv)
         {
             // @defin0 takes no arguments, but uses the context map of the caller
-            env.Map.Add("@definz", new CallAgentWrapper(DefineInNoArgRule, ArgumentMode.RemainderUnevaluated, basesal, 4, 10, basesal));
-        	env.Map.Add("@defwc", new CallAgentWrapper(DefineWordChoiceVariable, ArgumentMode.RemainderUnevaluated, basesal, 4, 10, false, plugenv));
-        	env.Map.Add("@defvc", new CallAgentWrapper(DefineWordChoiceVariable, ArgumentMode.RemainderUnevaluated, basesal, 4, 10, true, plugenv));
+            env.Map.Add("@definz", new CallAgentWrapper(DefineInNoArgRule, ArgumentMode.DelimitedUnevaluated, basesal, 4, 10, basesal));
+        	env.Map.Add("@defwc", new CallAgentWrapper(DefineWordChoiceVariable, ArgumentMode.DelimitedUnevaluated, basesal, 4, 10, false, plugenv));
+        	env.Map.Add("@defvc", new CallAgentWrapper(DefineWordChoiceVariable, ArgumentMode.DelimitedUnevaluated, basesal, 4, 10, true, plugenv));
 		}
 
         public static bool DefineInNoArgRule(Context context, IContinuation succ, IFailure fail, params object[] args)

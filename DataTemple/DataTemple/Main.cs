@@ -104,7 +104,8 @@ namespace DataTemple
             cont.Continue(context, new NopCallable());
 
             coderack.Execute(1000000, false);
-			if (verbose && Unilog.HasEntries)
+			Unilog.DropBelow(Unilog.levelRecoverable);
+			if (Unilog.HasEntries)
 				Console.WriteLine(Unilog.FlushToStringShort());
 		}
 		

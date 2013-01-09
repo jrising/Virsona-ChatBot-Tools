@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -p "@defvc %go go" -t "%sentence %noun %go *" -o "@print %noun go *" -i "I have gone to the store." -v</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -i "I fear that Nuclear escalation harms world peace." -p "@defvc %harm harm hurt # @defwc %believe believe think fear" -t "%sentence %opt I %believe that * %harm * " -o "@print *1 //-// *2." -v</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -i "Who is to blame? Frank is." -t "%sentences Who is * / %noun *" -o "@print %noun is *1"</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml"</Commandlineparameters>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

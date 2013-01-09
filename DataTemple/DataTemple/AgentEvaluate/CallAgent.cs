@@ -19,6 +19,7 @@ namespace DataTemple.AgentEvaluate
         NoArugments,
         SingleArgument,
         ManyArguments,
+		DelimitedUnevaluated,
         RemainderUnevaluated
     }
 

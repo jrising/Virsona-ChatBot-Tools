@@ -113,6 +113,25 @@ namespace DataTemple.AgentEvaluate
                     ContinueToCallAgent.Instantiate((CallAgent) element, new Context(context, sublst), mysucc, fail);
                     aftersucc.Continue(new Context(context, new List<IContent>()), fail);
                     return true;
+				} else if (((CallAgent)element).ArgumentOptions == ArgumentMode.DelimitedUnevaluated) {
+					int jj;
+		            for (jj = 0; jj < contents.Count; jj++)
+        		        if (contents[jj] == Special.EndDelimSpecial)
+                		    break;
+					
+					List<IContent> before = context.Contents.GetRange(ii + 1, jj - 1);
+					List<IContent> after;
+					if (jj < context.Contents.Count - 1)
+						after = context.Contents.GetRange(jj + 1, context.Contents.Count - jj - 1);
+					else
+						after = new List<IContent>();
+					
+                    ContinuationAppender evalappend = new ContinuationAppender(context, mysucc);
+					
+                    ContinueToCallAgent.Instantiate((CallAgent) element, new Context(context, before), evalappend.AsIndex(0), fail);
+                    Evaluator aftereval = new Evaluator(salience, ArgumentMode.ManyArguments, evalappend.AsIndex(1), aftersucc, isUserInput);
+					aftereval.Continue(new Context(context, after), fail);
+                    return true;
                 } else {
                     if (argumentMode == ArgumentMode.SingleArgument)
                     {

@@ -1,3 +1,11 @@
+/******************************************************************\
+ *      Class Name:     Interpreter
+ *      Written By:     James.R
+ *      Copyright:      Virsona Inc
+ *      -----------------------------------------------------------
+ * Turns a user-entered sequences of characters into tokens,
+ * and identifies each as a literal (word) or special.
+\******************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;

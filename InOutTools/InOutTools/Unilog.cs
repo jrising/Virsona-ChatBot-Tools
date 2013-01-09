@@ -31,10 +31,10 @@ namespace InOutTools
             }
         }
 
-        protected static double levelNotice = 0.0;
-        protected static double levelWarning = 1.0;
-        protected static double levelRecoverable = 5.0;
-        protected static double levelUnrecoverable = 40.0;
+        public static double levelNotice = 0.0;
+        public static double levelWarning = 1.0;
+        public static double levelRecoverable = 5.0;
+        public static double levelUnrecoverable = 40.0;
 
         protected static ExpiringDictionary<object, double> maxLevels = new ExpiringDictionary<object,double>();
         protected static ExpiringDictionary<object, double> errorLevels = new ExpiringDictionary<object, double>();
@@ -219,7 +219,19 @@ namespace InOutTools
                 return result.ToString();
             }
         }
-
+		
+		public static void DropBelow(double level) {
+            lock (entries)
+            {
+				ExpiringDictionary<int, LogEntry> afterward = new ExpiringDictionary<int, LogEntry>();
+				foreach (KeyValuePair<int, LogEntry> kvp in entries)
+					if (kvp.Value.level >= level)
+						afterward.Add(kvp);
+				
+				entries = afterward;
+            }
+		}
+		
         /// An instance of this class, used as an IMessageReceiver
 
         protected List<object> objectIgnores;
