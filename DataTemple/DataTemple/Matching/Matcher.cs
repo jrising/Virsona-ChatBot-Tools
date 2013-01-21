@@ -182,7 +182,7 @@ namespace DataTemple.Matching
 
             if (first is Word && input.IsLeaf)
             {
-                if (input.Text == first.Name)
+                if (input.Text.ToLower() == first.Name.ToLower())
                 {
                     ContinueNextUnmatched(context.ChildRange(1));
                     return true;

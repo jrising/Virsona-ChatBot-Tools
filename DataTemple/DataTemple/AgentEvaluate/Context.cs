@@ -148,8 +148,8 @@ namespace DataTemple.AgentEvaluate
                         return; // we're all done!
 
                 foreach (KeyValuePair<string, object> kvp in append.map)
-                    if (!map.ContainsKey(kvp.Key))
-                        map.Add(kvp.Key, kvp.Value);
+	                if (!map.ContainsKey(kvp.Key))
+	                    map.Add(kvp.Key, kvp.Value);
             }
         }
 

@@ -18,6 +18,7 @@ namespace DataTemple.Variables
             env.Map.Add("@definz", new CallAgentWrapper(DefineInNoArgRule, ArgumentMode.DelimitedUnevaluated, basesal, 4, 10, basesal));
         	env.Map.Add("@defwc", new CallAgentWrapper(DefineWordChoiceVariable, ArgumentMode.DelimitedUnevaluated, basesal, 4, 10, false, plugenv));
         	env.Map.Add("@defvc", new CallAgentWrapper(DefineWordChoiceVariable, ArgumentMode.DelimitedUnevaluated, basesal, 4, 10, true, plugenv));
+			env.Map.Add("@defpc", new CallAgentWrapper(DefinePhraseChoiceVariable, ArgumentMode.DelimitedUnevaluated, basesal, 4, 10, plugenv));
 		}
 
         public static bool DefineInNoArgRule(Context context, IContinuation succ, IFailure fail, params object[] args)
@@ -55,12 +56,36 @@ namespace DataTemple.Variables
             
 			List<string> options = new List<string>();
 			for (int ii = 1; ii < contents.Count; ii++)
-				options.Add(contents[ii].Name);
+				options.Add(contents[ii].Name.ToLower());
 			
 			if (isVerbChoice)
 	            context.Map.Add(name, new VerbChoiceVariable(name, options, plugenv));
 			else
 	            context.Map.Add(name, new WordChoiceVariable(name, options));
+
+            Context empty = new Context(context, new List<IContent>());
+            succ.Continue(empty, fail);
+
+			return true;
+		}
+
+		public static bool DefinePhraseChoiceVariable(Context context, IContinuation succ, IFailure fail, params object[] args) {
+            List<IContent> contents = context.Contents;
+            string name = contents[0].Name;
+			PluginEnvironment plugenv = (PluginEnvironment) args[0];
+            
+			List<List<string>> options = new List<List<string>>();
+			List<string> curropt = new List<string>();
+			for (int ii = 1; ii < contents.Count; ii++) {
+				if (contents[ii] == Special.ArgDelimSpecial) {
+					options.Add(curropt);
+					curropt = new List<string>();
+				} else
+					curropt.Add(contents[ii].Name.ToLower());
+			}
+			options.Add(curropt);
+			
+            context.Map.Add(name, new PhraseChoiceVariable(name, options, plugenv));
 
             Context empty = new Context(context, new List<IContent>());
             succ.Continue(empty, fail);
@@ -81,7 +106,7 @@ namespace DataTemple.Variables
 
         public override bool IsMatch(IParsedPhrase check)
         {
-            return options.Contains(check.Text);
+            return options.Contains(check.Text.ToLower());
         }
     }
 
@@ -129,6 +154,41 @@ namespace DataTemple.Variables
 	
 			string baseverb = verbs.InputToBase(verb);
 			return (bases.Contains(baseverb) || options.Contains(baseverb));
+        }
+    }
+
+    public class PhraseChoiceVariable : ProgressiveVariableAgent
+    {
+		List<List<string>> options;
+		
+        public PhraseChoiceVariable(string name, List<List<string>> options, PluginEnvironment plugenv)
+            : base(name, 100.0, new POSTagger(plugenv), new GrammarParser(plugenv))
+        {
+			this.options = options;
+        }
+
+        public override bool? IsMatch(IParsedPhrase check)
+        {
+			List<string> checks = StringUtilities.SplitWords(check.Text.ToLower(), true);
+			foreach (List<string> option in options) {
+				if (option.Count < checks.Count)
+					continue;
+				
+				bool sofar = true;
+				for (int ii = 0; ii < Math.Min(option.Count, checks.Count); ii++)
+					if (option[ii] != checks[ii]) {
+						sofar = false;
+						break;
+					}
+				
+				if (sofar) {
+					if (option.Count == checks.Count)
+						return true;
+					return null;
+				}
+			}
+			
+			return false;
         }
     }
 }

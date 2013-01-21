@@ -62,10 +62,11 @@ namespace DataTemple.Matching
                 }
 
                 Context argctx = context.LookupDefaulted<Context>("$argctx", context);
-				// Add our context after argctx
-				argctx.AddMappings(context);
+				// Add our context, shadowing variables in argctx
+				Context argctxchild = argctx.ChildRange(0);
+				argctxchild.AddMappings(context);
 
-                return Match(check, argctx, succ, fail);
+                return Match(check, argctxchild, succ, fail);
             }
             else
                 return Produce(context, succ, fail);
