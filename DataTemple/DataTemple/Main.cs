@@ -33,6 +33,7 @@ namespace DataTemple
 			MainClass main = new MainClass();
 
 			LongOpt[] longopts = new LongOpt[] {
+				new LongOpt("help", Argument.No, null, 'h'),
 				new LongOpt("verbose", Argument.No, null, 'v'),
 				new LongOpt("conf", Argument.Required, null, 'c'),
 				new LongOpt("tag", Argument.No, null, 2),
@@ -117,6 +118,8 @@ namespace DataTemple
 				}
 				case 'p': {
 					foreach (string line in File.ReadAllLines(g.Optarg)) {
+						if (line.Trim().Length == 0 || line.Trim().StartsWith("#"))
+							continue;
 						Context context = Interpreter.ParseCommands(main.basectx, line);
 	    	            IContinuation cont = new Evaluator(100.0, ArgumentMode.ManyArguments, main, new NopCallable(), true);
 			            cont.Continue(context, new NopCallable());
