@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Gnu.Getopt;
 using PluggerBase;
 using PluggerBase.ActionReaction.Actions;
 using PluggerBase.ActionReaction.Evaluations;
@@ -17,124 +18,207 @@ namespace DataTemple
 	class MainClass : IMessageReceiver, IContinuation
 	{
 		protected static string DOCS_URL = "https://github.com/jrising/Virsona-ChatBot-Tools/wiki/DataTemple-Command-Line-Tool";
-		protected bool verbose;
+		protected int verbose;
 		protected PluginEnvironment plugenv;
 		protected POSTagger tagger;
 		protected GrammarParser parser;
 		
+		protected Coderack coderack;
+		protected Memory memory;
+		protected Context basectx;
+				
 		public static void Main(string[] args)
 		{
-			CommandLineArguments parsedArgs = new CommandLineArguments(args);
-			MainClass main = new MainClass(parsedArgs);
-			if (main.verbose)
-				Console.WriteLine("Initializing...");
+			int c;
+			MainClass main = new MainClass();
+
+			LongOpt[] longopts = new LongOpt[] {
+				new LongOpt("verbose", Argument.No, null, 'v'),
+				new LongOpt("conf", Argument.Required, null, 'c'),
+				new LongOpt("tag", Argument.No, null, 2),
+				new LongOpt("parse", Argument.No, null, 3),
+				new LongOpt("knows", Argument.No, null, 4)
+			};
+			Getopt g = new Getopt("DataTemple", args, "hvc:I:P:O:T:i:p:t:", longopts);
 			
-			if (parsedArgs["h"] != null || parsedArgs["help"] != null)
-				Console.WriteLine("The documentation is currently at \n" + DOCS_URL);
-			if (parsedArgs["c"] == null && parsedArgs["conf"] == null) {
-				Console.WriteLine("The -c/-conf argument is required.  See\n" + DOCS_URL);
-				return;
+			bool acted = false;
+			List<PatternTemplateSource> dicta = new List<PatternTemplateSource>();
+
+			string input = null;
+			string output = null;
+			string template = null;
+			while ((c = g.getopt()) != -1)
+				switch (c) {
+				case 1: {
+					Console.WriteLine("I see you have return in order set and that " +
+						"a non-option argv element was just found " +
+						"with the value '" + g.Optarg + "'");
+					break;
+				}
+				case 2: {
+					acted = true;
+					if (main.tagger == null) {
+						Console.WriteLine("Use the -c option before --tag or --parse");
+						continue;
+					}
+					List<KeyValuePair<string, string>> tokens = main.tagger.TagString(input);
+					foreach (KeyValuePair<string, string> token in tokens)
+						Console.Write(token.Key + "/" + token.Value + " ");
+					Console.WriteLine("");
+					break;
+				}
+				case 3: {
+					acted = true;
+					if (main.parser == null) {
+						Console.WriteLine("Use the -c option before --tag or --parse");
+						continue;
+					}
+					Console.WriteLine(main.parser.Parse(input));
+					break;
+				}
+				case 4: {
+					DictumMaker maker = new DictumMaker(main.basectx, "testing");
+					dicta.Add(maker.MakeDictum("%sentence %noun %is %adj", "@know %noun @HasProperty %adj @SubjectTense %is"));
+		            dicta.Add(maker.MakeDictum("%sentence %event %attime", "@know %event @AtTime %attime"));
+        		    dicta.Add(maker.MakeDictum("%sentence %event %inall", "@know %event @InLocation %inall"));
+            		dicta.Add(maker.MakeDictum("%sentence %noun %inall", "@know %noun @InLocation %inall"));
+    		        dicta.Add(maker.MakeDictum("%sentence %noun %is a %noun", "@know %noun1 @IsA %noun2 @SubjectTense %is"));
+            		dicta.Add(maker.MakeDictum("%sentence %noun %will %verb1 * to %verb2 *", "@know %verbx1 @Subject %noun @SubjectTense %will %verb1 @ActiveObjects *1 @know %verbx2 @Subject %noun @SubjectTense %verb2 @ActiveObjects *2 @know %verbx2 @Condition %verbx1"));
+					break;
+				}
+				case 'v': {
+					main.verbose++;
+					break;
+				}
+				case 'h': {
+					Console.WriteLine("The documentation is currently at \n" + DOCS_URL);
+					break;
+				}
+				case 'c': {
+					main.Initialize(g.Optarg);
+					break;
+				}
+				case 'I': {
+					input = g.Optarg;
+					break;
+				}
+				case 'i': {
+					StreamReader file = new StreamReader(g.Optarg);
+					input = file.ReadToEnd();
+					break;
+				}
+				case 'P': {
+					Context context = Interpreter.ParseCommands(main.basectx, g.Optarg);
+    	            IContinuation cont = new Evaluator(100.0, ArgumentMode.ManyArguments, main, new NopCallable(), true);
+		            cont.Continue(context, new NopCallable());
+
+					main.RunToEnd();
+					break;
+				}
+				case 'p': {
+					foreach (string line in File.ReadAllLines(g.Optarg)) {
+						Context context = Interpreter.ParseCommands(main.basectx, line);
+	    	            IContinuation cont = new Evaluator(100.0, ArgumentMode.ManyArguments, main, new NopCallable(), true);
+			            cont.Continue(context, new NopCallable());
+	
+						main.RunToEnd();
+					}
+					break;
+				}
+				case 'T': {
+					template = g.Optarg;
+					if (template != null && output != null) {
+			            DictumMaker maker = new DictumMaker(main.basectx, "testing");
+						dicta.Add(maker.MakeDictum(template, output));
+
+						template = output = null;
+					}
+					break;
+				}
+				case 'O': {
+					output = g.Optarg;
+					if (template != null && output != null) {
+			            DictumMaker maker = new DictumMaker(main.basectx, "testing");
+						dicta.Add(maker.MakeDictum(template, output));
+
+						template = output = null;
+					}
+					break;
+				}
+				case 't': {
+					bool nextTemplate = true;
+					foreach (string line in File.ReadAllLines(g.Optarg)) {
+						string trimline = line.Trim();
+						if (trimline.Length == 0 || trimline.StartsWith("#"))
+							continue;
+						
+						if (nextTemplate) {
+							template = trimline;
+							nextTemplate = false;
+						} else {
+							output = trimline;
+				            DictumMaker maker = new DictumMaker(main.basectx, "testing");
+							dicta.Add(maker.MakeDictum(template, output));
+							nextTemplate = true;
+						}
+					}
+					
+					template = output = null;
+					break;
+				}
 			}
 			
-			string input = "";
-			if (parsedArgs["i"] != null)
-				input = parsedArgs["i"];
-			else if (parsedArgs["if"] != null) {
-				StreamReader file = new StreamReader(parsedArgs["if"]);
-				input = file.ReadToEnd();
-			}
-			
-			main.plugenv = new PluginEnvironment(main);
-			string config = parsedArgs["c"] == null ? parsedArgs["conf"] : parsedArgs["c"];
+			if (dicta.Count != 0)
+				main.DoMatching(dicta, input);
+			else if (!acted)
+				Console.WriteLine("Nothing to do.  Add -tag, -parse, or -t and -o");
+		}
+		
+		public MainClass() {
+			verbose = 0;
+		}
+					
+		public void Initialize(string config) {
+			plugenv = new PluginEnvironment(this);
 			if (!File.Exists(config)) {
 				Console.WriteLine("Cannot find configuration file at " + config);
 				return;
 			}
 			
-            main.plugenv.Initialize(config, new NameValueCollection());
-
-			if (parsedArgs["tag"] == null && parsedArgs["parse"] == null && (parsedArgs["t"] == null || parsedArgs["o"] == null)) {
-				Console.WriteLine("Nothing to do.  Add -tag, -parse, or -t and -o");
-				return;
-			}
-
-			main.tagger = new POSTagger(main.plugenv);
-			if (parsedArgs["tag"] != null) {
-				List<KeyValuePair<string, string>> tokens = main.tagger.TagString(input);
-				foreach (KeyValuePair<string, string> token in tokens)
-					Console.Write(token.Key + "/" + token.Value + " ");
-				Console.WriteLine("");
-			}
+            plugenv.Initialize(config, new NameValueCollection());
+				
+			tagger = new POSTagger(plugenv);			
+			parser = new GrammarParser(plugenv);
 			
-			main.parser = new GrammarParser(main.plugenv);
-			if (parsedArgs["parse"] != null) {
-				Console.WriteLine(main.parser.Parse(input));
-			}
+			coderack = new ZippyCoderack(this, 10000000);
+			memory = new Memory();
 			
-			if (parsedArgs["t"] == null || parsedArgs["o"] == null)
-				return; // not doing any template matching
-			
-			main.DoMatching(parsedArgs["p"], parsedArgs["t"], parsedArgs["o"], input);
-		}
-		
-		public MainClass(CommandLineArguments parsedArgs) {
-			verbose = (parsedArgs["v"] != null || parsedArgs["verbose"] != null);
-		}
-		
-		public MainClass() {
-			verbose = false;
-		}
-
-		void DoMatching(string preproc, string template, string command, string input) {
-			ZippyCoderack coderack = new ZippyCoderack(this, 10000000);
-			Memory memory = new Memory();
-			
-            Context basectx = new Context(coderack);
+            basectx = new Context(coderack);
 			GrammarVariables.LoadVariables(basectx, 100.0, memory, plugenv);
 			OutputVariables.LoadVariables(basectx, 100.0, plugenv);
 			ProgramVariables.LoadVariables(basectx, 100.0, plugenv);
-			
-			IContinuation cont = new ContinueAgentWrapper(ContinueToMatching, this, coderack, template, command, input);
-			Context context = basectx;
-			if (preproc != null) {
-				context = Interpreter.ParseCommands(basectx, preproc);
-                cont = new Evaluator(100.0, ArgumentMode.ManyArguments, cont, new NopCallable(), true);
-			}
-
-            cont.Continue(context, new NopCallable());
-
+		}
+		
+		public void RunToEnd() {
             coderack.Execute(1000000, false);
 			Unilog.DropBelow(Unilog.levelRecoverable);
 			if (Unilog.HasEntries)
-				Console.WriteLine(Unilog.FlushToStringShort());
+				Console.WriteLine(Unilog.FlushToStringShort());			
 		}
 		
-		void ContinueToMatching(Context context, IContinuation succ, IFailure fail, params object[] args) {
-			Coderack coderack = (Coderack) args[0];
-			string template = (string) args[1];
-			string command = (string) args[2];
-			string input = (string) args[3];
-			
-			if (verbose)
+		void DoMatching(List<PatternTemplateSource> dicta, string input) {
+			if (verbose > 0)
 				Console.WriteLine("Parsing input...");
 			IParsedPhrase phrase = parser.Parse(input);
 
-			if (verbose)
+			if (verbose > 0)
 				Console.WriteLine("Matching templates...");
-			
-            List<PatternTemplateSource> dicta = new List<PatternTemplateSource>();
-            DictumMaker maker = new DictumMaker(context, "testing");
-            dicta.Add(maker.MakeDictum(template, command));
-            /*dicta.Add(maker.MakeDictum("%sentence %noun %is %adj", "@know %noun @HasProperty %adj @SubjectTense %is"));
-            dicta.Add(maker.MakeDictum("%sentence %event %attime", "@know %event @AtTime %attime"));
-            dicta.Add(maker.MakeDictum("%sentence %event %inall", "@know %event @InLocation %inall"));
-            dicta.Add(maker.MakeDictum("%sentence %noun %inall", "@know %noun @InLocation %inall"));
-            dicta.Add(maker.MakeDictum("%sentence %noun %is a %noun", "@know %noun1 @IsA %noun2 @SubjectTense %is"));
-            dicta.Add(maker.MakeDictum("%sentence %noun %will %verb1 * to %verb2 *", "@know %verbx1 @Subject %noun @SubjectTense %will %verb1 @ActiveObjects *1 @know %verbx2 @Subject %noun @SubjectTense %verb2 @ActiveObjects *2 @know %verbx2 @Condition %verbx1"));*/
-			
+						
             // Add a codelet for each of these, to match the input
             foreach (PatternTemplateSource dictum in dicta)
                 dictum.Generate(coderack, phrase, this, new NopCallable(), 1.0);
+			
+			RunToEnd();
 		}
 				
 		public object Clone()
@@ -151,6 +235,9 @@ namespace DataTemple
 			Context context = (Context) value;
             if (!context.IsEmpty)
 				Console.WriteLine(context.ContentsCode());
+			
+			// update context
+			basectx = context;
 			
 			return true;
         }
@@ -202,7 +289,7 @@ namespace DataTemple
 		// IMessageReceiver
 		
 		public bool Receive(string message, object reference) {
-			if (verbose) {
+			if (verbose > 0) {
 				if (message == "EvaluateCodelet") {
 					if (Unilog.HasEntries)
 						Console.WriteLine(Unilog.FlushToStringShort());

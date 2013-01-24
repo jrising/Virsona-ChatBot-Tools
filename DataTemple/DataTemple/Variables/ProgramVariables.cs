@@ -132,9 +132,26 @@ namespace DataTemple.Variables
 			string verb;
 			if (check.IsLeaf || !check.Text.Contains(" ")) {
 				verb = check.Text;
-
-				if (Verbs.IsToHave(verb) || Verbs.IsToBe(verb) || Verbs.IsToDo(verb) ||
-				    verb == "will" || verb == "shall")
+				
+				if (Verbs.IsToHave(verb)) {
+					if (bases.Contains("have"))
+						return true;
+					else
+						return null;
+				}
+				if (Verbs.IsToBe(verb)) {
+					if (bases.Contains("be"))
+						return true;
+					else
+						return null;
+				}
+				if (Verbs.IsToDo(verb)) {
+					if (bases.Contains("do"))
+						return true;
+					else
+						return null;
+				}
+				if (verb == "will" || verb == "shall")
 					return null; // not sure yet
 			} else {
 				GroupPhrase groupPhrase = new GroupPhrase(check);

@@ -21,8 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -p "@defpc %belphr I believe that / We can be sure that / Now we have come to know that #" -t "%sentence %opt %belphr # * makes *" -o "@print *1, *2" -i "We can be sure that smoke makes fire." -v
-</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -p ~/Dropbox/CausalAssertions/demo_preprocs.txt -t ~/Dropbox/CausalAssertions/demo_templates.txt -I "Fred is of benefit to John." -v</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -36,6 +35,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="Gnu.Getopt, Version=0.9.1.0, Culture=neutral, PublicKeyToken=d014b4ccdc53511a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\Gnu.Getopt.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
