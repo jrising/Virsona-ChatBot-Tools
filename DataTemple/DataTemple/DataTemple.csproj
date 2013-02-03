@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -p ~/Dropbox/CausalAssertions/demo_preprocs.txt -t ~/Dropbox/CausalAssertions/demo_templates.txt -I "Fred is of benefit to John." -v</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -p ~/Downloads/bad_preprocs.txt -t ~/Dropbox/CausalAssertions/templates.txt -I "Fred is of benefit to John." -v</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>

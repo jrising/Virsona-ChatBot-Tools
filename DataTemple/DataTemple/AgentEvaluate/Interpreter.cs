@@ -24,14 +24,14 @@ namespace DataTemple.AgentEvaluate
         {
             List<string> tokens = StringUtilities.SplitWords(commands, true);
             List<IContent> contents = new List<IContent>();
-
+			
             for (int ii = 0; ii < tokens.Count; ii++)
             {
                 int jj = 0;
                 if (tokens[ii][0] == ' ')
                     jj = 1;
 
-                if (IsSpecial(tokens[ii][jj]))
+                if (tokens[ii].Length > jj && IsSpecial(tokens[ii][jj]))
                 {
                     if (tokens.Count > ii + 1 && tokens[ii + 1][0] == ' ')
                     {
@@ -81,7 +81,13 @@ namespace DataTemple.AgentEvaluate
                             contents.Add(new Special(token));
                     }
                 }
-                else
+				else if (jj == 1 && contents.Count > 0 && contents[contents.Count - 1] is Word) {
+					if (tokens[ii] == " " && tokens.Count > ii + 1) {
+						contents[contents.Count - 1] = new Word(contents[contents.Count - 1].Name + tokens[ii + 1]);
+						ii++;
+					} else
+						contents[contents.Count - 1] = new Word(contents[contents.Count - 1].Name + tokens[ii].Substring(jj));
+				} else
                     contents.Add(new Word(tokens[ii]));
             }
 

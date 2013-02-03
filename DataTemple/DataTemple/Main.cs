@@ -18,6 +18,9 @@ namespace DataTemple
 	class MainClass : IMessageReceiver, IContinuation
 	{
 		protected static string DOCS_URL = "https://github.com/jrising/Virsona-ChatBot-Tools/wiki/DataTemple-Command-Line-Tool";
+
+		protected bool initialized;
+		
 		protected int verbose;
 		protected PluginEnvironment plugenv;
 		protected POSTagger tagger;
@@ -109,6 +112,10 @@ namespace DataTemple
 					break;
 				}
 				case 'P': {
+					if (!main.initialized) {
+						Console.WriteLine("Use the -c option before -P");
+						continue;
+					}
 					Context context = Interpreter.ParseCommands(main.basectx, g.Optarg);
     	            IContinuation cont = new Evaluator(100.0, ArgumentMode.ManyArguments, main, new NopCallable(), true);
 		            cont.Continue(context, new NopCallable());
@@ -117,6 +124,10 @@ namespace DataTemple
 					break;
 				}
 				case 'p': {
+					if (!main.initialized) {
+						Console.WriteLine("Use the -c option before -p");
+						continue;
+					}
 					foreach (string line in File.ReadAllLines(g.Optarg)) {
 						if (line.Trim().Length == 0 || line.Trim().StartsWith("#"))
 							continue;
@@ -129,6 +140,10 @@ namespace DataTemple
 					break;
 				}
 				case 'T': {
+					if (!main.initialized) {
+						Console.WriteLine("Use the -c option before -T");
+						continue;
+					}
 					template = g.Optarg;
 					if (template != null && output != null) {
 			            DictumMaker maker = new DictumMaker(main.basectx, "testing");
@@ -139,6 +154,11 @@ namespace DataTemple
 					break;
 				}
 				case 'O': {
+					if (!main.initialized) {
+						Console.WriteLine("Use the -c option before -O");
+						continue;
+					}
+
 					output = g.Optarg;
 					if (template != null && output != null) {
 			            DictumMaker maker = new DictumMaker(main.basectx, "testing");
@@ -149,6 +169,11 @@ namespace DataTemple
 					break;
 				}
 				case 't': {
+					if (!main.initialized) {
+						Console.WriteLine("Use the -c option before -t");
+						continue;
+					}
+
 					bool nextTemplate = true;
 					foreach (string line in File.ReadAllLines(g.Optarg)) {
 						string trimline = line.Trim();
@@ -179,6 +204,7 @@ namespace DataTemple
 		
 		public MainClass() {
 			verbose = 0;
+			initialized = false;
 		}
 					
 		public void Initialize(string config) {
@@ -200,6 +226,8 @@ namespace DataTemple
 			GrammarVariables.LoadVariables(basectx, 100.0, memory, plugenv);
 			OutputVariables.LoadVariables(basectx, 100.0, plugenv);
 			ProgramVariables.LoadVariables(basectx, 100.0, plugenv);
+			
+			initialized = true;
 		}
 		
 		public void RunToEnd() {
