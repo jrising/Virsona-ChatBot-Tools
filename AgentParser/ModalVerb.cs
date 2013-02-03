@@ -21,12 +21,18 @@ namespace LanguageNet.AgentParser
         public ModalVerb(string word)
             : base("MD", word)
         {
+            precedence = -6;
         }
 
         public override bool Transform(Sentence sentence)
-        {
+        {				
             List<Phrase> phrases = new List<Phrase>();
             phrases.Add(this);
+			
+			KeyValuePair<string, string> nks = NeighborKinds(sentence);
+			if (nks.Value == "VP")
+				phrases.Add(sentence.PhraseAfter(this));
+
             sentence.Combine(phrases, new VerbPhrase());
             return true;
         }
