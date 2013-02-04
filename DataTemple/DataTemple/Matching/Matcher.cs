@@ -159,7 +159,7 @@ namespace DataTemple.Matching
                 IContinuation mysucc = succ;
 				// Check if we have values to match later
                 if (unmatched.Count != 0)
-                    mysucc = new Matcher(salience, unmatched[0], unmatched.GetRange(1, unmatched.Count - 1), succ);
+                    mysucc = MakeNextUnmatchedContinue(mysucc);
                 ContextAppender appender = new ContextAppender(salience, context, -1, mysucc);
 
                 MatchProduceAgent agent = (MatchProduceAgent)((Value) first).Data;
@@ -227,6 +227,10 @@ namespace DataTemple.Matching
 
             return eval;
         }
+		
+		public Evaluator MakeNextUnmatchedContinue(IContinuation succ) {
+			return MakeMatcherContinue(salience, context.ChildRange(1), unmatched[0], unmatched.GetRange(1, unmatched.Count - 1), succ);
+		}
 		
         public void ContinueNextUnmatched(Context context)
         {
