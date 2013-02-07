@@ -19,9 +19,10 @@ namespace DataTemple
 	{
 		protected static string DOCS_URL = "https://github.com/jrising/Virsona-ChatBot-Tools/wiki/DataTemple-Command-Line-Tool";
 
-		protected bool initialized;
-		
+		protected bool initialized;		
 		protected int verbose;
+		protected bool serialmode;
+		
 		protected PluginEnvironment plugenv;
 		protected POSTagger tagger;
 		protected GrammarParser parser;
@@ -43,7 +44,7 @@ namespace DataTemple
 				new LongOpt("parse", Argument.No, null, 3),
 				new LongOpt("knows", Argument.No, null, 4)
 			};
-			Getopt g = new Getopt("DataTemple", args, "hvc:I:P:O:T:i:p:t:", longopts);
+			Getopt g = new Getopt("DataTemple", args, "hvsc:I:P:O:T:i:p:t:", longopts);
 			
 			bool acted = false;
 			List<PatternTemplateSource> dicta = new List<PatternTemplateSource>();
@@ -96,6 +97,10 @@ namespace DataTemple
 				}
 				case 'h': {
 					Console.WriteLine("The documentation is currently at \n" + DOCS_URL);
+					break;
+				}
+				case 's': {
+					main.serialmode = true;
 					break;
 				}
 				case 'c': {
@@ -205,6 +210,7 @@ namespace DataTemple
 		public MainClass() {
 			verbose = 0;
 			initialized = false;
+			serialmode = false;
 		}
 					
 		public void Initialize(string config) {
@@ -246,8 +252,13 @@ namespace DataTemple
 				Console.WriteLine("Matching templates...");
 						
             // Add a codelet for each of these, to match the input
-            foreach (PatternTemplateSource dictum in dicta)
-                dictum.Generate(coderack, phrase, this, new NopCallable(), 1.0);
+			if (!serialmode) {
+	            foreach (PatternTemplateSource dictum in dicta)
+    	            dictum.Generate(coderack, phrase, this, new NopCallable(), 1.0);
+			} else {
+				SerialTemplateMatcher matcher = new SerialTemplateMatcher(this, this, coderack, phrase, dicta, 1.0);
+				matcher.MatchNextSentence();
+			}
 			
 			RunToEnd();
 		}

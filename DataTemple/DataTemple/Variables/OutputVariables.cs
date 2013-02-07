@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PluggerBase;
 using PluggerBase.ActionReaction.Evaluations;
 using LanguageNet.Grammarian;
@@ -21,6 +22,7 @@ namespace DataTemple
 			GrammarParser parser = new GrammarParser(plugenv);
 			
 			Console.WriteLine(StarUtilities.ProducedCode(context, tagger, parser));
+			succ.Continue(new Context(context, new List<IContent>()), fail);
             return true;
 		}
 	}

@@ -381,14 +381,19 @@ namespace DataTemple.Variables
 	                // Match against each element
 	                foreach (IParsedPhrase constituent in phrase.Branches)
 	                    Matcher.MatchAgainst(salience, context, constituent, new List<IParsedPhrase>(), succ, fail);
+					
+					return true;
 	            }
 	            else if (phrase.Part == "FRAG" || phrase.Part == "S" || phrase.Part == "SBARQ")
 	            {
 	                // Do a match using my contents
 	                Matcher.MatchAgainst(salience, context, (IParsedPhrase) check, new List<IParsedPhrase>(), succ, fail);
+					
+					return true;
 	            }
 			}
-
+			
+			fail.Fail("Not a sentence.", succ);
             return true;
         }
 
