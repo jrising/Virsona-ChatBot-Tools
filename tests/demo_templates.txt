@@ -1,0 +1,28 @@
+# Template 1
+%sentence %opt %belphr # there %were %the %big %chance %opt that # * %will %opt %greatly # %harm *
+@print *1 //-// *2.
+
+
+# Template 2
+%sentence %opt %belphr # * %were %likely %for %opt %greatly # %harm *
+@print *1 //-// *2.
+
+
+# Template 3
+%sentence %opt %belphr # * %have %the %opt %big # %chance %for %harm *
+@print *1 //-// *2.
+
+
+# Template 4
+%sentence %opt %belphr # * %opt %will # %opt %greatly # %harm *
+@print *1 //-// *2.
+
+
+# Template 5
+%sentence %opt %belphr # * %opt %will # %likely %harm *
+@print *1 //-// *2.
+
+
+# Template 6
+%sentence %opt %belphr # * %were %opt %likely # %harm *
+@print *1 //-// *2.

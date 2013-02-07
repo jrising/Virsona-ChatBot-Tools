@@ -1,0 +1,83 @@
+@defvc %achieve accomplish achieve acquire act adapt arrange attain cheat colour complete con conclude construct consummate create deceive decipher decode decorate defraud design develop diddle discharge do dress dupe earn effect effectuate execute fabricate fashion finish fix fleece fulfill furbish gain get give hoax invent keep make manufacture mount obtain organize originate paint paper perfect perform prepare present procure produce reach realize renovate resolve satisfy shape show skin solve stage stiff sting style swindle tailor transact trick undertake wallpaper win work
+@defvc %allow allow permit
+@defvc %begin begin culminate ensue rise start
+@defvc %benefit abet add advance advantage advocate aggravate aid amplify assist augment avail back begin benefit better bolster boost brace build cause champion commence compel compound construct continue convalesce countenance create cultivate cure deepen defend develop effect elevate encourage endorse engender enhance enlarge enrich espouse extend facilitate favour finance fix forward foster fund further generate grow heal heighten help hoist hone improve incite increase induce inflate intensify invigorate lift magnify maintain mend motivate occasion polish precipitate preserve proceed produce profit promote prop provoke raise recover recuperate reinforce remedy renew renovate repair restore result resume revitalize save second serve shore sponsor start strengthen subsidize succour support sustain underwrite upgrade uphold
+@defvc %come come
+@defvc %compell argue compell convince
+@defvc %harm abase abate abridge adulterate afflict aggrieve alleviate anaesthetize annihilate annoy annul arrest assassinate attack avoid bankrupt bar beat beggar belay belittle benumb besmirch blacken blight block blow blunt bodge botch bother break bruise burden butcher cancel cease chagrin check clobber combat condescend conquer contract control cripple croak crush curb curtail cut damage dampen deaden debase debilitate decimate decrease deface defeat degrade deign demean demolish depress desolate despoil destroy deter devalue devastate devestate dilute diminish disable discompose discourage disempower disfigure disgrace dismantle dispatch distress downgrade downsize droop drop dull dwindle encumber end enervate enfeeble eradicate erase eschew execute exhaust exterminate extinguish extirpate fade fail fight flag floor foil frustrate gash grieve gut halt handicap harm hinder hobble humble humiliate hurt hush ill-treat impair impede impoverish incapacitate incommode inconvenience inhibit injure invalidate jeopardize kill lessen level liquidate lower maim maltreat mangle mar massacre minimize mitigate moderate molest muffle murder mute mutilate neutralize nonplus nullify numb obliterate obstruct oppose oppress outplay overload overpower overthrow overturn overwhelm pain paralyse pauperize pillage plunder prevent prune quash quell quieten ravage raze reduce resist reverse rout ruin sabotage sack sadden sap scotch shatter shorten sink slash slaughter slay smash smother soften spoil staunch stem stifle still sting stop strain subdue subjugate submerge subvert suppress tank tarnish tax temper terminate thin thwart tire total trammel trash trounce truncate undermine undo upset vanquish veto vitiate waste weaken whack withstand wound wreck
+@defvc %have have
+@defvc %need demand need require
+@defvc %offers bring give offer
+@defvc %run go pass run
+@defvc %were are bode bring have is were
+@defwc %I I mine my our us we
+@defwc %affect affect effect influence
+@defwc %again again more
+@defwc %any a all an any every
+@defwc %apt apt bound certain likely sure
+@defwc %bad bad disastrous hurt ill painful
+@defwc %badly badly devestatingly grossly horribly overwhelmingly unacceptably urgently
+@defwc %basis basis way
+@defwc %because as because for
+@defwc %believe belief believe fear opinion think
+@defwc %better better bigger greater higher superior
+@defwc %big big great huge magnificent much substantial vast
+@defwc %but and but however
+@defwc %chance anticipation apprehension capabilities chance excitement expectancy fear feasibility hazard hope liability likelihood odds outlook plausibility possibility potential potentiality practicability prediction probability promise prospect prospects risk suspense talent workableness
+@defwc %completely completely utterly
+@defwc %confidence believe confidence expectations
+@defwc %consequences consequence consequences repercussions
+@defwc %dangerous dangerous inflammatory worrisome
+@defwc %destruction destroy destroying destruction harm harming hurt hurting weaken weakening
+@defwc %effect effect impact influence
+@defwc %effects effect effects influence influences one ones outcome outcomes process processes way ways
+@defwc %either either neither
+@defwc %exactly exactly maybe perhaps precisely presumably
+@defwc %feasible attainable feasible possible
+@defwc %for about for in of on to
+@defwc %fully completely considerably entirely fully greatly largely
+@defwc %good beneficial best enhancing good great helpful wonderful
+@defwc %greatly greatly hugely significantly
+@defwc %high enough great high sufficient
+@defwc %if assuming given if suppose supposing
+@defwc %increase further help increase maintain
+@defwc %induldge induldge induldging
+@defwc %interest benefit freedom incentives interest interests sovereignty use utility well-being
+@defwc %it he her him it she them they us we you
+@defwc %likely certainly likely potentially probably surely
+@defwc %maintain benefit benefits boost boosts condition maintain maintaining maintains strengthen strengthens touchstone
+@defwc %many many much
+@defwc %may likely may might
+@defwc %mean bring brings cause causes mean means
+@defwc %might likely may might probably
+@defwc %mistake error mistake mistakes mistaking wrong
+@defwc %more better bigger greater larger more
+@defwc %need need use
+@defwc %now afterwards hence henceforth now since
+@defwc %obtain further get maintain obtain secure
+@defwc %one finally first one second then third three two ultimately
+@defwc %opensecret clandistine open secret
+@defwc %or and nor or
+@defwc %our american domestic national our
+@defwc %power disgression disposal hand hands mercy power
+@defwc %problem burden burdens problem problems
+@defwc %pursues further furthers pursue pursues
+@defwc %remove deminish destroy reduce remove
+@defwc %return return revert revisit
+@defwc %secure build create ensure secure
+@defwc %slowly gradually slowly
+@defwc %sure certain certainly sure surely then thus
+@defwc %the that the these those a all an it that the them these this those
+@defwc %then hence then thus
+@defwc %thing affair course mess process situation thing
+@defwc %three 3 couple few number three
+@defwc %thus so then therefore thus
+@defwc %tyranny danger horror tyranny
+@defwc %understood forseen understood
+@defwc %when once when
+@defwc %which which who
+@defwc %whole all complete completely entire entirely whole
+@defwc %without lacking without
+@defpc %belphr I think that / It makes sense / Therefore we have reason / I believe that / Thus, we have reason / It is reasonable / Now we have reason / We can thus say with confidence that
+@defpc %cannot is unable to / could not / cannot / is incapable of / wouldnot / is not able to / are unable to / are incapable of / can not / are not able to / will not
+@defpc %topic Our present topic is
