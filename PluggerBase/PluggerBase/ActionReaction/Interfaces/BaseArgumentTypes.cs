@@ -21,6 +21,22 @@
  * <http://www.gnu.org/licenses/>.
  *      -----------------------------------------------------------
  * A collection of classes describing basic types of arguments
+ * Defines:
+ *   AnyArgumentType
+ *   NullArgumentType
+ *   UnknownArgumentType
+ *   AmbiguousArgumentType
+ *   ManyConstraintArgumentType
+ *   BooleanArgumentType
+ *   SelectableArgumentType
+ *   RangedArgumentType<T>
+ *   TypedArgumentType
+ *   StringArgumentType
+ *   EnumerableArgumentType
+ *   DictionaryArgumentType<TKey, TValue>
+ *   SeveralArgumentType
+ *   NamedArgumentType
+ *   SetArgumentTreeArgumentType
 \******************************************************************/
 using System;
 using System.Collections.Generic;
