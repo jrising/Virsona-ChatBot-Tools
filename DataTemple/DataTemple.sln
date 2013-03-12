@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InOutTools", "..\InOutTools
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExamineTools", "..\ExamineTools\ExamineTools\ExamineTools.csproj", "{F96D3B75-4055-40C7-A03C-ECE015E77BBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpellingBee", "..\SpellingBee\SpellingBee\SpellingBee.csproj", "{E501960B-1889-460C-8806-0439C24617DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -39,6 +41,10 @@ Global
 		{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}.Debug|x86.Build.0 = Debug|x86
 		{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}.Release|x86.ActiveCfg = Release|x86
 		{A98A890E-D7FC-4797-99C0-03E4ED8B8F82}.Release|x86.Build.0 = Release|x86
+		{E501960B-1889-460C-8806-0439C24617DA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E501960B-1889-460C-8806-0439C24617DA}.Debug|x86.Build.0 = Debug|Any CPU
+		{E501960B-1889-460C-8806-0439C24617DA}.Release|x86.ActiveCfg = Release|Any CPU
+		{E501960B-1889-460C-8806-0439C24617DA}.Release|x86.Build.0 = Release|Any CPU
 		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Debug|x86.Build.0 = Debug|Any CPU
 		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Release|x86.ActiveCfg = Release|Any CPU

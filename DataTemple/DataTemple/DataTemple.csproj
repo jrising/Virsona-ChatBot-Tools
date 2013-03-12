@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -p ~/Dropbox/CausalAssertions/preprocs.txt -t ~/Dropbox/CausalAssertions/demo_templates.txt -i ~/Dropbox/CausalAssertions/demo_text.txt -s</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -I "I fear that Nuclear escalation harms world peace." -P "@defvc %harm harm hurt # @defwc %believe believe think fear" -T "%sentence %opt I %believe that * %harm * " -O "@print *1 //-// *2." -v</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -115,6 +115,7 @@
     <Compile Include="Matching\DeclinedVariable.cs" />
     <Compile Include="Matching\ProgressiveVariableAgent.cs" />
     <Compile Include="SerialTemplateMatcher.cs" />
+    <Compile Include="Matching\WordComparer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

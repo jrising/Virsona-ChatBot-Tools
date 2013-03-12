@@ -204,7 +204,7 @@ namespace DataTemple
 			if (dicta.Count != 0)
 				main.DoMatching(dicta, input);
 			else if (!acted)
-				Console.WriteLine("Nothing to do.  Add -tag, -parse, or -t and -o");
+				Console.WriteLine("Nothing to do.  Add -tag, -parse, or -t or -T and -O");
 		}
 		
 		public MainClass() {
@@ -232,6 +232,7 @@ namespace DataTemple
 			GrammarVariables.LoadVariables(basectx, 100.0, memory, plugenv);
 			OutputVariables.LoadVariables(basectx, 100.0, plugenv);
 			ProgramVariables.LoadVariables(basectx, 100.0, plugenv);
+			basectx.Map.Add("$Compare", new WordComparer());
 			
 			initialized = true;
 		}
@@ -285,48 +286,6 @@ namespace DataTemple
         }
 
         #endregion
-
-		
-		/* Formation Code 1
-		public static void Main(string[] args)
-		{
-			TempleMatcher matcher = TempleMatcher.Interpret(plugenv, "a *"); //args[1]);
-			List<PatternMatch> matches = matcher.AllMatches(new AmbiguousPhrase("This is a test.")); //args[2]));
-			
-			foreach (PatternMatch match in matches)
-				match.Display(Console.Out);
-				
-			Console.WriteLine("Complete");			
-		}*/
-		
-		/* Formation Code 2
-		public static void Main(string[] args)
-		{
-			PluginEnvironment plugenv = new PluginEnvironment(new MainClass());
-			string plugbase = "/Users/jrising/projects/virsona/github/data";
-            plugenv.Initialize(plugbase + "/config.xml", plugbase, new NameValueCollection());
-
-			matcher.Match(args[2], DisplayExtract, DisplayComplete);
-		}
-		
-		// This is a Continuelet
-		int DisplayExtract(IArena arena, double salience, object value, IFailure fail, params object[] args)
-		{
-			PatternMatch match = (PatternMatch) value;
-			match.Display(Console.Out);
-
-			arena.Fail(fail, salience, "find the next match", null);
-			
-			return 1;
-		}
-
-		// This is a Faillet
-		int DisplayComplete(IArena arena, double salience, string reason, IContinuation skip, params object[] args)
-		{
-			Console.WriteLine("No more matches: " + reason);
-			
-			return 1;
-		}*/
 
 		// IMessageReceiver
 		

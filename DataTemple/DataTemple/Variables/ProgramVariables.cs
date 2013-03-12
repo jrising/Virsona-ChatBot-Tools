@@ -61,7 +61,7 @@ namespace DataTemple.Variables
 			if (isVerbChoice)
 	            context.Map.Add(name, new VerbChoiceVariable(name, options, plugenv));
 			else
-	            context.Map.Add(name, new WordChoiceVariable(name, options));
+	            context.Map.Add(name, new WordChoiceVariable(name, options, (WordComparer) context.LookupSimple("$Compare")));
 
             Context empty = new Context(context, new List<IContent>());
             succ.Continue(empty, fail);
@@ -85,7 +85,7 @@ namespace DataTemple.Variables
 			}
 			options.Add(curropt);
 			
-            context.Map.Add(name, new PhraseChoiceVariable(name, options, plugenv));
+            context.Map.Add(name, new PhraseChoiceVariable(name, options, plugenv, (WordComparer) context.LookupSimple("$Compare")));
 
             Context empty = new Context(context, new List<IContent>());
             succ.Continue(empty, fail);
@@ -97,16 +97,18 @@ namespace DataTemple.Variables
     public class WordChoiceVariable : Variable
     {
 		List<string> options;
+		WordComparer comparer;
 		
-        public WordChoiceVariable(string name, List<string> options)
+        public WordChoiceVariable(string name, List<string> options, WordComparer comparer)
             : base(name)
         {
 			this.options = options;
+			this.comparer = comparer;
         }
 
         public override bool IsMatch(IParsedPhrase check)
         {
-            return options.Contains(check.Text.ToLower());
+			return comparer.MatchAny(check.Text, options);
         }
     }
 
@@ -177,11 +179,13 @@ namespace DataTemple.Variables
     public class PhraseChoiceVariable : ProgressiveVariableAgent
     {
 		List<List<string>> options;
+		WordComparer comparer;
 		
-        public PhraseChoiceVariable(string name, List<List<string>> options, PluginEnvironment plugenv)
+        public PhraseChoiceVariable(string name, List<List<string>> options, PluginEnvironment plugenv, WordComparer comparer)
             : base(name, 100.0, new POSTagger(plugenv), new GrammarParser(plugenv))
         {
 			this.options = options;
+			this.comparer = comparer;
         }
 
         public override bool? IsMatch(IParsedPhrase check)
@@ -193,7 +197,7 @@ namespace DataTemple.Variables
 				
 				bool sofar = true;
 				for (int ii = 0; ii < Math.Min(option.Count, checks.Count); ii++)
-					if (option[ii] != checks[ii]) {
+					if (!comparer.Match(checks[ii], option[ii])) {
 						sofar = false;
 						break;
 					}

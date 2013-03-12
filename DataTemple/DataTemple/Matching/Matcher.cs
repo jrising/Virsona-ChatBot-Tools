@@ -182,7 +182,8 @@ namespace DataTemple.Matching
 
             if (first is Word && input.IsLeaf)
             {
-                if (input.Text.ToLower() == first.Name.ToLower())
+				WordComparer comparer = (WordComparer) context.LookupSimple("$Compare");
+                if (comparer.Match(input.Text, first.Name))
                 {
                     ContinueNextUnmatched(context.ChildRange(1));
                     return true;
