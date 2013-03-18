@@ -9,11 +9,11 @@ namespace DataTemple.Matching
 		{
 		}
 
-		public bool Match(string input, string pattern) {
+		public virtual bool Match(string input, string pattern) {
 			return input.ToLower() == pattern.ToLower();
 		}
 		
-		public bool MatchAny(string input, List<string> options) {
+		public virtual bool MatchAny(string input, List<string> options) {
 			return options.Contains(input.ToLower());
 		}
 	}

@@ -22,6 +22,7 @@ namespace DataTemple
 		protected bool initialized;		
 		protected int verbose;
 		protected bool serialmode;
+		protected TryToRescueMatch tryToRescueMatch; // succ is a full-match, fail is no-match
 		
 		protected PluginEnvironment plugenv;
 		protected POSTagger tagger;
@@ -42,9 +43,10 @@ namespace DataTemple
 				new LongOpt("conf", Argument.Required, null, 'c'),
 				new LongOpt("tag", Argument.No, null, 2),
 				new LongOpt("parse", Argument.No, null, 3),
-				new LongOpt("knows", Argument.No, null, 4)
+				new LongOpt("knows", Argument.No, null, 4),
+				new LongOpt("spell", Argument.No, null, 'z')
 			};
-			Getopt g = new Getopt("DataTemple", args, "hvsc:I:P:O:T:i:p:t:", longopts);
+			Getopt g = new Getopt("DataTemple", args, "hvszc:I:P:O:T:i:p:t:", longopts);
 			
 			bool acted = false;
 			List<PatternTemplateSource> dicta = new List<PatternTemplateSource>();
@@ -101,6 +103,17 @@ namespace DataTemple
 				}
 				case 's': {
 					main.serialmode = true;
+					break;
+				}
+				case 'z': {
+					if (!main.initialized) {
+						Console.WriteLine("Use the -c option before -z");
+						continue;
+					}
+					
+					SpellingBeeWordComparer wordComparer = new SpellingBeeWordComparer(main.plugenv.GetConfigDirectory("datadirectory"));
+					main.basectx.Map["$Compare"] = wordComparer;
+					main.tryToRescueMatch = new CorrectSpellingsRescueMatch(main.tryToRescueMatch, wordComparer, main.parser, 100);
 					break;
 				}
 				case 'c': {
@@ -211,6 +224,8 @@ namespace DataTemple
 			verbose = 0;
 			initialized = false;
 			serialmode = false;
+			
+			tryToRescueMatch = new TryToRescueMatch();
 		}
 					
 		public void Initialize(string config) {
@@ -254,10 +269,12 @@ namespace DataTemple
 						
             // Add a codelet for each of these, to match the input
 			if (!serialmode) {
-	            foreach (PatternTemplateSource dictum in dicta)
-    	            dictum.Generate(coderack, phrase, this, new NopCallable(), 1.0);
+	            foreach (PatternTemplateSource dictum in dicta) {
+					IFailure fail = tryToRescueMatch.MakeFailure(phrase, dictum, this, new NopCallable(), coderack);
+    	            dictum.Generate(coderack, phrase, this, fail, 1.0);
+				}
 			} else {
-				SerialTemplateMatcher matcher = new SerialTemplateMatcher(this, this, coderack, phrase, dicta, 1.0);
+				SerialTemplateMatcher matcher = new SerialTemplateMatcher(this, this, coderack, tryToRescueMatch, phrase, dicta, 1.0);
 				matcher.MatchNextSentence();
 			}
 			

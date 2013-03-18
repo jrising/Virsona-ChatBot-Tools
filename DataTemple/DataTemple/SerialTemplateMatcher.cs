@@ -14,8 +14,9 @@ namespace DataTemple
 		IMessageReceiver receiver;
 		IContinuation succ;
 		Coderack coderack;
+		TryToRescueMatch tryToRescueMatch;
 		
-		List<IParsedPhrase> inputs;
+		List<IParsedPhrase> inputs;		
 		int inputIndex;
 		List<PatternTemplateSource> allDicta;
 		Queue<PatternTemplateSource> remainingDicta;
@@ -23,11 +24,13 @@ namespace DataTemple
 		double weight;
 		
 		public SerialTemplateMatcher(IMessageReceiver receiver, IContinuation succ, Coderack coderack,
-		                             IParsedPhrase input, List<PatternTemplateSource> dicta, double weight)
+		                             TryToRescueMatch tryToRescueMatch, IParsedPhrase input,
+		                             List<PatternTemplateSource> dicta, double weight)
 		{
 			this.receiver = receiver;
 			this.succ = succ;
 			this.coderack = coderack;
+			this.tryToRescueMatch = tryToRescueMatch;
 
 			this.inputs = new List<IParsedPhrase>(input.Branches);
 			inputIndex = -1;
@@ -49,9 +52,10 @@ namespace DataTemple
 			if (remainingDicta.Count == 0)
 				return false;
 			
-			PatternTemplateSource dictum = remainingDicta.Dequeue();
+			PatternTemplateSource dictum = remainingDicta.Dequeue();			
 			if (dictum.Pattern.Contents[0].Name == "%sentence") {
-				dictum.Generate(coderack, inputs[inputIndex], this, this, weight);
+				IFailure fail = tryToRescueMatch.MakeFailure(inputs[inputIndex], dictum, this, this, coderack);
+				dictum.Generate(coderack, inputs[inputIndex], this, fail, weight);
 				
 				return true;
 			} else if (dictum.Pattern.Contents[0].Name == "%sentences") {
@@ -61,7 +65,8 @@ namespace DataTemple
 						count++;
 				
 				GroupPhrase groupPhrase = new GroupPhrase("=P", inputs.GetRange(inputIndex, count));
-				dictum.Generate(coderack, groupPhrase, this, this, weight);
+				IFailure fail = tryToRescueMatch.MakeFailure(groupPhrase, dictum, this, this, coderack);
+				dictum.Generate(coderack, groupPhrase, this, fail, weight);
 				
 				return true;
 			} else {
@@ -86,7 +91,7 @@ namespace DataTemple
 		
 		public object Clone()
 		{
-			return new SerialTemplateMatcher(receiver, succ, coderack, new GroupPhrase("=P", inputs), allDicta, weight);
+			return new SerialTemplateMatcher(receiver, succ, coderack, tryToRescueMatch, new GroupPhrase("=P", inputs), allDicta, weight);
 		}
 	}
 }

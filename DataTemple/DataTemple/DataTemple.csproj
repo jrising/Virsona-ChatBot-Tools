@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -I "I fear that Nuclear escalation harms world peace." -P "@defvc %harm harm hurt # @defwc %believe believe think fear" -T "%sentence %opt I %believe that * %harm * " -O "@print *1 //-// *2." -v</Commandlineparameters>
+    <Commandlineparameters>-c "/Users/jrising/projects/virsona/github/config.xml" -I "He atte meat" -T "%sentence He %verb *" -O "@print ok *1" -v</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -116,6 +116,9 @@
     <Compile Include="Matching\ProgressiveVariableAgent.cs" />
     <Compile Include="SerialTemplateMatcher.cs" />
     <Compile Include="Matching\WordComparer.cs" />
+    <Compile Include="Matching\SpellingBeeWordComparer.cs" />
+    <Compile Include="TryToRescueMatch.cs" />
+    <Compile Include="CorrectSpellingsRescueMatch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -138,6 +141,10 @@
     <ProjectReference Include="..\..\ExamineTools\ExamineTools\ExamineTools.csproj">
       <Project>{F96D3B75-4055-40C7-A03C-ECE015E77BBC}</Project>
       <Name>ExamineTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SpellingBee\SpellingBee\SpellingBee.csproj">
+      <Project>{E501960B-1889-460C-8806-0439C24617DA}</Project>
+      <Name>SpellingBee</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

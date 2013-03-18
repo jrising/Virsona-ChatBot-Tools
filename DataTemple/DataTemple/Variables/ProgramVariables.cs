@@ -59,7 +59,7 @@ namespace DataTemple.Variables
 				options.Add(contents[ii].Name.ToLower());
 			
 			if (isVerbChoice)
-	            context.Map.Add(name, new VerbChoiceVariable(name, options, plugenv));
+	            context.Map.Add(name, new VerbChoiceVariable(name, options, plugenv, (WordComparer) context.LookupSimple("$Compare")));
 			else
 	            context.Map.Add(name, new WordChoiceVariable(name, options, (WordComparer) context.LookupSimple("$Compare")));
 
@@ -117,12 +117,14 @@ namespace DataTemple.Variables
 		List<string> options;
 		List<string> bases;
 		Verbs verbs;
+		WordComparer comparer;
 		
-        public VerbChoiceVariable(string name, List<string> options, PluginEnvironment plugenv)
+        public VerbChoiceVariable(string name, List<string> options, PluginEnvironment plugenv, WordComparer comparer)
             : base(name, 100.0, new POSTagger(plugenv), new GrammarParser(plugenv))
         {
 			this.options = options;
 			this.verbs = new Verbs(plugenv);
+			this.comparer = comparer;
 			
 			this.bases = new List<string>();
 			foreach (string option in options)
@@ -168,11 +170,9 @@ namespace DataTemple.Variables
 					return false;
 			}
 			
-			if (options.Contains(verb) || bases.Contains(verb))
-					return true;
-	
 			string baseverb = verbs.InputToBase(verb);
-			return (bases.Contains(baseverb) || options.Contains(baseverb));
+			return (comparer.MatchAny(verb, options) || comparer.MatchAny(verb, bases) ||
+			    comparer.MatchAny(baseverb, bases));
         }
     }
 

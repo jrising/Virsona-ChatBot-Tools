@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>SpellingBee</RootNamespace>
     <AssemblyName>SpellingBee</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

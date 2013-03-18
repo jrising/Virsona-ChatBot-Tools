@@ -90,7 +90,7 @@ namespace DataTemple.Matching
             Matcher.MatchAgainst(salience, pattern, input, new List<IParsedPhrase>(), checker, fail);
         }
 
-        public void Generate(Coderack coderack, IContinuation succ, IFailure fail, double weight)
+        /*public void Generate(Coderack coderack, IContinuation succ, IFailure fail, double weight)
         {
             PatternTemplateSource checker = new PatternTemplateSource(this, coderack, weight, succ);
 
@@ -99,8 +99,8 @@ namespace DataTemple.Matching
             Evaluator eval = new Evaluator(maxSalience * weight, ArgumentMode.ManyArguments, appender.AsIndex(0), appender.AsIndex(1), true);
 
             eval.Continue(pattern, fail);
-        }
-
+        }*/
+				
         #region IContinuation Members
 
         public bool Continue(object value, IFailure fail)
