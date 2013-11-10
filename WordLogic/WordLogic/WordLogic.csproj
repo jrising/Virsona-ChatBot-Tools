@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{01F00D52-DCF6-45B5-96C0-06D04FBE3844}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>WordLogic</RootNamespace>
+    <AssemblyName>WordLogic</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="BeITMemcached, Version=1.0.3146.22961, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\data\BeITMemcached.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GivenNames.cs" />
+    <Compile Include="WordLogicInterface.cs" />
+    <Compile Include="GenderAttribute.cs" />
+    <Compile Include="InformedPhrase.cs" />
+    <Compile Include="IWordLookup.cs" />
+    <Compile Include="PhraseSense.cs" />
+    <Compile Include="PhraseAttribute.cs" />
+    <Compile Include="SpeechPart.cs" />
+    <Compile Include="PartOSAttribute.cs" />
+    <Compile Include="AnaphoraUtilities.cs" />
+    <Compile Include="NumberAttribute.cs" />
+    <Compile Include="PersonAwareness.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\GenericTools\GenericTools.csproj">
+      <Project>{7AEB4A15-8603-4675-B636-98DA6292291A}</Project>
+      <Name>GenericTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PluggerBase\PluggerBase\PluggerBase.csproj">
+      <Project>{4D2297C0-FE51-4056-80CD-A72469075B10}</Project>
+      <Name>PluggerBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\InOutTools\InOutTools\InOutTools.csproj">
+      <Project>{19407319-EC07-4562-92BE-1A7F86D90ECF}</Project>
+      <Name>InOutTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Grammarian\Grammarian.csproj">
+      <Project>{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}</Project>
+      <Name>Grammarian</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
