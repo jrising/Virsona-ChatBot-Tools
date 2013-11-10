@@ -117,6 +117,60 @@ namespace LanguageNet.WordNet
 		}
 		#endregion EncodeWord
 		
+		
+        #region GetIndex
+        /// <summary>
+        /// Returns a list of the Index objects stored in the cache corresponding to the given string and part(s) of speech
+        /// </summary>
+        /// <param name="word">The string to use as a key</param>
+        /// <param name="part">The part of speech limitations</param>
+        /// <returns>The Index objects</returns>
+        public List<Index> GetIndex(string word, WordNetAccess.PartOfSpeech part)
+        {
+            if (word.Length == 0)
+                return new List<Index>();
+
+            word = EncodeWord(word);
+			
+			List<Index> idxres = new List<Index>();
+			
+			if (part == WordNetAccess.PartOfSpeech.Adj || part == WordNetAccess.PartOfSpeech.All) {
+				Index idxresAdj;
+				if (adjIndexSource.TryGetValue(word, out idxresAdj)) {
+					idxres.Add(idxresAdj);
+					if (part == WordNetAccess.PartOfSpeech.Adj)
+						return idxres;
+				}
+			}
+			if (part == WordNetAccess.PartOfSpeech.Adv || part == WordNetAccess.PartOfSpeech.All) {
+				Index idxresAdv;
+				if (advIndexSource.TryGetValue(word, out idxresAdv)) {
+					idxres.Add(idxresAdv);
+					if (part == WordNetAccess.PartOfSpeech.Adv)
+						return idxres;
+				}
+			}
+			if (part == WordNetAccess.PartOfSpeech.Noun || part == WordNetAccess.PartOfSpeech.All) {
+				Index idxresNoun;
+				if (advIndexSource.TryGetValue(word, out idxresNoun)) {
+					idxres.Add(idxresNoun);
+					if (part == WordNetAccess.PartOfSpeech.Noun)
+						return idxres;
+				}
+			}
+			if (part == WordNetAccess.PartOfSpeech.Verb || part == WordNetAccess.PartOfSpeech.All) {
+				Index idxresVerb;
+				if (advIndexSource.TryGetValue(word, out idxresVerb)) {
+					idxres.Add(idxresVerb);
+					if (part == WordNetAccess.PartOfSpeech.Verb)
+						return idxres;
+				}
+			}
+			
+			return idxres;
+        }
+        #endregion GetIndex
+		
         #region IFastSerializable Members
 
         public void Deserialize(SerializationReader reader)

@@ -13,6 +13,7 @@ using PluggerBase.ActionReaction.Evaluations;
 using PluggerBase.FastSerializer;
 using DataTemple.Codeland.SearchTree;
 using InOutTools;
+using ExamineTools;
 
 namespace DataTemple.Codeland
 {
@@ -118,16 +119,11 @@ namespace DataTemple.Codeland
         /// Execute the coderack for a given amount of time
         /// </summary> 
         public virtual void Execute(int time, bool debugMode) {
-            //int origtime = time;
-            //Profiler profiler = new Profiler();
+            int origtime = time;
+            Profiler profiler = new Profiler();
 
-            while (time > 0 && CountTop > 0) {
-                   // && (profiler.GetTime() / 1000 < origtime)) {
-                bool done = ExecuteOne(debugMode);
-                if (!done) {
-                    // This shouldn't happen-- we're out of executable codelets
-                    break;
-                }
+            while (time > 0 && CountTop > 0 && (profiler.GetTime() / 1000 < origtime)) {
+                time -= ExecuteOne(debugMode);
             }
 
             // Check if we're taking the time we say we are
@@ -147,19 +143,21 @@ namespace DataTemple.Codeland
             else
                 receiver.Receive("Time Limit Reached.", this);
         }
-
-        public virtual bool ExecuteOne(bool debugMode)
+		
+		// return codelet's time
+        public virtual int ExecuteOne(bool debugMode)
         {
             Codelet codelet = SelectSalientCodelet();
             if (codelet == null)
-                return false; // nothing to do!
+                return 1; // nothing to do!
 
             if (!codelet.NeedsEvaluation)
             {
                 // Skip it!
-                return true;
+                return 1;
             }
-
+			
+			int time = codelet.time;
             watching = codelet.watched;
             bool done = false;
 
@@ -197,7 +195,7 @@ namespace DataTemple.Codeland
 
             watching = false;
 
-            return done;
+            return time;
         }
 
         /// <summary> 

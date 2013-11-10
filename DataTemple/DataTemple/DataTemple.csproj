@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -92,7 +92,6 @@
     <Compile Include="AgentEvaluate\CallAgentWrapper.cs" />
     <Compile Include="AgentEvaluate\Interpreter.cs" />
     <Compile Include="Variables\OutputVariables.cs" />
-    <Compile Include="Matching\BestScore.cs" />
     <Compile Include="Matching\Concept.cs" />
     <Compile Include="Matching\ConceptTranslator.cs" />
     <Compile Include="Matching\Datum.cs" />
@@ -102,7 +101,6 @@
     <Compile Include="Matching\MatchProduceAgent.cs" />
     <Compile Include="Matching\Memory.cs" />
     <Compile Include="Matching\PatternTemplateSource.cs" />
-    <Compile Include="Matching\ProbableStrength.cs" />
     <Compile Include="Matching\Relations.cs" />
     <Compile Include="Matching\StarEater.cs" />
     <Compile Include="Matching\StarUtilities.cs" />
@@ -122,13 +120,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Grammarian\Grammarian.csproj">
-      <Project>{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}</Project>
-      <Name>Grammarian</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PluggerBase\PluggerBase\PluggerBase.csproj">
       <Project>{4D2297C0-FE51-4056-80CD-A72469075B10}</Project>
       <Name>PluggerBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Grammarian\Grammarian.csproj">
+      <Project>{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}</Project>
+      <Name>Grammarian</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\GenericTools\GenericTools.csproj">
       <Project>{7AEB4A15-8603-4675-B636-98DA6292291A}</Project>

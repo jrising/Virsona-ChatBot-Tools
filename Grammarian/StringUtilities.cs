@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace LanguageNet.Grammarian
 {
@@ -86,6 +87,98 @@ namespace LanguageNet.Grammarian
                 words.Add(word.ToString());
 
             return words;
+        }
+		
+		        public delegate string StringConverter(string input);
+
+        public static string Standardize(string input)
+        {
+            return input.ToUpper();
+        }
+
+        public static string StripInvalids(string input)
+        {
+            Regex invalids = new Regex("[^0-9a-zA-Z-]", RegexOptions.IgnorePatternWhitespace);
+            return invalids.Replace(input, " ");
+        }
+
+        public static string ReplaceCI(string original, string pattern, string replacement)
+        {
+            int count, position0, position1;
+            count = position0 = position1 = 0;
+            string upperString = original.ToUpper();
+            string upperPattern = pattern.ToUpper();
+            int inc = (original.Length / pattern.Length) *
+                      (replacement.Length - pattern.Length);
+            char[] chars = new char[original.Length + Math.Max(0, inc)];
+            while ((position1 = upperString.IndexOf(upperPattern,
+                                              position0)) != -1)
+            {
+                for (int i = position0; i < position1; ++i)
+                    chars[count++] = original[i];
+                for (int i = 0; i < replacement.Length; ++i)
+                    chars[count++] = replacement[i];
+                position0 = position1 + pattern.Length;
+            }
+            if (position0 == 0) return original;
+            for (int i = position0; i < original.Length; ++i)
+                chars[count++] = original[i];
+            return new string(chars, 0, count);
+        }
+
+        // This both does temporary replacements and case-insensitivity
+        public static string ReplaceCI(string original, Dictionary<string, string> replaces)
+        {
+            List<string> matches = new List<string>();
+
+            string upperString = original.ToUpper();
+            string result = original;
+
+            foreach (KeyValuePair<string, string> replace in replaces)
+            {
+                int count, position0, position1;
+                count = position0 = position1 = 0;
+
+                if (replace.Key.Trim() == "")
+                {
+                    result.Replace(replace.Key, replace.Value);
+                    continue;
+                }
+                string upperPattern = replace.Key.ToUpper();
+                int inc = (result.Length / replace.Key.Length) *
+                          ((replace.Value.Length - replace.Value.Trim().Length + 6) - replace.Key.Length);
+                char[] chars = new char[result.Length + Math.Max(0, inc)];
+                while ((position1 = upperString.IndexOf(upperPattern,
+                                                  position0)) != -1)
+                {
+                    for (int i = position0; i < position1; ++i)
+                        chars[count++] = result[i];
+                    string replacement = "__R" + (matches.Count + 1);
+                    // Add spaces based on original
+                    string untrimmed = replace.Value;
+                    string trimStart = untrimmed.TrimStart();
+                    string trimEnd = untrimmed.TrimEnd();
+                    replacement = untrimmed.Substring(0, untrimmed.Length - trimStart.Length)
+                        + replacement + untrimmed.Substring(trimEnd.Length);
+
+                    for (int i = 0; i < replacement.Length; ++i)
+                        chars[count++] = replacement[i];
+                    position0 = position1 + replace.Key.Length;
+                }
+                if (position0 != 0)
+                {
+                    matches.Add(replace.Value.Trim());
+                    for (int i = position0; i < result.Length; ++i)
+                        chars[count++] = result[i];
+                    result = new string(chars, 0, count);
+                    upperString = result.ToUpper();
+                }
+            }
+
+            for (int ii = 0; ii < matches.Count; ii++)
+                result = result.Replace("__R" + (ii + 1), matches[ii]);
+
+            return result;
         }
     }
 }

@@ -4,6 +4,9 @@ using PluggerBase;
 using GenericTools;
 using MetricSalad.Moods;
 
+using System.Collections.Generic;
+using MathematicTools.Distributions;
+
 namespace MetricSalad
 {
 	class MainClass : IMessageReceiver
@@ -17,13 +20,26 @@ namespace MetricSalad
 			if (parsedArgs["stem"] != null)
 				Console.WriteLine(parsedArgs["stem"] + " => " + stemmer.stemTerm(parsedArgs["stem"]));
 			
+			/*ANEWEmotionSensor sensor2 = new ANEWEmotionSensor("/Users/jrising/projects/virsona/github/data");
+			for (int rr = 0; rr < sensor2.positiveMatrix.GetLength(0); rr++) {
+				for (int cc = 0; cc < sensor2.positiveMatrix.GetLength(1); cc++)
+					Console.Write(sensor2.positiveMatrix[rr, cc] + ", ");
+				Console.WriteLine(" - ");
+			}
+			for (int rr = 0; rr < sensor2.negativeMatrix.GetLength(0); rr++) {
+				for (int cc = 0; cc < sensor2.negativeMatrix.GetLength(1); cc++)
+					Console.Write(sensor2.negativeMatrix[rr, cc] + ", ");
+				Console.WriteLine(" - ");
+			}
+			return;*/
+			
 			if (parsedArgs["freqrows"] != null) {
 				DataReader reader = new DataReader(parsedArgs["f"]);
 				for (string[] row = reader.ReadRow(); row != null; row = reader.ReadRow()) {
 					TwoTuple<int, int> counts = FrequencyTools.WordCount(parsedArgs["freqrows"], row[1]);
 					Console.WriteLine(counts.one + "," + counts.two + ",\"" + row[2] + "\"");
 				}
-			}
+			}				
 			
 			if (parsedArgs["emotion"] != null) {
 				ANEWEmotionSensor sensor = new ANEWEmotionSensor("/Users/jrising/projects/virsona/github/data");
@@ -44,7 +60,43 @@ namespace MetricSalad
 						valids++;
 				}
 			}
-
+			
+			if (parsedArgs["eimpute"] != null) {
+				ANEWEmotionSensor sensor = new ANEWEmotionSensor("/Users/jrising/projects/virsona/github/data");
+				
+				/*List<List<string>> rows = new List<List<string>>();
+				rows.Add(TwitterUtilities.SplitWords("happy aaaa cccc"));
+				rows.Add(TwitterUtilities.SplitWords("sad bbbb cccc"));
+				
+				IDataSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> inputed = sensor.ImputeEmotionalContent(rows, 1000);
+				foreach (KeyValuePair<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> kvp in inputed)
+					Console.WriteLine(kvp.Key + ": " + kvp.Value.one.Mean + ", " + kvp.Value.two.Mean + ", " + kvp.Value.three.Mean);*/
+				
+				DataReader reader = new DataReader(parsedArgs["f"]);
+				List<List<string>> rows = new List<List<string>>();
+				for (string[] row = reader.ReadRow(); row != null; row = reader.ReadRow()) {
+					rows.Add(TwitterUtilities.SplitWords(row[1].ToLower()));
+				}
+				reader.Close();
+				
+				/*IDataSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> inputed = sensor.ImputeEmotionalContent(rows, 10);
+				double minv = 1, maxv = 0;
+				foreach (KeyValuePair<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> kvp in inputed) {
+					minv = Math.Min(minv, kvp.Value.one.Mean);
+					maxv = Math.Max(maxv, kvp.Value.one.Mean);
+					Console.WriteLine(kvp.Key + ": " + kvp.Value.one.Mean + " x " + kvp.Value.one.Variance + ", " + kvp.Value.two.Mean + ", " + kvp.Value.three.Mean);
+				}
+				
+				Console.WriteLine("Min: " + minv + ", Max: " + maxv);*/
+				
+				sensor.ImputeEmotionalContent(rows, 10);
+				
+				reader = new DataReader(parsedArgs["f"]);
+				for (string[] row = reader.ReadRow(); row != null; row = reader.ReadRow()) {
+					double[] emotions = sensor.EstimateEmotions(row[1]);
+					Console.WriteLine("\"" + row[0] + "\"," + emotions[0] + "," + emotions[1] + "," + emotions[2] + "," + emotions[3] + "," + emotions[4] + "," + emotions[5] + "," + emotions[6] + "," + emotions[7] + ",\"" + row[2] + "\"");
+				}
+			}
 		}
 		
 		public MainClass() {

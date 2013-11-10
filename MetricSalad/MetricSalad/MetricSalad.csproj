@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>MetricSalad</RootNamespace>
     <AssemblyName>MetricSalad</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c ~/projects/virsona/github/config.xml -emorows -f ~/projects/twitter/sandy/loctweets.csv</Commandlineparameters>
+    <Commandlineparameters>-c ~/projects/virsona/github/config.xml -eimpute -f ~/projects/twitter/sandy/usertweets.csv</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -46,6 +46,7 @@
     <Compile Include="PorterStemmer.cs" />
     <Compile Include="Moods\ANEWFileSource.cs" />
     <Compile Include="Moods\ANEWEmotionSensor.cs" />
+    <Compile Include="TwitterUtilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

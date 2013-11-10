@@ -47,17 +47,17 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PluggerBase\PluggerBase\PluggerBase.csproj">
-      <Project>{4D2297C0-FE51-4056-80CD-A72469075B10}</Project>
-      <Name>PluggerBase</Name>
+    <ProjectReference Include="..\GenericTools\GenericTools.csproj">
+      <Project>{7AEB4A15-8603-4675-B636-98DA6292291A}</Project>
+      <Name>GenericTools</Name>
     </ProjectReference>
     <ProjectReference Include="..\Grammarian\Grammarian.csproj">
       <Project>{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}</Project>
       <Name>Grammarian</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GenericTools\GenericTools.csproj">
-      <Project>{7AEB4A15-8603-4675-B636-98DA6292291A}</Project>
-      <Name>GenericTools</Name>
+    <ProjectReference Include="..\PluggerBase\PluggerBase\PluggerBase.csproj">
+      <Project>{4D2297C0-FE51-4056-80CD-A72469075B10}</Project>
+      <Name>PluggerBase</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

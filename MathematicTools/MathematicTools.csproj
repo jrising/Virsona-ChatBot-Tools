@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MathematicTools</RootNamespace>
     <AssemblyName>MathematicTools</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,6 +43,7 @@
     <Compile Include="Statistics\Matrix.cs" />
     <Compile Include="Statistics\OLS.cs" />
     <Compile Include="Statistics\RandomMatrix.cs" />
+    <Compile Include="Statistics\WeightedStatistics.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

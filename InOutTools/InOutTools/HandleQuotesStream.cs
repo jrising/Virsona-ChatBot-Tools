@@ -6,7 +6,7 @@ namespace InOutTools
 	{
 		protected Stream source;
 		protected string quotes;
-		protected string search;
+		protected char[] search;
 		protected char replace;
 		
 		protected bool inquotes;
@@ -15,7 +15,7 @@ namespace InOutTools
 		{
 			source = new FileStream(filename, FileMode.Open);
 			this.quotes = quotes;
-			this.search = search;
+			this.search = search.ToCharArray();
 			this.replace = replace;
 		}
 				
@@ -25,11 +25,17 @@ namespace InOutTools
 				int bb = source.ReadByte();
 				if (bb < 0)
 					return bb;
-			
+				
+				// drop escaped characters (e.g., other quotes)
+				if (inquotes && bb == '\\') {
+					source.ReadByte();
+					return replace;
+				}
+				
 				char cc = (char) bb;
 				if (quotes.Contains(cc.ToString()))
 					inquotes = !inquotes;
-				else if (inquotes && search.Contains(cc.ToString()))
+				else if (inquotes && Array.IndexOf<char>(search, cc) != -1)
 					return (int) replace;
 				else
 					return bb;

@@ -24,13 +24,20 @@ namespace DataTemple.Codeland
         /// <summary> 
         /// Create a new coderack
         /// </summary> 
-        public ZippyCoderack(IMessageReceiver receiver, int space)
+        public ZippyCoderack(IMessageReceiver receiver)
             : base()
         {
             codelets = new SalienceList<Codelet>();
             this.receiver = receiver;
         }
-
+		
+        /// Deserialization constructor
+		public ZippyCoderack()
+			: base() {
+			codelets = new SalienceList<Codelet>();
+			this.receiver = new StandaloneReceiver(false);
+		}
+		
         /// <summary> 
         /// Execute the coderack for a given amount of time
         /// </summary> 
@@ -74,7 +81,8 @@ namespace DataTemple.Codeland
                         time -= 1;
                         continue;
                     }
-
+					
+					int codetime = codelet.time;
                     watching = codelet.watched;
 
                     // Console.WriteLine("=(" + CountPrime.ToString + "/" + codelets.Count.ToString + ")=> " + codelet.ToString())
@@ -111,6 +119,7 @@ namespace DataTemple.Codeland
                     }
 
                     watching = false;
+					time -= codetime;
 
                     // Move back two
                     values = values.Previous;
@@ -143,7 +152,7 @@ namespace DataTemple.Codeland
                 receiver.Receive("Time Limit Reached.", this);
         }
 
-        public override bool ExecuteOne(bool debugMode)
+        public override int ExecuteOne(bool debugMode)
         {
             SalienceList<Codelet> codelist = (SalienceList<Codelet>)codelets;
 
@@ -151,7 +160,7 @@ namespace DataTemple.Codeland
             LinkedListNode<double> keys = codelist.LinkedKeys.Last;
             LinkedListNode<Codelet> values = codelist.LinkedValues.Last;
             if (values == null)
-                return true;   // nothing to do!
+                return 1;   // nothing to do!
 
             Codelet codelet = values.Value;
             if (values.Previous != null)
@@ -162,14 +171,15 @@ namespace DataTemple.Codeland
             }
 
             if (codelet == null)
-                return true;   // nothing to do!
+                return 1;   // nothing to do!
 
             if (!codelet.NeedsEvaluation)
             {
                 // Skip it!
-                return true;
+                return 1;
             }
-
+			
+			int time = codelet.time;
             watching = codelet.watched;
             bool done = false;
 
@@ -205,7 +215,7 @@ namespace DataTemple.Codeland
                 keys = keys.Previous;
             }
 
-            return done;
+            return time;
         }
         #endregion
     }

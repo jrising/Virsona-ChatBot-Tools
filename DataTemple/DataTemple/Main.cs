@@ -213,7 +213,7 @@ namespace DataTemple
 					break;
 				}
 			}
-			
+
 			if (dicta.Count != 0)
 				main.DoMatching(dicta, input);
 			else if (!acted)
@@ -240,7 +240,7 @@ namespace DataTemple
 			tagger = new POSTagger(plugenv);			
 			parser = new GrammarParser(plugenv);
 			
-			coderack = new ZippyCoderack(this, 10000000);
+			coderack = new ZippyCoderack(this);
 			memory = new Memory();
 			
             basectx = new Context(coderack);

@@ -62,6 +62,10 @@ namespace InOutTools
 			
 			return parser.ReadFields();
 		}
+		
+		public void Close() {
+			parser.Close();
+		}
 	}
 }
 

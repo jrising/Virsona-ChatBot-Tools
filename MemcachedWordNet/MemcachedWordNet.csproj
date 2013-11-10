@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MemcachedWordNet</RootNamespace>
     <AssemblyName>MemcachedWordNet</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,6 +42,7 @@
     <Compile Include="IndexFile.cs" />
     <Compile Include="DefinitionFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Thesaurus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

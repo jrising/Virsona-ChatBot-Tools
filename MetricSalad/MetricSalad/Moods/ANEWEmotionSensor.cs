@@ -4,6 +4,7 @@ using System.IO;
 using LanguageNet.Grammarian;
 using PluggerBase;
 using GenericTools;
+using GenericTools.DataSources;
 using MathematicTools.Statistics;
 using MathematicTools.Distributions;
 
@@ -24,17 +25,20 @@ namespace MetricSalad.Moods
 			COUNT = 8
 		};
 		
-		protected ANEWFileSource source;
+		protected IDataSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> source;
 		protected PorterStemmer stemmer;
 		// We use a minimum distance measure
 		protected ContinuousDistribution[,] positiveProduct;
 		protected ContinuousDistribution[,] negativeProduct;
+		
+		public double[,] positiveMatrix;
+		public double[,] negativeMatrix;
 				
 		public ANEWEmotionSensor(string datadirectory)
 		{
             // Data files contained in [datadrectory]/metrics
             string metricsdir = datadirectory + Path.DirectorySeparatorChar + "metrics" + Path.DirectorySeparatorChar;
-			source = new ANEWFileSource(metricsdir + "anew.csv");
+			source = new MemoizedSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>>(new ANEWFileSource(metricsdir + "anew.csv"));
 			stemmer = new PorterStemmer();
 			
 			// These matrices are used in G emotion = vad
@@ -64,11 +68,14 @@ namespace MetricSalad.Moods
 			positiveProduct = RandomMatrix.Multiply(RandomMatrix.Transpose(randomPositives),
 			                                        RandomMatrix.Inverse(RandomMatrix.Multiply(randomPositives, RandomMatrix.Transpose(randomPositives))));
 			negativeProduct = RandomMatrix.Multiply(RandomMatrix.Transpose(randomNegatives),
-			                                        RandomMatrix.Inverse(RandomMatrix.Multiply(randomNegatives, RandomMatrix.Transpose(randomNegatives))));						
+			                                        RandomMatrix.Inverse(RandomMatrix.Multiply(randomNegatives, RandomMatrix.Transpose(randomNegatives))));
+			
+			positiveMatrix = Matrix.Multiply(Matrix.Transpose(positives), Matrix.Inverse(Matrix.Multiply(positives, Matrix.Transpose(positives))));
+			negativeMatrix = Matrix.Multiply(Matrix.Transpose(negatives), Matrix.Inverse(Matrix.Multiply(negatives, Matrix.Transpose(negatives))));			
 		}
 		
 		public double[] EstimateEmotions(string text) {
-			List<string> words = StringUtilities.SplitWords(text.ToLower(), true);			
+			List<string> words = StringUtilities.SplitWords(text.ToLower(), true);
 			// 3. Look up each word in ANEWFileSource
 			double[] numer = new double[(int) Emotions.COUNT], denom = new double[(int) Emotions.COUNT];
 			for (int ii = 0; ii < (int) Emotions.COUNT; ii++)
@@ -79,12 +86,8 @@ namespace MetricSalad.Moods
 					continue;
 				
 				ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution> vad;
-				if (!source.TryGetValue(word, out vad)) {
-					// try stemmed word
-					string stem = stemmer.stemTerm(word);
-					if (stem == word || !source.TryGetValue(stem, out vad))
-						continue;
-				}
+				if (!TryGetWordOrStem(source, word, out vad))
+					continue;
 				
 				numer[(int) Emotions.Valence] += vad.one.Mean / vad.one.Variance;
 				denom[(int) Emotions.Valence] += 1 / vad.one.Variance;
@@ -115,6 +118,201 @@ namespace MetricSalad.Moods
 				numer[ii] /= denom[ii];
 			
 			return numer;
+		}
+		
+		public bool TryGetWordOrStem(IDataSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> source,
+		                             string word, out ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution> vad) {
+			if (!source.TryGetValue(word, out vad)) {
+				// try stemmed word
+				string stem = stemmer.stemTerm(word);
+				if (stem == word || !source.TryGetValue(stem, out vad))
+					return false;
+			}
+			
+			return true;
+		}
+		
+		/*public IDataSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> ImputeEmotionalContent(List<List<string>> texts, uint repeats) {
+			MemorySource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> inputed = new MemorySource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>>();
+			ComboSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> combo = new ComboSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>>(source, inputed);
+			
+			for (uint ii = 0; ii < repeats; ii++) {
+				Dictionary<string, double> wordVnumers = new Dictionary<string, double>(), wordVdenoms = new Dictionary<string, double>(),
+					wordAnumers = new Dictionary<string, double>(), wordAdenoms = new Dictionary<string, double>(),
+					wordDnumers = new Dictionary<string, double>(), wordDdenoms = new Dictionary<string, double>(),
+					wordVsumvar = new Dictionary<string, double>(), wordVcounts = new Dictionary<string, double>(),
+					wordAsumvar = new Dictionary<string, double>(), wordAcounts = new Dictionary<string, double>(),
+					wordDsumvar = new Dictionary<string, double>(), wordDcounts = new Dictionary<string, double>();
+				
+				uint jj = 0;
+				foreach (List<string> words in texts) {
+					jj++;
+					if (jj % 1000 == 0)
+						Console.WriteLine("#" + jj);
+					
+					double textVnumer = 0, textVdenom = 0, textAnumer = 0, textAdenom = 0, textDnumer = 0, textDdenom = 0;
+					double textVsumvar = 0, textVcount = 0, textAsumvar = 0, textAcount = 0, textDsumvar = 0, textDcount = 0;
+					foreach (string word in words) {
+						if (word.StartsWith(" ") || word.Length <= 2)
+							continue;
+		
+						ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution> vad;
+						if (!TryGetWordOrStem(combo, word, out vad))
+							continue;
+						
+						textVnumer += vad.one.Mean / vad.one.Variance;
+						textVdenom += 1 / vad.one.Variance;
+						textVsumvar += vad.one.Variance;
+						textVcount++;
+						textAnumer += vad.two.Mean / vad.two.Variance;
+						textAdenom += 1 / vad.two.Variance;
+						textAsumvar += vad.two.Variance;
+						textAcount++;
+						textDnumer += vad.three.Mean / vad.three.Variance;
+						textDdenom += 1 / vad.three.Variance;
+						textDsumvar += vad.three.Variance;
+						textDcount++;
+					}
+					
+					double vmean = textVnumer / textVdenom, amean = textAnumer / textAdenom, dmean = textDnumer / textDdenom;
+					double vvar = textVsumvar / textVcount, avar = textAsumvar / textAcount, dvar = textDsumvar / textDcount;
+					
+					if (double.IsNaN(vmean) || double.IsNaN(amean) || double.IsNaN(dmean))
+						continue;
+					
+					foreach (string word in words) {
+						if (word.StartsWith(" ") || word.Length <= 2)
+							continue;
+						
+						ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution> vad;
+						if (TryGetWordOrStem(source, word, out vad))
+							continue;
+						
+						string stem = stemmer.stemTerm(word);
+												
+						AddTextNumerDenom(stem, wordVnumers, wordVdenoms, wordVsumvar, wordVcounts, vmean, vvar);
+						AddTextNumerDenom(stem, wordAnumers, wordAdenoms, wordAsumvar, wordAcounts, amean, avar);
+						AddTextNumerDenom(stem, wordDnumers, wordDdenoms, wordDsumvar, wordDcounts, dmean, dvar);
+					}
+				}
+
+				foreach (string stem in wordVnumers.Keys) {
+					ContinuousDistribution valence = new ClippedGaussianDistribution(wordVnumers[stem] / wordVdenoms[stem], wordVsumvar[stem] / wordVcounts[stem], 0, 1);
+					ContinuousDistribution arousal = new ClippedGaussianDistribution(wordAnumers[stem] / wordAdenoms[stem], wordAsumvar[stem] / wordAcounts[stem], 0, 1);
+					ContinuousDistribution dominance = new ClippedGaussianDistribution(wordDnumers[stem] / wordDdenoms[stem], wordDsumvar[stem] / wordDcounts[stem], 0, 1);
+					
+					inputed[stem] = new ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>(valence, arousal, dominance);
+				}
+			}
+			
+			source = combo;
+			return inputed;
+		}
+		
+		public void AddTextNumerDenom(string stem, Dictionary<string, double> wordXnumers,
+		                              Dictionary<string, double> wordXdenoms, Dictionary<string, double> wordXsumvar, 
+		                              Dictionary<string, double> wordXcounts, double xmean, double xvar) {
+			double numer, denom, sumvar, count;
+			if (!wordXnumers.TryGetValue(stem, out numer)) {
+				numer = 0;
+				denom = 0;
+				sumvar = 0;
+				count = 0;
+			} else {
+				wordXdenoms.TryGetValue(stem, out denom);
+				wordXsumvar.TryGetValue(stem, out sumvar);
+				wordXcounts.TryGetValue(stem, out count);
+				xvar += (xmean - numer / denom) * (xmean - numer / denom);
+			}
+
+			numer += xmean / xvar;
+			denom += 1 / xvar;
+			sumvar += xvar;
+			count++;
+
+			wordXnumers[stem] = numer;
+			wordXdenoms[stem] = denom;
+			wordXsumvar[stem] = sumvar;
+			wordXcounts[stem] = count;
+		}*/
+		
+		public IDataSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> ImputeEmotionalContent(List<List<string>> texts, uint repeats) {
+			MemorySource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> inputed = new MemorySource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>>();
+			ComboSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> combo = new ComboSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>>(source, inputed);
+			
+			for (uint ii = 0; ii < repeats; ii++) {
+				Dictionary<string, List<KeyValuePair<double, double>>>
+					sentencesV = new Dictionary<string, List<KeyValuePair<double, double>>>(),
+					sentencesA = new Dictionary<string, List<KeyValuePair<double, double>>>(),
+					sentencesD = new Dictionary<string, List<KeyValuePair<double, double>>>();
+				
+				uint jj = 0;
+				foreach (List<string> words in texts) {
+					jj++;
+					if (jj % 1000 == 0)
+						Console.WriteLine("#" + jj);
+					
+					List<KeyValuePair<double, double>> wordsV = new List<KeyValuePair<double, double>>(),
+						wordsA = new List<KeyValuePair<double, double>>(),
+						wordsD = new List<KeyValuePair<double, double>>();
+					foreach (string word in words) {
+						if (word.StartsWith(" ") || word.Length <= 2)
+							continue;
+		
+						ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution> vad;
+						if (!TryGetWordOrStem(combo, word, out vad))
+							continue;
+						
+						wordsV.Add(new KeyValuePair<double, double>(vad.one.Mean, 1/vad.one.Variance));
+						wordsA.Add(new KeyValuePair<double, double>(vad.two.Mean, 1/vad.two.Variance));
+						wordsD.Add(new KeyValuePair<double, double>(vad.three.Mean, 1/vad.three.Variance));
+					}
+					
+					double vmean = WeightedStatistics.Mean(wordsV), amean = WeightedStatistics.Mean(wordsA), dmean = WeightedStatistics.Mean(wordsD);
+					double vvar = WeightedStatistics.Variance(wordsV, vmean, true), avar = WeightedStatistics.Variance(wordsA, amean, true), dvar = WeightedStatistics.Variance(wordsD, dmean, true);
+					
+					if (double.IsNaN(vmean) || double.IsNaN(amean) || double.IsNaN(dmean))
+						continue;
+					
+					foreach (string word in words) {
+						if (word.StartsWith(" ") || word.Length <= 2)
+							continue;
+						
+						ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution> vad;
+						if (TryGetWordOrStem(source, word, out vad))
+							continue;
+						
+						string stem = stemmer.stemTerm(word);
+												
+						AddTextNumerDenom(stem, sentencesV, vmean, vvar);
+						AddTextNumerDenom(stem, sentencesA, amean, avar);
+						AddTextNumerDenom(stem, sentencesD, dmean, dvar);
+					}
+				}
+
+				foreach (string stem in sentencesV.Keys) {
+					double vmean = WeightedStatistics.Mean(sentencesV[stem]), amean = WeightedStatistics.Mean(sentencesA[stem]), dmean = WeightedStatistics.Mean(sentencesD[stem]);
+					
+					ContinuousDistribution valence = new ClippedGaussianDistribution(vmean, WeightedStatistics.Variance(sentencesV[stem], vmean, true), 0, 1);
+					ContinuousDistribution arousal = new ClippedGaussianDistribution(amean, WeightedStatistics.Variance(sentencesA[stem], amean, true), 0, 1);
+					ContinuousDistribution dominance = new ClippedGaussianDistribution(dmean, WeightedStatistics.Variance(sentencesD[stem], dmean, true), 0, 1);
+					
+					inputed[stem] = new ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>(valence, arousal, dominance);
+				}
+			}
+			
+			source = combo;
+			return inputed;
+		}
+		
+		public void AddTextNumerDenom(string stem, Dictionary<string, List<KeyValuePair<double, double>>> sentencesX, double xmean, double xvar) {
+			List<KeyValuePair<double, double>> pws;
+			if (!sentencesX.TryGetValue(stem, out pws))
+				pws = new List<KeyValuePair<double, double>>();
+
+			pws.Add(new KeyValuePair<double, double>(xmean, 1/xvar));
+			
+			sentencesX[stem] = pws;
 		}
 	}
 }
