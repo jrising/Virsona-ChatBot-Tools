@@ -53,7 +53,9 @@ namespace LanguageNet.WordNet
 		protected DefinitionFile verbDefinitionSource;
 		protected DefinitionFile adjDefinitionSource;
 		protected DefinitionFile advDefinitionSource;
-
+		
+		protected FileWordNetTools fileTools;
+		
 		public WordNetInterface()
 		{
 		}
@@ -98,10 +100,18 @@ namespace LanguageNet.WordNet
             env.SetDataSource<long, WordNetDefinition>(WordNetAccess.AdjDefinitionSourceName, adjDefinitionSource);
             env.SetDataSource<long, WordNetDefinition>(WordNetAccess.AdvDefinitionSourceName, advDefinitionSource);
 			
+			fileTools = new FileWordNetTools(env.GetConfigDirectory("datadirectory") + Path.DirectorySeparatorChar + "wordnet" + Path.DirectorySeparatorChar);
+			
 			return InitializeResult.Success();
         }
 		
         #endregion
+		
+		public FileWordNetTools FileTools {
+			get {
+				return fileTools;
+			}
+		}
 		
 		#region EncodeWord
 		/// <summary>
@@ -116,7 +126,6 @@ namespace LanguageNet.WordNet
 			return retVal.ToLower();
 		}
 		#endregion EncodeWord
-		
 		
         #region GetIndex
         /// <summary>

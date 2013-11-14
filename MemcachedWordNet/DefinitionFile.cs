@@ -70,7 +70,7 @@ namespace LanguageNet.WordNet
         public bool TryGetValue(long key, out WordNetDefinition value)
         {
 			string data = ReadRecord(key);
-			value = ParseDefinition(data, "");
+			value = ParseDefinition(data, "", filename);
 			
 			if (value.Position != key)
 				throw new ArithmeticException("The stream position is not aligned with the specified offset!");
@@ -90,7 +90,7 @@ namespace LanguageNet.WordNet
 				if (line.Length == 0 || line[0] == ' ')
 					continue;
 				
-				result.Add(position, ParseDefinition(line, ""));
+				result.Add(position, ParseDefinition(line, "", filename));
 			} while (!reader.EndOfStream);
 			
 			reader.Close();
@@ -112,7 +112,7 @@ namespace LanguageNet.WordNet
 		/// <param name="dbFileName">The full path of the file to open</param>
 		/// <param name="word">The word that will be defined by the parsed definition</param>
 		/// <returns>A populated Definition object if successful; otherwise null</returns>
-		internal WordNetDefinition ParseDefinition(string data, string exclude)
+		internal static WordNetDefinition ParseDefinition(string data, string exclude, string filename)
 		{
 			WordNetDefinition retVal = null;
 			try

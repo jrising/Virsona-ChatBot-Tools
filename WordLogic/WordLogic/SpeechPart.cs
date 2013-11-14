@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenericTools;
+using LanguageNet.Grammarian;
 
 namespace LanguageNet.WordLogic
 {
@@ -262,6 +263,33 @@ namespace LanguageNet.WordLogic
             }
 
             return sense.Attributes;
+        }
+		
+        // Convert from WordNet speech part
+        public static SpeechPart WordNetPartToSpeechPart(WordNetAccess.PartOfSpeech type)
+        {
+            if (type == WordNetAccess.PartOfSpeech.Adj)
+                return Adjective;
+            if (type == WordNetAccess.PartOfSpeech.AdjSat || type == WordNetAccess.PartOfSpeech.All || type == WordNetAccess.PartOfSpeech.Satellite)
+                return Unknown;
+            if (type == WordNetAccess.PartOfSpeech.Adv)
+                return Adverb;
+            if (type == WordNetAccess.PartOfSpeech.Noun)
+                return Noun;
+            if (type == WordNetAccess.PartOfSpeech.Verb)
+                return Verb;
+
+            return Unknown;
+        }
+
+        // Convert a list of wordnet speech parts
+        public static List<SpeechPart> WordNetPartToSpeechPart(List<WordNetAccess.PartOfSpeech> types)
+        {
+            List<SpeechPart> parts = new List<SpeechPart>();
+            foreach (WordNetAccess.PartOfSpeech type in types)
+                parts.Add(WordNetPartToSpeechPart(type));
+
+            return parts;
         }
     }
 }

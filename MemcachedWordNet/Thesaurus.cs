@@ -27,8 +27,7 @@ namespace LanguageNet.WordNet
             foreach (Index index in indices)
             {
                 partsFound.Add(index.DbPartOfSpeech);
-				// TODO: redo GetDefinitionSynonyms and friends (below) to not need filenames
-                List<string> fileNames = DbFileHelper.GetDBaseForType(index.DbPartOfSpeech);
+                List<string> fileNames = iface.FileTools.GetDBaseForType(index.DbPartOfSpeech);
                 foreach (long synSetOffset in index.SynSetsOffsets)
                 {
                     List<string> synwords;
@@ -56,9 +55,9 @@ namespace LanguageNet.WordNet
         /// <summary>
         /// Find only those synonyms which unambiguously mean the same thing
         /// </summary>
-        public static List<string> GetExactSynonyms(string word, WordNetAccess.PartOfSpeech part)
+        public static List<string> GetExactSynonyms(WordNetInterface iface, string word, WordNetAccess.PartOfSpeech part)
         {
-            List<Index> indices = DictionaryHelper.GetIndex(word.ToLower(), part);
+            List<Index> indices = iface.FileTools.GetIndex(word.ToLower(), part);
             if (indices.Count != 1)
                 return null;    // ambiguous or none
 
@@ -66,10 +65,10 @@ namespace LanguageNet.WordNet
             if (index.SynSetsOffsets.Count != 1)
                 return null;    // ambiguous
 
-            List<string> fileNames = DbFileHelper.GetDBaseForType(index.DbPartOfSpeech);
+            List<string> fileNames = iface.FileTools.GetDBaseForType(index.DbPartOfSpeech);
             long synSetOffset = index.SynSetsOffsets[0];
 
-            List<string> synwords = FileParser.GetDefinitionSynonyms(synSetOffset, fileNames[0]);
+            List<string> synwords = GetDefinitionSynonyms(synSetOffset, fileNames[0]);
             if (synwords.Count == 0)
                 return null;
 
@@ -116,11 +115,11 @@ namespace LanguageNet.WordNet
             List<string> retVal = new List<string>();
             try
             {
-                string data = ReadRecord(offset, dbFileName);
+                string data = FileWordNetTools.ReadRecord(offset, dbFileName);
                 if (!string.IsNullOrEmpty(data))
                 {
                     int i = 0;
-                    string[] tokens = data.Split(Constants.Tokenizer, StringSplitOptions.RemoveEmptyEntries);
+                    string[] tokens = data.Split(DefinitionFile.Tokenizer, StringSplitOptions.RemoveEmptyEntries);
 
                     long position = Convert.ToInt64(tokens[i]);
                     i++;
@@ -137,7 +136,7 @@ namespace LanguageNet.WordNet
                     {
                         string tempWord = tokens[i + j];
                         if (!string.IsNullOrEmpty(tempWord))
-                            retVal.Add(DecodeWord(tempWord));
+                            retVal.Add(DefinitionFile.DecodeWord(tempWord));
                     }
                 }
             }
@@ -162,11 +161,11 @@ namespace LanguageNet.WordNet
             List<string> retVal = new List<string>();
             try
             {
-                string data = ReadRecord(offset, dbFileName);
+                string data = FileWordNetTools.ReadRecord(offset, dbFileName);
                 if (!string.IsNullOrEmpty(data))
                 {
                     int i = 0;
-                    string[] tokens = data.Split(Constants.Tokenizer, StringSplitOptions.RemoveEmptyEntries);
+                    string[] tokens = data.Split(DefinitionFile.Tokenizer, StringSplitOptions.RemoveEmptyEntries);
 
                     long position = Convert.ToInt64(tokens[i]);
                     i++;
@@ -187,8 +186,8 @@ namespace LanguageNet.WordNet
                         if (!string.IsNullOrEmpty(tempWord))
                         {
                             // it's a first level synonym-- add it twice!
-                            retVal.Add(DecodeWord(tempWord));
-                            retVal.Add(DecodeWord(tempWord));
+                            retVal.Add(DefinitionFile.DecodeWord(tempWord));
+                            retVal.Add(DefinitionFile.DecodeWord(tempWord));
                         }
                     }
                     i += wordCount * 2;
@@ -230,11 +229,11 @@ namespace LanguageNet.WordNet
             List<string> retVal = new List<string>();
             try
             {
-                string data = ReadPartialRecord(offset, dbFileName, 128);
+                string data = FileWordNetTools.ReadPartialRecord(offset, dbFileName, 128);
                 if (!string.IsNullOrEmpty(data))
                 {
                     int i = 0;
-                    string[] tokens = data.Split(Constants.Tokenizer, 24, StringSplitOptions.RemoveEmptyEntries);
+                    string[] tokens = data.Split(DefinitionFile.Tokenizer, 24, StringSplitOptions.RemoveEmptyEntries);
 
                     long position = Convert.ToInt64(tokens[i]);
                     i++;
@@ -250,7 +249,7 @@ namespace LanguageNet.WordNet
                     {
                         string tempWord = tokens[i + j];
                         if (!string.IsNullOrEmpty(tempWord))
-                            retVal.Add(DecodeWord(tempWord));
+                            retVal.Add(DefinitionFile.DecodeWord(tempWord));
                     }
                 }
             }

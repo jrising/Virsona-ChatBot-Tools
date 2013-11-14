@@ -28,7 +28,7 @@ namespace LanguageNet.Grammarian
 		
         public enum PartOfSpeech
         {
-            Noun, Verb, Adj, Adv, Satellite, All
+            Noun, Verb, Adj, Adv, Satellite, All, AdjSat
 		}
 		
 		protected PluginEnvironment plugenv;
