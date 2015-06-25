@@ -39,7 +39,11 @@ namespace TestParaphrasing
 						
 			// Test 4: Look up some indices
 			WordNetAccess wordnet = new WordNetAccess(plugenv);
-			Console.WriteLine("Synonyms: " + string.Join(", ", wordnet.GetExactSynonyms("rug", WordNetAccess.PartOfSpeech.Noun).ToArray()));
+			List<string> synonyms = wordnet.GetExactSynonyms("rug", WordNetAccess.PartOfSpeech.Noun);
+			if (synonyms == null)
+				Console.WriteLine("Could not find a synonym for 'rug'.  Is Memcached installed?");
+			else
+				Console.WriteLine("Synonyms: " + string.Join(", ", synonyms.ToArray()));
 		}
 		
 		public MainClass() {

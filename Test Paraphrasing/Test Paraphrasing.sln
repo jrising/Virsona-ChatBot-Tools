@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test Paraphrasing", "Test Paraphrasing\Test Paraphrasing.csproj", "{92539854-CCCB-4F5F-B631-89D2E94D05D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentParser", "..\AgentParser\AgentParser.csproj", "{3700E5DE-B669-41FB-A815-30DCB7E34466}"
@@ -67,8 +67,5 @@ Global
 		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Debug|x86.Build.0 = Debug|Any CPU
 		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Release|x86.ActiveCfg = Release|Any CPU
 		{F96D3B75-4055-40C7-A03C-ECE015E77BBC}.Release|x86.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Test Paraphrasing\Test Paraphrasing.csproj
 	EndGlobalSection
 EndGlobal
