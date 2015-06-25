@@ -18,16 +18,18 @@ namespace FeatureReducer
     [ClassInterface(ClassInterfaceType.None)]
     public class FeatureReduction //FRInterface
     {
-        public FeatureReduction()
+		protected string datadir;
+		
+        public FeatureReduction(string datadir)
         {
-
+			this.datadir = datadir;
         }
 
         public bool isStopWord(string s)
         {
             s = s.ToLower();
 
-            String[] stopWords = File.ReadAllLines(@"C:\Documents and Settings\All Users\Application Data\Virsona\Stop words list.txt");
+            String[] stopWords = File.ReadAllLines(Path.Combine(datadir, "Stop words list.txt"));
 
             for (int j = 0; j < stopWords.Length; j++)
             {
@@ -43,7 +45,7 @@ namespace FeatureReducer
         
         public string reduceFeatures(string s)
         {
-            String[] puncList = File.ReadAllLines(@"C:\Documents and Settings\All Users\Application Data\Virsona\Punc_List.txt");
+            String[] puncList = File.ReadAllLines(Path.Combine(datadir, "Punc_List.txt"));
             s = " " + s;
             s = s.ToLower();
             for (int i = 0; i < puncList.Length; i++)
@@ -57,7 +59,7 @@ namespace FeatureReducer
             // clean up the "s" left over from examples like "people's"
             s = s.Replace(" s ", " ");
 
-            String[] stopWords = File.ReadAllLines(@"C:\Documents and Settings\All Users\Application Data\Virsona\Stop words list.txt");
+            String[] stopWords = File.ReadAllLines(Path.Combine(datadir, "Stop words list.txt"));
 
             for (int j = 0; j < stopWords.Length; j++)
             {

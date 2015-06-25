@@ -17,6 +17,18 @@ namespace MathematicTools.Distributions
 			this.upper = upper;
 		}
 		
+		public double InternalMean {
+			get {
+				return mean;
+			}
+		}
+		
+		public double InternalVariance {
+			get {
+				return variance;
+			}
+		}
+		
 		// from http://en.wikipedia.org/wiki/Truncated_normal_distribution
 		public override double Mean {
 			get {

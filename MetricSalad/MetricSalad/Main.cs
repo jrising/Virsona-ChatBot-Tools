@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using InOutTools;
 using PluggerBase;
 using GenericTools;
@@ -64,6 +65,7 @@ namespace MetricSalad
 			if (parsedArgs["eimpute"] != null) {
 				ANEWEmotionSensor sensor = new ANEWEmotionSensor("/Users/jrising/projects/virsona/github/data");
 				
+				// DIAGNOSTIC
 				/*List<List<string>> rows = new List<List<string>>();
 				rows.Add(TwitterUtilities.SplitWords("happy aaaa cccc"));
 				rows.Add(TwitterUtilities.SplitWords("sad bbbb cccc"));
@@ -72,29 +74,44 @@ namespace MetricSalad
 				foreach (KeyValuePair<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> kvp in inputed)
 					Console.WriteLine(kvp.Key + ": " + kvp.Value.one.Mean + ", " + kvp.Value.two.Mean + ", " + kvp.Value.three.Mean);*/
 				
-				DataReader reader = new DataReader(parsedArgs["f"]);
-				List<List<string>> rows = new List<List<string>>();
-				for (string[] row = reader.ReadRow(); row != null; row = reader.ReadRow()) {
-					rows.Add(TwitterUtilities.SplitWords(row[1].ToLower()));
+				bool smallFile = false;
+				if (smallFile) {
+					DataReader reader = new DataReader(parsedArgs["f"]);
+					List<List<string>> rows = new List<List<string>>();
+					for (string[] row = reader.ReadRow(); row != null; row = reader.ReadRow()) {
+						Console.WriteLine(row);
+						rows.Add(TwitterUtilities.SplitWords(row[10].ToLower()));
+					}
+					reader.Close();
+				
+					/*IDataSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> inputed = sensor.ImputeEmotionalContent(rows, 10);
+					double minv = 1, maxv = 0;
+					foreach (KeyValuePair<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> kvp in inputed) {
+						minv = Math.Min(minv, kvp.Value.one.Mean);
+						maxv = Math.Max(maxv, kvp.Value.one.Mean);
+						Console.WriteLine(kvp.Key + ": " + kvp.Value.one.Mean + " x " + kvp.Value.one.Variance + ", " + kvp.Value.two.Mean + ", " + kvp.Value.three.Mean);
+					}
+				
+					Console.WriteLine("Min: " + minv + ", Max: " + maxv);*/
+				
+					sensor.ImputeEmotionalContent(rows, 10, parsedArgs["f"] + "imputed");
+				} else {
+					sensor.ImputeEmotionalContentFromFile(parsedArgs["f"], 11, 0, parsedArgs["f"].Substring(0, parsedArgs["f"].Length - 4) + "imputed.csv");
 				}
-				reader.Close();
 				
-				/*IDataSource<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> inputed = sensor.ImputeEmotionalContent(rows, 10);
-				double minv = 1, maxv = 0;
-				foreach (KeyValuePair<string, ThreeTuple<ContinuousDistribution, ContinuousDistribution, ContinuousDistribution>> kvp in inputed) {
-					minv = Math.Min(minv, kvp.Value.one.Mean);
-					maxv = Math.Max(maxv, kvp.Value.one.Mean);
-					Console.WriteLine(kvp.Key + ": " + kvp.Value.one.Mean + " x " + kvp.Value.one.Variance + ", " + kvp.Value.two.Mean + ", " + kvp.Value.three.Mean);
-				}
-				
-				Console.WriteLine("Min: " + minv + ", Max: " + maxv);*/
-				
-				sensor.ImputeEmotionalContent(rows, 10);
-				
-				reader = new DataReader(parsedArgs["f"]);
-				for (string[] row = reader.ReadRow(); row != null; row = reader.ReadRow()) {
-					double[] emotions = sensor.EstimateEmotions(row[1]);
-					Console.WriteLine("\"" + row[0] + "\"," + emotions[0] + "," + emotions[1] + "," + emotions[2] + "," + emotions[3] + "," + emotions[4] + "," + emotions[5] + "," + emotions[6] + "," + emotions[7] + ",\"" + row[2] + "\"");
+				uint jj = 0;
+				using (var stream = File.CreateText(parsedArgs["f"] + "result")) {
+					jj++;
+					if (jj % 1000 == 0)
+						Console.WriteLine("#" + jj);
+
+					DataReader reader = new DataReader(parsedArgs["f"]);
+					for (string[] row = reader.ReadRow(); row != null; row = reader.ReadRow()) {
+						double[] emotions = sensor.EstimateEmotions(row[11]);
+						for (int ii = 0; ii < 11; ii++)
+							stream.Write(row[ii] + ",");
+						stream.WriteLine(emotions[0] + "," + emotions[1] + "," + emotions[2] + "," + emotions[3] + "," + emotions[4] + "," + emotions[5] + "," + emotions[6] + "," + emotions[7]);
+					}
 				}
 			}
 		}

@@ -122,6 +122,9 @@ namespace ExamineTools
 
         public static string AnnounceWorst()
         {
+			if (Profiler.expectedTimes.Count == 0)
+				return "Nothing profiled.";
+			
             string worst = Profiler.WorstCode();
             return "Worst Code: " + worst + ": " + Profiler.numExecuted[worst] + "x " + ((int) Profiler.AverageExpected(worst)) + " expected, " + ((int) Profiler.AverageTotal(worst)) + " (" + ((int) Profiler.AverageSelf(worst)) + ") actual";
         }

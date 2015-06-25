@@ -64,7 +64,12 @@ namespace LanguageNet.WordNet
 
         public InitializeResult Initialize(PluginEnvironment env, Assembly assembly, IMessageReceiver receiver)
         {
-            // Data files contained in [datadrectory]/wordnet
+			return InitializeLocal(env, receiver);
+		}
+		
+        public InitializeResult InitializeLocal(PluginEnvironment env, IMessageReceiver receiver)
+        {
+			// Data files contained in [datadrectory]/wordnet
             string basedir = env.GetConfigDirectory("datadirectory") + Path.DirectorySeparatorChar + "wordnet" + Path.DirectorySeparatorChar;
 			MemcachedClient cache = MemcacheSource.DefaultClient();
 			
@@ -72,11 +77,15 @@ namespace LanguageNet.WordNet
 			verbIndexSource = new BackedMemcachedSource<Index>(new IndexFile(basedir, WordNetAccess.PartOfSpeech.Verb), "WN:I:V:", cache);
 			adjIndexSource = new BackedMemcachedSource<Index>(new IndexFile(basedir, WordNetAccess.PartOfSpeech.Adj), "WN:I:A:", cache);
 			advIndexSource = new BackedMemcachedSource<Index>(new IndexFile(basedir, WordNetAccess.PartOfSpeech.Adv), "WN:I:R:", cache);
-			
+
 			if (!advIndexSource.TestMemcached(10, 10)) {
+				Console.Out.WriteLine("Loading nouns into Memcached");
 				nounIndexSource.LoadIntoMemcached();
+				Console.Out.WriteLine("Loading verbs into Memcached");
 				verbIndexSource.LoadIntoMemcached();
+				Console.Out.WriteLine("Loading adjectives into Memcached");
 				adjIndexSource.LoadIntoMemcached();
+				Console.Out.WriteLine("Loading adverbs into Memcached");
 				advIndexSource.LoadIntoMemcached();
 			}
 				
@@ -161,7 +170,7 @@ namespace LanguageNet.WordNet
 			}
 			if (part == WordNetAccess.PartOfSpeech.Noun || part == WordNetAccess.PartOfSpeech.All) {
 				Index idxresNoun;
-				if (advIndexSource.TryGetValue(word, out idxresNoun)) {
+				if (nounIndexSource.TryGetValue(word, out idxresNoun)) {
 					idxres.Add(idxresNoun);
 					if (part == WordNetAccess.PartOfSpeech.Noun)
 						return idxres;
@@ -169,7 +178,7 @@ namespace LanguageNet.WordNet
 			}
 			if (part == WordNetAccess.PartOfSpeech.Verb || part == WordNetAccess.PartOfSpeech.All) {
 				Index idxresVerb;
-				if (advIndexSource.TryGetValue(word, out idxresVerb)) {
+				if (verbIndexSource.TryGetValue(word, out idxresVerb)) {
 					idxres.Add(idxresVerb);
 					if (part == WordNetAccess.PartOfSpeech.Verb)
 						return idxres;

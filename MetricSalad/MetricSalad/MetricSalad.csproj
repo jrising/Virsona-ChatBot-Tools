@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>-c ~/projects/virsona/github/config.xml -eimpute -f ~/projects/twitter/sandy/usertweets.csv</Commandlineparameters>
+    <Commandlineparameters>-c ~/projects/virsona/github/config.xml -eimpute -f "/Volumes/TOSHIBA EXT/data/combined.csv"</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
