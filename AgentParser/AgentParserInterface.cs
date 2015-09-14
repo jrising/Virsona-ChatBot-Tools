@@ -23,6 +23,12 @@ namespace LanguageNet.AgentParser
 		
         #region IPlugin Members
 
+		public uint Version {
+			get {
+				return 1;
+			}
+		}
+
         // Add the plugins actions and data source
         public InitializeResult Initialize(PluginEnvironment env, Assembly assembly, IMessageReceiver receiver)
         {

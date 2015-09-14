@@ -62,6 +62,12 @@ namespace LanguageNet.WordNet
 
         #region IPlugin Members
 
+		public uint Version {
+			get {
+				return 2;
+			}
+		}
+
         public InitializeResult Initialize(PluginEnvironment env, Assembly assembly, IMessageReceiver receiver)
         {
 			return InitializeLocal(env, receiver);

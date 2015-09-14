@@ -44,6 +44,12 @@ namespace LanguageNet.Morphologer
 
         #region IPlugin Members
 
+		public uint Version {
+			get {
+				return 1;
+			}
+		}
+
         public InitializeResult Initialize(PluginEnvironment env, Assembly assembly, IMessageReceiver receiver)
         {
             // Data files contained in [datadrectory]/wordnet

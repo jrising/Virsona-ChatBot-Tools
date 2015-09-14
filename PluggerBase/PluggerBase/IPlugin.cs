@@ -15,6 +15,7 @@ namespace PluggerBase
 {
     public interface IPlugin : IMessageReceiver, IFastSerializable
     {
+		uint Version { get; }
         InitializeResult Initialize(PluginEnvironment env, Assembly assembly, IMessageReceiver receiver);
     }
 }

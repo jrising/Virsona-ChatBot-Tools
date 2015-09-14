@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Collections.Generic;
 using PluggerBase;
 using LanguageNet.Grammarian;
+using LanguageNet.AgentParser; // XXX
 
 namespace TestParaphrasing
 {
@@ -34,12 +35,21 @@ namespace TestParaphrasing
 
 			// Test 3: Paraphrasing
 			Random randgen = new Random();
-			IParsedPhrase after = parser.Paraphrase(before, null, null, randgen.NextDouble());
-			Console.WriteLine(after.Text);
+			try {
+				IParsedPhrase after = parser.Paraphrase(before, null, null, randgen.NextDouble());
+				Console.WriteLine(after.Text);
+			} catch (Exception ex) {
+				Console.WriteLine ("Error: " + ex.Message);
+			}
 						
 			// Test 4: Look up some indices
 			WordNetAccess wordnet = new WordNetAccess(plugenv);
-			List<string> synonyms = wordnet.GetExactSynonyms("rug", WordNetAccess.PartOfSpeech.Noun);
+			List<string> synonyms = null;
+			try {
+				synonyms = wordnet.GetExactSynonyms("rug", WordNetAccess.PartOfSpeech.Noun);
+			} catch (Exception ex) {
+				Console.WriteLine ("Error: " + ex.Message);
+			}
 			if (synonyms == null)
 				Console.WriteLine("Could not find a synonym for 'rug'.  Is Memcached installed?");
 			else

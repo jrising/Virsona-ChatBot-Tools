@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordLogic", "WordLogic\WordLogic.csproj", "{01F00D52-DCF6-45B5-96C0-06D04FBE3844}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericTools", "..\GenericTools\GenericTools.csproj", "{7AEB4A15-8603-4675-B636-98DA6292291A}"
@@ -37,8 +37,5 @@ Global
 		{7AEB4A15-8603-4675-B636-98DA6292291A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AEB4A15-8603-4675-B636-98DA6292291A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AEB4A15-8603-4675-B636-98DA6292291A}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = WordLogic\WordLogic.csproj
 	EndGlobalSection
 EndGlobal

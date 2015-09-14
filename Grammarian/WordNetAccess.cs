@@ -65,16 +65,38 @@ namespace LanguageNet.Grammarian
 		}
 
 		public List<string> GetExactSynonyms(string word, PartOfSpeech part) {
+			if (part == PartOfSpeech.All) {
+				List<string> result = new List<string> ();
+				List<string> resultAdj = GetExactSynonyms (word, PartOfSpeech.Adj);
+				if (resultAdj != null)
+					result.AddRange (resultAdj);
+				List<string> resultAdv = GetExactSynonyms (word, PartOfSpeech.Adv);
+				if (resultAdv != null)
+					result.AddRange (resultAdv);
+				List<string> resultNoun = GetExactSynonyms (word, PartOfSpeech.Noun);
+				if (resultNoun != null)
+					result.AddRange (resultNoun);
+				List<string> resultVerb = GetExactSynonyms (word, PartOfSpeech.Verb);
+				if (resultVerb != null)
+					result.AddRange (resultVerb);
+				return result;
+			}
+
 			long[] indices;
 			
 			IDataSource<string, long[]> indexSource = plugenv.GetDataSource<string, long[]>(GetIndexSourceName(part));
-			if (indexSource == null || !indexSource.TryGetValue(word, out indices) || indices.Length != 1)
+			if (indexSource == null)
+				throw new Exception("Cannot find index for " + GetIndexSourceName (part));
+			
+			if (!indexSource.TryGetValue(word, out indices) || indices.Length != 1)
 				return null; // missing or ambiguous
 			
 			WordNetDefinition definition;
 			
 			IDataSource<long, WordNetDefinition> definitionSource = plugenv.GetDataSource<long, WordNetDefinition>(GetDefinitionSourceName(part));
-			if (definitionSource == null || !definitionSource.TryGetValue(indices[0], out definition))
+			if (definitionSource == null)
+				throw new Exception("Cannot find definitions for " + GetDefinitionSourceName(part));
+			if (!definitionSource.TryGetValue(indices[0], out definition))
 				return null; // missing
 			
 			return definition.Words;

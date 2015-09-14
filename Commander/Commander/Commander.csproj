@@ -3,39 +3,38 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{92539854-CCCB-4F5F-B631-89D2E94D05D1}</ProjectGuid>
+    <ProjectGuid>{3DF0538C-7FDC-4D29-B782-65A5A49D655B}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>TestParaphrasing</RootNamespace>
-    <AssemblyName>Test Paraphrasing</AssemblyName>
+    <RootNamespace>Commander</RootNamespace>
+    <AssemblyName>Commander</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
-    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -46,10 +45,6 @@
     <ProjectReference Include="..\..\Grammarian\Grammarian.csproj">
       <Project>{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}</Project>
       <Name>Grammarian</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\AgentParser\AgentParser.csproj">
-      <Project>{3700E5DE-B669-41FB-A815-30DCB7E34466}</Project>
-      <Name>AgentParser</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

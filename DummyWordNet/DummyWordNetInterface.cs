@@ -36,6 +36,12 @@ namespace DummyWordNet
 
         #region IPlugin Members
 
+		public uint Version {
+			get {
+				return 1;
+			}
+		}
+
         public InitializeResult Initialize(PluginEnvironment env, Assembly assembly, IMessageReceiver receiver)
         {
             // register data sources for WordNet
