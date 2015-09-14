@@ -13,15 +13,18 @@ namespace Commander
 
 		public static void Main (string[] args)
 		{
+			if (args.Length < 1) {
+				Console.WriteLine ("Call with the path to config.xml.");
+				return;
+			}
 			MainClass instance = new MainClass ();
-			instance.Run ();
+			instance.Run (args[0]);
 		}
 
-		public void Run() {
+		public void Run(string configpath) {
 			PluginEnvironment plugenv = new PluginEnvironment(this);
 
-			string plugbase = "/Users/jrising/projects/virsona/github/";
-			plugenv.Initialize(plugbase + "config.xml", null);
+			plugenv.Initialize(configpath, null);
 			Console.WriteLine (plugenv.GetConfigDirectory ("datadirectory"));
 
 			Console.WriteLine ("Welcome to the Virsona Commander!");
