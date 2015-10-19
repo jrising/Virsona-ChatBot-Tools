@@ -6,7 +6,7 @@
  * A value with a confidence
 \******************************************************************/
 using System;
-using PluggerBase.FastSerializer;
+using ActionReaction.FastSerializer;
 
 namespace GenericTools
 {
@@ -140,7 +140,7 @@ namespace GenericTools
             } else
                 strength /= strengthFactor;
         }
-        
+
         // Relative ProbableStrengths
 
         public static double RelativeStrength(double relStrength, double baseStrength)

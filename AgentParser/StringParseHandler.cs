@@ -13,8 +13,8 @@
 using System;
 using System.Collections.Generic;
 using PluggerBase;
-using PluggerBase.ActionReaction.Actions;
-using PluggerBase.ActionReaction.Interfaces;
+using ActionReaction.Actions;
+using ActionReaction.Interfaces;
 using LanguageNet.Grammarian;
 
 namespace LanguageNet.AgentParser
@@ -22,7 +22,7 @@ namespace LanguageNet.AgentParser
 	public class StringParseHandler : UnitaryHandler
 	{
 		protected POSTagger tagger;
-		
+
         public StringParseHandler(PluginEnvironment plugenv)
             : base("Grammar Parser of Strings",
                 "Construct an IParsedPhrase for a given string",

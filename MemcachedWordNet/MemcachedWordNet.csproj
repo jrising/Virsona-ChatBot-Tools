@@ -57,6 +57,10 @@
       <Project>{7AEB4A15-8603-4675-B636-98DA6292291A}</Project>
       <Name>GenericTools</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\debased\ActionReaction\ActionReaction\ActionReaction.csproj">
+      <Project>{05E3A79C-E6F1-4AA7-B427-CF033E6E567A}</Project>
+      <Name>ActionReaction</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

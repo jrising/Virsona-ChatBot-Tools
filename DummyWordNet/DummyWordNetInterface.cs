@@ -11,7 +11,8 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using PluggerBase;
-using PluggerBase.FastSerializer;
+using ActionReaction;
+using ActionReaction.FastSerializer;
 using LanguageNet.Grammarian;
 
 namespace DummyWordNet
@@ -23,7 +24,7 @@ namespace DummyWordNet
 		protected SynonymSource verbSynonyms;
 		protected SynonymSource adjSynonyms;
 		protected SynonymSource advSynonyms;
-		
+
 		public DummyWordNetInterface()
 		{
 			nounSynonyms = new SynonymSource();
@@ -53,7 +54,7 @@ namespace DummyWordNet
             env.SetDataSource<long, WordNetDefinition>(WordNetAccess.VerbDefinitionSourceName, verbSynonyms);
             env.SetDataSource<long, WordNetDefinition>(WordNetAccess.AdjDefinitionSourceName, adjSynonyms);
             env.SetDataSource<long, WordNetDefinition>(WordNetAccess.AdvDefinitionSourceName, advSynonyms);
-			
+
 			return InitializeResult.Success();
         }
 

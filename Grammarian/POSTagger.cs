@@ -11,7 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PluggerBase;
-using PluggerBase.ActionReaction.Interfaces;
+using ActionReaction;
+using ActionReaction.Interfaces;
 
 namespace LanguageNet.Grammarian
 {
@@ -31,11 +32,11 @@ namespace LanguageNet.Grammarian
             partsSource = plugenv.GetDataSource<string, string[]>(PartsSourceName);
             this.plugenv = plugenv;
         }
-		
+
 		public List<KeyValuePair<string, string>> TagString(string words) {
 			return TagList(StringUtilities.SplitWords(words, false));
 		}
-		
+
         // Tag every element from a grammatical list of words
         public List<KeyValuePair<string, string>> TagList(List<string> words)
         {

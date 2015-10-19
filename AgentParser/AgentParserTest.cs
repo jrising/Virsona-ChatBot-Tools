@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using NUnit.Framework;
+using ActionReaction;
 using PluggerBase;
 using LanguageNet.Grammarian;
 using ExamineTools;
@@ -26,9 +27,9 @@ namespace LanguageNet.AgentParser
 		{
 			PluginEnvironment plugenv = new PluginEnvironment(this);
             plugenv.Initialize("/Users/jrising/projects/virsona/github/config.xml", new NameValueCollection());
-			
+
 			POSTagger tagger = new POSTagger(plugenv);
-			
+
 			string input = @"2. GENERAL POLICIES--IMMEDIATE AND LONG-RANGE
 
 During the war, production for civilian use was limited by war needs and available manpower. Economic stabilization required measures to spread limited supplies equitably by rationing, price controls, increased taxes, savings bond campaigns, and credit controls. Now, with the surrender of our enemies, economic stabilization requires that policies be directed toward promoting an increase in supplies at low unit prices.
@@ -63,7 +64,7 @@ All of the policies of the Federal Government must be geared to the objective of
 For example, the kinds of tax measures we have at different times--whether we raise our revenue in a way to encourage consumer spending and business investment or to discourage it--have a vital bearing on this question. It is affected also by regular notions on consumer credit and by the money market, which is strongly influenced by the rate of interest on Government securities. It is affected by almost every step we take.
 In short, the way we handle the proper functions of government, the way we time the exercise of our traditional and legitimate governmental functions, has a vital bearing on the economic health of the Nation.
 These policies are discussed in greater detail in the accompanying Fifth Quarterly Report of the Director of War Mobilization and Reconversion.";
-			
+
 			Console.WriteLine(Profiler.AnnounceEach());
 			List<KeyValuePair<string, string>> tokens = tagger.TagString(input);
 			Sentence sentence = new Sentence(tokens);
@@ -72,7 +73,7 @@ These policies are discussed in greater detail in the accompanying Fifth Quarter
 			Console.WriteLine(parsed.ToString());
 			Console.WriteLine("Time: " + timer.GetTime());
 		}
-		
+
 		public bool Receive(string message, object reference) {
 			Console.WriteLine(message);
 			return true;

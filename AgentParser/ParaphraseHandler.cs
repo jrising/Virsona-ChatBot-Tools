@@ -10,8 +10,9 @@
 using System;
 using System.Collections.Generic;
 using PluggerBase;
-using PluggerBase.ActionReaction.Actions;
-using PluggerBase.ActionReaction.Interfaces;
+using ActionReaction;
+using ActionReaction.Actions;
+using ActionReaction.Interfaces;
 using LanguageNet.Grammarian;
 
 namespace LanguageNet.AgentParser
@@ -21,7 +22,7 @@ namespace LanguageNet.AgentParser
 		protected Nouns nouns;
 		protected Verbs verbs;
 		protected WordNetAccess wordnet;
-		
+
         public ParaphraseHandler(PluginEnvironment plugenv)
             : base("Paraphrase an IParsedPhrase",
                    "Construct a new IParsedPhrase which means roughly the same thing.",
@@ -50,7 +51,7 @@ namespace LanguageNet.AgentParser
 				foreach (string word in emph)
 					emphasizes.AddRange(input.FindPhrases(word));
 			}
-			
+
 			return input.Parapharse(verbs, nouns, wordnet, opts.Value, emphasizes, ref prob);
 		}
 
@@ -63,7 +64,7 @@ namespace LanguageNet.AgentParser
 			GrammarParser.ParaphraseOptions? opts = null;
 			List<string> emph = null;
 			double prob = 0;
-			
+
 			if (arg.TryGetValue("input", out value))
 				input = (Phrase) value;
 			if (arg.TryGetValue("opts", out value))
@@ -72,7 +73,7 @@ namespace LanguageNet.AgentParser
 				emph = (List<string>) value;
 			if (arg.TryGetValue("prob", out value))
 				prob = (double) value;
-			
+
             Phrase result = Handle(input, opts, emph, prob);
 			return new ArgumentTree(result);
 		}

@@ -11,7 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PluggerBase;
-using PluggerBase.ActionReaction.Interfaces;
+using ActionReaction;
+using ActionReaction.Interfaces;
 
 namespace LanguageNet.Grammarian
 {

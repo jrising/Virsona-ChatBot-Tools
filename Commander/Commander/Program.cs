@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-
+using ActionReaction;
 using PluggerBase;
 using LanguageNet.Grammarian;
 
@@ -40,6 +40,11 @@ namespace Commander
 						string sentence = string.Join (" ", new ArraySegment<string> (argv, 1, argv.Length - 1));
 						object result = plugenv.ImmediateConvertTo (sentence,
 							                LanguageNet.Grammarian.POSTagger.TagEnumerationResultType, 1, 1000);
+						if (result is Exception) {
+							Console.WriteLine (((Exception)result).Message);
+							Console.WriteLine (((Exception)result).StackTrace);
+							continue;
+						}
 						Console.WriteLine (result);
 						string output = string.Join (" ", (IEnumerable<string>)result);
 						Console.WriteLine (output);

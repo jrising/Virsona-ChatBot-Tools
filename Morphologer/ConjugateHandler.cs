@@ -4,7 +4,7 @@
  *      Copyright:      2009, Virsona, Inc.
  *                      GNU Lesser General Public License, Ver. 3
  *                      (see license.txt and license.lesser.txt)
- * 
+ *
  * 						Modified from DoMuchMore by David Levy
  *      -----------------------------------------------------------
  * This file is part of Morphologer and is free software: you
@@ -12,12 +12,12 @@
  * Lesser General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option)
  * any later version.
- * 
+ *
  * Plugger Base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Morphologer.  If not, see
  * <http://www.gnu.org/licenses/>.
@@ -29,7 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using LanguageNet.Grammarian;
-using PluggerBase.ActionReaction.Actions;
+using ActionReaction.Actions;
 using GenericTools;
 
 namespace LanguageNet.Morphologer
@@ -37,7 +37,7 @@ namespace LanguageNet.Morphologer
 	public class ConjugateHandler : UnitaryHandler
 	{
 		protected VerbsData verbsData;
-		
+
 		public ConjugateHandler(VerbsData verbsData)
 			: base("Verb Conjugator",
 			       "Change the conjugation of a verb",
@@ -81,7 +81,7 @@ namespace LanguageNet.Morphologer
         {
             string found1 = "";
             TwoTuple<string, string> found2;
-            
+
             if (verbsData.verb_tobase.TryGetValue(verb, out found1))
                 return found1;
 
@@ -94,7 +94,7 @@ namespace LanguageNet.Morphologer
             if (verbsData.pastpart_base.TryGetValue(verb, out found1))
                 return found1;
 
-            //input not in any of the verb tables 
+            //input not in any of the verb tables
             char last = char.ToLower(verb[verb.Length - 1]);
             if (last == 's')
                 return SItBase(verb);
@@ -273,7 +273,7 @@ namespace LanguageNet.Morphologer
                     if ((input == "axed") || (input == "annexed") ||
                         (input == "finessed") || (input == "dyed") ||
                         (input == "eyed")) {
-                        //change ed to e 
+                        //change ed to e
                         return input.Substring(0, ilen - 1);
                     } else if ((input == "gassed") || (input == "bussed") ||
                                (input == "trafficked") || (input == "panicked") ||
@@ -324,12 +324,12 @@ namespace LanguageNet.Morphologer
 
                     return input.Substring(0, ilen - 1);
                 // one-or-more-consonants + single-vowel + single-consonant + ed
-                } else if ((ilen > 5) && 
+                } else if ((ilen > 5) &&
                     AuxString.IsConsonant(input, ilen - 5) &&
                     AuxString.IsVowel(input, ilen - 4) &&
                     AuxString.IsConsonant(input, ilen - 3)) {
                     return input.Substring(0, ilen - 1); // remove final 'd'
-                //ends  consonant + ed  
+                //ends  consonant + ed
                 } else if ((ilen > 3) && AuxString.IsConsonant(input, ilen - 3)) {
                     if (input == "singed")
                         return "singe";
@@ -338,7 +338,7 @@ namespace LanguageNet.Morphologer
                     else {
                         string result = input.Substring(0, ilen - 1); // try removing 'd'
                         if (!(verbsData.transitive.ContainsKey(result) && verbsData.intransitive.ContainsKey(result) &&
-                              verbsData.either.ContainsKey(result) && verbsData.todouble.ContainsKey(result)))   {        
+                              verbsData.either.ContainsKey(result) && verbsData.todouble.ContainsKey(result)))   {
                             return result.Substring(0, result.Length - 1);
                         }
 
@@ -363,9 +363,9 @@ namespace LanguageNet.Morphologer
             else {
                 int ilen = verb.Length;
                 char last = char.ToLower(verb[ilen - 1]);
-    
+
                 //end consonant + y
-                if ((ilen > 2) && (last == 'y') && 
+                if ((ilen > 2) && (last == 'y') &&
                     (AuxString.IsConsonant(verb, ilen - 2))) {
                     // replace y with ies
                     return verb.Substring(0, ilen - 1) + "ies";

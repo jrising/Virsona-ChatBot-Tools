@@ -28,38 +28,28 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Reflection;
 using System.Xml;
-using PluggerBase.ActionReaction.Actions;
-using PluggerBase.ActionReaction.Interfaces;
-using PluggerBase.ActionReaction.Evaluations;
+using ActionReaction;
+using ActionReaction.Actions;
 
 namespace PluggerBase
 {
     // The plugin environment combines a globally accessible environment
-    public class PluginEnvironment : ICloneable
+    public class PluginEnvironment : ActionEnvironment, ICloneable
     {
-        protected IMessageReceiver receiver;
-
         protected List<IPlugin> plugins;
 		protected string configPath;
         protected ArgumentTree config;
 
         // tree of sources
         protected Dictionary<string, IDataSource> sources;
-        // ICallables and IHandlers, keyed by named result types (or "" for unnamed)
-        protected Dictionary<string, List<IAction>> actions;
 
         protected Dictionary<string, List<IMessageReceiver>> hooks;
 
-        public PluginEnvironment(IMessageReceiver receiver)
+		public PluginEnvironment(IMessageReceiver receiver) : base(receiver)
         {
-            this.receiver = receiver;
-
             plugins = new List<IPlugin>();
             config = new ArgumentTree(null);
             sources = new Dictionary<string, IDataSource>();
-            actions = new Dictionary<string, List<IAction>>();
-            actions[""] = new List<IAction>();
-
             hooks = new Dictionary<string, List<IMessageReceiver>>();
         }
 
@@ -86,15 +76,7 @@ namespace PluggerBase
                 return sources;
             }
         }
-
-        public IDictionary<string, List<IAction>> Actions
-        {
-            get
-            {
-                return actions;
-            }
-        }
-
+			
         public void Initialize(string conffile, NameValueCollection args)
         {
             LoadConfigurationFile(conffile);
@@ -230,38 +212,7 @@ namespace PluggerBase
 
             return null;
         }
-
-        public void AddAction(IAction action)
-        {
-            string resultname = action.Output.Name;
-            // Add this to the possible actions to produce this
-            GetNamedActions(resultname).Add(action);
-        }
-
-        public object ImmediateConvertTo(object args, IArgumentType resultType, int maxlevel, int time)
-        {
-            return QueueArena.CallResult(CallableConvertTo(resultType, maxlevel), args, time, 0.0);
-        }
-
-        public ICallable CallableConvertTo(IArgumentType resultType, int maxlevel)
-        {
-            return new ActionConversion(this, resultType, new Dictionary<IAction,int>(), Aborter.NewAborter(maxlevel));
-        }
-
-        public List<IAction> GetNamedActions(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-                return actions[""];
-            else
-            {
-                List<IAction> namedacts = null;
-                if (!actions.TryGetValue(name, out namedacts))
-                    actions[name] = namedacts = new List<IAction>();
-
-                return namedacts;
-            }
-        }
-
+			
         public void CallHooks(string key, bool forcehandle, string message, object reference)
         {
             List<IMessageReceiver> hookrecs = GetHooks(key);

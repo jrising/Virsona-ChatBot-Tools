@@ -9,7 +9,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Morphologer</RootNamespace>
     <AssemblyName>Morphologer</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,6 +57,10 @@
     <ProjectReference Include="..\PluggerBase\PluggerBase\PluggerBase.csproj">
       <Project>{4D2297C0-FE51-4056-80CD-A72469075B10}</Project>
       <Name>PluggerBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\debased\ActionReaction\ActionReaction\ActionReaction.csproj">
+      <Project>{05E3A79C-E6F1-4AA7-B427-CF033E6E567A}</Project>
+      <Name>ActionReaction</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

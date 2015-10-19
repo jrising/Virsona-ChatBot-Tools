@@ -4,7 +4,7 @@
  *      Copyright:      2009, Virsona, Inc.
  *                      GNU Lesser General Public License, Ver. 3
  *                      (see license.txt and license.lesser.txt)
- * 
+ *
  * 						Modified from DoMuchMore by David Levy
  *      -----------------------------------------------------------
  * This file is part of Morphologer and is free software: you
@@ -12,12 +12,12 @@
  * Lesser General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option)
  * any later version.
- * 
+ *
  * Plugger Base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Morphologer.  If not, see
  * <http://www.gnu.org/licenses/>.
@@ -27,8 +27,8 @@
 using System;
 using System.Collections.Generic;
 using LanguageNet.Grammarian;
-using PluggerBase.ActionReaction.Actions;
-using PluggerBase.ActionReaction.Interfaces;
+using ActionReaction.Actions;
+using ActionReaction.Interfaces;
 using GenericTools;
 
 namespace LanguageNet.Morphologer
@@ -37,7 +37,7 @@ namespace LanguageNet.Morphologer
 	{
 		protected VerbsData verbsData;
 		protected ConjugateHandler conjugator;
-		
+
 		public InflectionTestHandler(VerbsData verbsData, ConjugateHandler conjugator)
 			: base("Inflection Tester",
 			       "Determine the inflection of a verb",
@@ -47,7 +47,7 @@ namespace LanguageNet.Morphologer
 			this.verbsData = verbsData;
 			this.conjugator = conjugator;
 		}
-		
+
 		public Verbs.Convert Handle(string input)
         {
 			if (IsBaseForm(input))
@@ -303,12 +303,12 @@ namespace LanguageNet.Morphologer
                     input = input.Substring(0, ilen - 1);   // remove final d
             }
         }
-        
+
         public bool IsBaseForm(string input)
         {
             return input == conjugator.InputToBase(input);
         }
-		
+
 		#region IUnitaryHandler Members
 
         public override object Handle(object arg)

@@ -19,6 +19,7 @@
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
     <PlatformTarget>x86</PlatformTarget>
+    <Commandlineparameters>~/projects/virsona/github/config.xml</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>full</DebugType>
@@ -45,6 +46,10 @@
     <ProjectReference Include="..\..\Grammarian\Grammarian.csproj">
       <Project>{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}</Project>
       <Name>Grammarian</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\debased\ActionReaction\ActionReaction\ActionReaction.csproj">
+      <Project>{05E3A79C-E6F1-4AA7-B427-CF033E6E567A}</Project>
+      <Name>ActionReaction</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

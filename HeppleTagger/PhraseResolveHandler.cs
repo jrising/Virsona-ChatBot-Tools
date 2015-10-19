@@ -12,8 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
-using PluggerBase.ActionReaction.Actions;
-using PluggerBase.ActionReaction.Interfaces;
+using ActionReaction.Actions;
+using ActionReaction.Interfaces;
 using LanguageNet.Grammarian;
 
 namespace HeppleTagger

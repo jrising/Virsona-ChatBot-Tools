@@ -51,5 +51,9 @@
       <Project>{3700E5DE-B669-41FB-A815-30DCB7E34466}</Project>
       <Name>AgentParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\debased\ActionReaction\ActionReaction\ActionReaction.csproj">
+      <Project>{05E3A79C-E6F1-4AA7-B427-CF033E6E567A}</Project>
+      <Name>ActionReaction</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

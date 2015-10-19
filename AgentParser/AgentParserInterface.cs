@@ -11,7 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using PluggerBase;
-using PluggerBase.FastSerializer;
+using ActionReaction;
+using ActionReaction.FastSerializer;
 
 namespace LanguageNet.AgentParser
 {
@@ -20,7 +21,7 @@ namespace LanguageNet.AgentParser
 	{
 		// A data source with the type for a given part of speech name (e.g. NN)
         public const string PartTypeSourceName = "AgentParser:PartTypeSource";
-		
+
         #region IPlugin Members
 
 		public uint Version {

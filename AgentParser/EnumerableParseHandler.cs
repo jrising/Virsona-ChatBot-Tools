@@ -10,13 +10,13 @@
 \******************************************************************/
 using System;
 using System.Collections.Generic;
-using PluggerBase.ActionReaction.Actions;
+using ActionReaction.Actions;
 using LanguageNet.Grammarian;
 
 namespace LanguageNet.AgentParser
 {
 	public class EnumerableParseHandler : UnitaryHandler
-	{		
+	{
         public EnumerableParseHandler()
             : base("Grammar Parser of Lists of Tokens",
                 "Construct an IParsedPhrase from a list of tokens",

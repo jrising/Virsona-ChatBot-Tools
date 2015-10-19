@@ -14,8 +14,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using ActionReaction;
 using PluggerBase;
-using PluggerBase.FastSerializer;
+using ActionReaction.FastSerializer;
 
 namespace HeppleTagger
 {

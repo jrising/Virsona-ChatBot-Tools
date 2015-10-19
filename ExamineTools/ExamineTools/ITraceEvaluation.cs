@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using PluggerBase.ActionReaction.Evaluations;
+using ActionReaction.Evaluations;
+
 namespace ExamineTools
 {
 	public interface ITraceEvaluation
@@ -8,16 +9,16 @@ namespace ExamineTools
 		string TraceTitle {
 			get;
 		}
-		
+
 		IContinuation Success {
 			get;
 		}
-		
+
 		IFailure Failure {
 			get;
 		}
 	}
-	
+
 	public class TraceEvaluationTools {
 		public static List<string> GetSuccessTrace(ITraceEvaluation cont) {
 			List<string> titles = new List<string>();
@@ -26,7 +27,7 @@ namespace ExamineTools
 				IContinuation eval = cont.Success;
 				if (eval == null)
 					break;
-				
+
 				if (eval is ITraceEvaluation)
 					cont = (ITraceEvaluation) eval;
 				else {
@@ -34,7 +35,7 @@ namespace ExamineTools
 					break;
 				}
 			}
-			
+
 			return titles;
 		}
 	}

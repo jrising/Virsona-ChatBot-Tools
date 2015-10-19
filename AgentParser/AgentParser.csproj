@@ -9,7 +9,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>AgentParser</RootNamespace>
     <AssemblyName>AgentParser</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -128,6 +127,10 @@
     <ProjectReference Include="..\ExamineTools\ExamineTools\ExamineTools.csproj">
       <Project>{F96D3B75-4055-40C7-A03C-ECE015E77BBC}</Project>
       <Name>ExamineTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\debased\ActionReaction\ActionReaction\ActionReaction.csproj">
+      <Project>{05E3A79C-E6F1-4AA7-B427-CF033E6E567A}</Project>
+      <Name>ActionReaction</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

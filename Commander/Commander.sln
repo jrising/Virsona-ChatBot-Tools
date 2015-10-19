@@ -7,12 +7,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluggerBase", "..\PluggerBa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grammarian", "..\Grammarian\Grammarian.csproj", "{5B36F670-EB0A-41AC-A6F5-F2E2B53DF732}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionReaction", "..\..\..\debased\ActionReaction\ActionReaction\ActionReaction.csproj", "{05E3A79C-E6F1-4AA7-B427-CF033E6E567A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{05E3A79C-E6F1-4AA7-B427-CF033E6E567A}.Debug|x86.ActiveCfg = Debug|x86
+		{05E3A79C-E6F1-4AA7-B427-CF033E6E567A}.Debug|x86.Build.0 = Debug|x86
+		{05E3A79C-E6F1-4AA7-B427-CF033E6E567A}.Release|x86.ActiveCfg = Release|x86
+		{05E3A79C-E6F1-4AA7-B427-CF033E6E567A}.Release|x86.Build.0 = Release|x86
 		{3DF0538C-7FDC-4D29-B782-65A5A49D655B}.Debug|x86.ActiveCfg = Debug|x86
 		{3DF0538C-7FDC-4D29-B782-65A5A49D655B}.Debug|x86.Build.0 = Debug|x86
 		{3DF0538C-7FDC-4D29-B782-65A5A49D655B}.Release|x86.ActiveCfg = Release|x86

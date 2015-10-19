@@ -8,6 +8,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PluggerBase</RootNamespace>
     <AssemblyName>PluggerBase</AssemblyName>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,50 +33,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionReaction\Actions\Aborter.cs" />
-    <Compile Include="ActionReaction\Actions\FormableAction.cs" />
-    <Compile Include="ActionReaction\Actions\LastFailure.cs" />
-    <Compile Include="ArgumentTree.cs" />
-    <Compile Include="FastSerializer\FastSerializerInterfaces.cs" />
-    <Compile Include="FastSerializer\SerializationReader.cs" />
-    <Compile Include="FastSerializer\SerializationWriter.cs" />
     <Compile Include="InitialzeResult.cs" />
-    <Compile Include="ActionReaction\Evaluations\Agents.cs" />
-    <Compile Include="ActionReaction\Evaluations\CallableAsContinuation.cs" />
-    <Compile Include="ActionReaction\Evaluations\Callables.cs" />
-    <Compile Include="ActionReaction\Evaluations\Continuations.cs" />
-    <Compile Include="ActionReaction\Evaluations\ImmediateArena.cs" />
-    <Compile Include="ActionReaction\Actions\TryValues.cs" />
-    <Compile Include="ActionReaction\Evaluations\Failures.cs" />
-    <Compile Include="ActionReaction\Actions\ArgumentsHandler.cs" />
-    <Compile Include="ActionReaction\Actions\BestContinuation.cs" />
-    <Compile Include="ActionReaction\Actions\HandlerWrapper.cs" />
-    <Compile Include="ActionReaction\Actions\UnitaryHandler.cs" />
-    <Compile Include="ActionReaction\Evaluations\Evaluables.cs" />
-    <Compile Include="ActionReaction\Evaluations\IArena.cs" />
-    <Compile Include="ActionReaction\Actions\IActions.cs" />
-    <Compile Include="ActionReaction\Actions\ActionConversion.cs" />
-    <Compile Include="ActionReaction\Evaluations\Nops.cs" />
-    <Compile Include="ActionReaction\Interfaces\HtmlInterface\HtmlArgumentTree.cs" />
-    <Compile Include="ActionReaction\Interfaces\HtmlInterface\HtmlUtilities.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IDataSource.cs" />
-    <Compile Include="FastSerializer\IFastSerializable.cs" />
-    <Compile Include="IMessageReceiver.cs" />
-    <Compile Include="ActionReaction\Interfaces\BaseArgumentTypes.cs" />
-    <Compile Include="ActionReaction\Interfaces\DerivedArgumentTypes.cs" />
-    <Compile Include="ActionReaction\Interfaces\HtmlInterface\HtmlInterface.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ActionReaction\Interfaces\Interfaces.cs" />
-    <Compile Include="ActionReaction\Actions\QueueArena.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="PluginDisplayNameAttribute.cs" />
     <Compile Include="PluginEnvironment.cs" />
     <Compile Include="PluginNotValidException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FastSerializer\StandaloneReceiver.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -84,4 +49,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\debased\ActionReaction\ActionReaction\ActionReaction.csproj">
+      <Project>{05E3A79C-E6F1-4AA7-B427-CF033E6E567A}</Project>
+      <Name>ActionReaction</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

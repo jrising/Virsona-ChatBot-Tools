@@ -9,7 +9,8 @@
 \******************************************************************/
 using System;
 using System.Reflection;
-using PluggerBase.FastSerializer;
+using ActionReaction;
+using ActionReaction.FastSerializer;
 
 namespace PluggerBase
 {

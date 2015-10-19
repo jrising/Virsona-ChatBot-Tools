@@ -10,8 +10,8 @@
 using System;
 using System.Collections.Generic;
 using LanguageNet.Grammarian;
-using PluggerBase.ActionReaction.Actions;
-using PluggerBase.ActionReaction.Interfaces;
+using ActionReaction.Actions;
+using ActionReaction.Interfaces;
 
 namespace LanguageNet.Morphologer
 {
@@ -19,7 +19,7 @@ namespace LanguageNet.Morphologer
 	{
 		protected Nouns.Number changeTo;
 		protected Dictionary<string, string> toMap;
-		
+
 		public ChangeNounHandler(Nouns.Number changeTo, Dictionary<string, string> toMap)
 			: base("Number of Noun Changer",
 			       "Change the Number of a Noun (plural or singular)",
@@ -29,14 +29,14 @@ namespace LanguageNet.Morphologer
 		{
 			this.changeTo = changeTo;
 			this.toMap = toMap;
-			
+
 		}
 
         public string Handle(string input)
         {
 			if (toMap.ContainsKey(input))
 				return toMap[input];
-			
+
 			if (changeTo == Nouns.Number.Singular) {
 				if (input.EndsWith("ses"))
 					return input.Substring(0, input.Length - 2);
@@ -48,7 +48,7 @@ namespace LanguageNet.Morphologer
 				else
 					return input + "s";
 			}
-			
+
 			return input;
         }
 

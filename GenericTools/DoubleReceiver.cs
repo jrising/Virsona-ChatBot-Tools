@@ -10,8 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using PluggerBase;
-using PluggerBase.FastSerializer;
+using ActionReaction;
+using ActionReaction.FastSerializer;
 
 namespace GenericTools
 {
@@ -56,7 +56,7 @@ namespace GenericTools
         public static IMessageReceiver addReceiver(IMessageReceiver group, IMessageReceiver add) {
             if (group == null)
                 return add;
-            
+
             return new DoubleReceiver(add, group);
         }
 

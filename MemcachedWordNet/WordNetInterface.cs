@@ -10,12 +10,12 @@
  * Lesser General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option)
  * any later version.
- * 
+ *
  * Plugger Base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with MemcachedWordNet.  If not, see
  * <http://www.gnu.org/licenses/>.
@@ -28,8 +28,9 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.IO;
+using ActionReaction;
 using PluggerBase;
-using PluggerBase.FastSerializer;
+using ActionReaction.FastSerializer;
 using LanguageNet.Grammarian;
 using GenericTools.DataSources;
 using BeIT.MemCached;
@@ -53,9 +54,9 @@ namespace LanguageNet.WordNet
 		protected DefinitionFile verbDefinitionSource;
 		protected DefinitionFile adjDefinitionSource;
 		protected DefinitionFile advDefinitionSource;
-		
+
 		protected FileWordNetTools fileTools;
-		
+
 		public WordNetInterface()
 		{
 		}
@@ -72,13 +73,13 @@ namespace LanguageNet.WordNet
         {
 			return InitializeLocal(env, receiver);
 		}
-		
+
         public InitializeResult InitializeLocal(PluginEnvironment env, IMessageReceiver receiver)
         {
 			// Data files contained in [datadrectory]/wordnet
             string basedir = env.GetConfigDirectory("datadirectory") + Path.DirectorySeparatorChar + "wordnet" + Path.DirectorySeparatorChar;
 			MemcachedClient cache = MemcacheSource.DefaultClient();
-			
+
 			nounIndexSource = new BackedMemcachedSource<Index>(new IndexFile(basedir, WordNetAccess.PartOfSpeech.Noun), "WN:I:N:", cache);
 			verbIndexSource = new BackedMemcachedSource<Index>(new IndexFile(basedir, WordNetAccess.PartOfSpeech.Verb), "WN:I:V:", cache);
 			adjIndexSource = new BackedMemcachedSource<Index>(new IndexFile(basedir, WordNetAccess.PartOfSpeech.Adj), "WN:I:A:", cache);
@@ -94,40 +95,40 @@ namespace LanguageNet.WordNet
 				Console.Out.WriteLine("Loading adverbs into Memcached");
 				advIndexSource.LoadIntoMemcached();
 			}
-				
+
 			nounOffsetsSource = new MapDataSource<string, Index, long[]>(nounIndexSource, IndexFile.ExtractOffsets, null);
 			verbOffsetsSource = new MapDataSource<string, Index, long[]>(verbIndexSource, IndexFile.ExtractOffsets, null);
 			adjOffsetsSource = new MapDataSource<string, Index, long[]>(adjIndexSource, IndexFile.ExtractOffsets, null);
 			advOffsetsSource = new MapDataSource<string, Index, long[]>(advIndexSource, IndexFile.ExtractOffsets, null);
-			
+
             env.SetDataSource<string, long[]>(WordNetAccess.NounIndexSourceName, nounOffsetsSource);
             env.SetDataSource<string, long[]>(WordNetAccess.VerbIndexSourceName, verbOffsetsSource);
             env.SetDataSource<string, long[]>(WordNetAccess.AdjIndexSourceName, adjOffsetsSource);
             env.SetDataSource<string, long[]>(WordNetAccess.AdvIndexSourceName, advOffsetsSource);
-			
+
 			nounDefinitionSource = new DefinitionFile(basedir, WordNetAccess.PartOfSpeech.Noun);
 			verbDefinitionSource = new DefinitionFile(basedir, WordNetAccess.PartOfSpeech.Verb);
 			adjDefinitionSource = new DefinitionFile(basedir, WordNetAccess.PartOfSpeech.Adv);
 			advDefinitionSource = new DefinitionFile(basedir, WordNetAccess.PartOfSpeech.Adv);
-			
+
             env.SetDataSource<long, WordNetDefinition>(WordNetAccess.NounDefinitionSourceName, nounDefinitionSource);
             env.SetDataSource<long, WordNetDefinition>(WordNetAccess.VerbDefinitionSourceName, verbDefinitionSource);
             env.SetDataSource<long, WordNetDefinition>(WordNetAccess.AdjDefinitionSourceName, adjDefinitionSource);
             env.SetDataSource<long, WordNetDefinition>(WordNetAccess.AdvDefinitionSourceName, advDefinitionSource);
-			
+
 			fileTools = new FileWordNetTools(env.GetConfigDirectory("datadirectory") + Path.DirectorySeparatorChar + "wordnet" + Path.DirectorySeparatorChar);
-			
+
 			return InitializeResult.Success();
         }
-		
+
         #endregion
-		
+
 		public FileWordNetTools FileTools {
 			get {
 				return fileTools;
 			}
 		}
-		
+
 		#region EncodeWord
 		/// <summary>
 		/// Converts a compound word/phrase into the recognized format
@@ -141,7 +142,7 @@ namespace LanguageNet.WordNet
 			return retVal.ToLower();
 		}
 		#endregion EncodeWord
-		
+
         #region GetIndex
         /// <summary>
         /// Returns a list of the Index objects stored in the cache corresponding to the given string and part(s) of speech
@@ -155,9 +156,9 @@ namespace LanguageNet.WordNet
                 return new List<Index>();
 
             word = EncodeWord(word);
-			
+
 			List<Index> idxres = new List<Index>();
-			
+
 			if (part == WordNetAccess.PartOfSpeech.Adj || part == WordNetAccess.PartOfSpeech.All) {
 				Index idxresAdj;
 				if (adjIndexSource.TryGetValue(word, out idxresAdj)) {
@@ -190,11 +191,11 @@ namespace LanguageNet.WordNet
 						return idxres;
 				}
 			}
-			
+
 			return idxres;
         }
         #endregion GetIndex
-		
+
         #region IFastSerializable Members
 
         public void Deserialize(SerializationReader reader)

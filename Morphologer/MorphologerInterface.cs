@@ -12,12 +12,12 @@
  * Lesser General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option)
  * any later version.
- * 
+ *
  * Plugger Base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with Morphologer.  If not, see
  * <http://www.gnu.org/licenses/>.
@@ -28,8 +28,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.IO;
+using ActionReaction;
 using PluggerBase;
-using PluggerBase.FastSerializer;
+using ActionReaction.FastSerializer;
 using LanguageNet.Grammarian;
 using GenericTools.DataSources;
 
@@ -54,10 +55,10 @@ namespace LanguageNet.Morphologer
         {
             // Data files contained in [datadrectory]/wordnet
             string basedir = env.GetConfigDirectory("datadirectory") + Path.DirectorySeparatorChar + "morpho" + Path.DirectorySeparatorChar;
-			
+
 			InitializeNouns(env, basedir);
 			InitializeVerbs(env, basedir);
-			
+
 			return InitializeResult.Success();
         }
 
@@ -71,35 +72,35 @@ namespace LanguageNet.Morphologer
 			IDataSource<string, Nouns.NounType> maleSource = new AlphabeticFileSet<Nouns.NounType>(basedir + "person_male.txt", tokenizer, key_len, Nouns.NounType.ProperMale);
 			IDataSource<string, Nouns.NounType> citySource = new AlphabeticFileSet<Nouns.NounType>(basedir + "city.txt", tokenizer, key_len, Nouns.NounType.ProperCity);
 			IDataSource<string, Nouns.NounType> countrySource = new AlphabeticFileSet<Nouns.NounType>(basedir + "country.txt", tokenizer, key_len, Nouns.NounType.ProperCountry);
-			IDataSource<string, Nouns.NounType> regionSource = new AlphabeticFileSet<Nouns.NounType>(basedir + "region.txt", tokenizer, key_len, Nouns.NounType.ProperProvince);			
+			IDataSource<string, Nouns.NounType> regionSource = new AlphabeticFileSet<Nouns.NounType>(basedir + "region.txt", tokenizer, key_len, Nouns.NounType.ProperProvince);
 			IDataSource<string, Nouns.NounType> countSource = new AlphabeticFileSet<Nouns.NounType>(basedir + "count_nouns.txt", tokenizer, key_len, Nouns.NounType.Count);
 			IDataSource<string, Nouns.NounType> massSource = new AlphabeticFileSet<Nouns.NounType>(basedir + "mass_nouns.txt", tokenizer, key_len, Nouns.NounType.Mass);
-			IDataSource<string, Nouns.NounType> theSource = new AlphabeticFileSet<Nouns.NounType>(basedir + "the_nouns.txt", tokenizer, key_len, Nouns.NounType.The);			
-			
+			IDataSource<string, Nouns.NounType> theSource = new AlphabeticFileSet<Nouns.NounType>(basedir + "the_nouns.txt", tokenizer, key_len, Nouns.NounType.The);
+
             env.SetDataSource<string, Nouns.NounType>(Nouns.NounTypeSourceName, new ComboSource<string, Nouns.NounType>(new ComboSource<string, Nouns.NounType>(
 			                                          new ComboSource<string, Nouns.NounType>(new ComboSource<string, Nouns.NounType>(ambigSource, femaleSource), maleSource),
 			                                          new ComboSource<string, Nouns.NounType>(new ComboSource<string, Nouns.NounType>(citySource, countrySource), regionSource)),
 			                                          new ComboSource<string, Nouns.NounType>(new ComboSource<string, Nouns.NounType>(countSource, massSource), theSource)));
-			
+
 			IDataSource<string, Nouns.Gender> feminineSource = new AlphabeticFileSet<Nouns.Gender>(basedir + "nouns_female.txt", tokenizer, key_len, Nouns.Gender.Female);
 			IDataSource<string, Nouns.Gender> masculineSource = new AlphabeticFileSet<Nouns.Gender>(basedir + "nouns_male.txt", tokenizer, key_len, Nouns.Gender.Male);
 			IDataSource<string, Nouns.Gender> eitherSource = new AlphabeticFileSet<Nouns.Gender>(basedir + "nouns_malefem.txt", tokenizer, key_len, Nouns.Gender.Either);
-			
+
 			env.SetDataSource<string, Nouns.Gender>(Nouns.GenderSourceName,
 			                                        new ComboSource<string, Nouns.Gender>(new ComboSource<string, Nouns.Gender>(feminineSource, masculineSource), eitherSource));
-                                                         
+
 			MemorySource<string, string> toSingular = new MemorySource<string, string>();
 			MemorySource<string, string> toPlural = new MemorySource<string, string>();
 			ReadNounNumber(basedir + "nouns_number.txt", toSingular, toPlural);
-			
+
 			env.SetDataSource<string, Nouns.Number>(Nouns.NumberSourceName,
-			                                        new ComboSource<string, Nouns.Number>(new MapDataSource<string, string, Nouns.Number>(toSingular, ToShared, Nouns.Number.Plural), 
+			                                        new ComboSource<string, Nouns.Number>(new MapDataSource<string, string, Nouns.Number>(toSingular, ToShared, Nouns.Number.Plural),
 			                                                                              new MapDataSource<string, string, Nouns.Number>(toPlural, ToShared, Nouns.Number.Singular)));
 
 			env.AddAction(new ChangeNounHandler(Nouns.Number.Singular, toSingular));
 			env.AddAction(new ChangeNounHandler(Nouns.Number.Plural, toPlural));
 		}
-		
+
 		public void ReadNounNumber(string filename, Dictionary<string, string> toSingular, Dictionary<string, string> toPlural) {
             string[] lines = File.ReadAllLines(filename);
             if (lines == null)
@@ -110,7 +111,7 @@ namespace LanguageNet.Morphologer
                     break;
                 AuxString auxstr1 = new AuxString(lines[ii]);
                 AuxString auxstr2 = new AuxString(lines[ii + 1]);
-                
+
                 string t1, line1;
                 if (auxstr1.WordCount() > 1) {
                     t1 = auxstr1.Word(1);
@@ -152,15 +153,15 @@ namespace LanguageNet.Morphologer
                 }
             }
 		}
-		
+
 		public Nouns.Number ToShared(string value, object shared) {
 			return (Nouns.Number) shared;
 		}
-		
+
 		public void InitializeVerbs(PluginEnvironment env, string basedir) {
 			VerbsData verbsData = new VerbsData(basedir);
 			ConjugateHandler conjugator = new ConjugateHandler(verbsData);
-			
+
 			env.AddAction(conjugator);
 			env.AddAction(new TransitiveTestHandler(verbsData, conjugator));
 			env.AddAction(new InflectionTestHandler(verbsData, conjugator));
@@ -182,9 +183,9 @@ namespace LanguageNet.Morphologer
 			                                                                                                            new ComboSource<string, Verbs.VerbType>(
 			                                          new ComboSource<string, Verbs.VerbType>(advIntransitiveSource, advEitherSource), advPrepSource)));
 		}
-		
+
         #endregion
-		
+
         #region IFastSerializable Members
 
         public void Deserialize(SerializationReader reader)

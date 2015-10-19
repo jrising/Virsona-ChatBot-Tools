@@ -13,15 +13,15 @@
 using System;
 using System.Collections.Generic;
 using LanguageNet.Grammarian;
-using PluggerBase.ActionReaction.Actions;
+using ActionReaction.Actions;
 
 namespace LanguageNet.Morphologer
 {
 	public class TransitiveTestHandler : UnitaryHandler
-	{		
+	{
 		protected VerbsData verbsData;
 		protected ConjugateHandler conjugator;
-		
+
 		public TransitiveTestHandler(VerbsData verbsData, ConjugateHandler conjugator)
 			: base("Transitivity Tester",
 			       "Check if a verb is transitive",
