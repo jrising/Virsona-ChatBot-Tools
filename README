@@ -20,6 +20,11 @@ thought of as translating arguments from one kind to another.  If no
 plugin can perform a requested conversion, a collection of partial
 conversions will be attempted.
 
+PluggerBase relies on ActionReaction, available at
+https://github.com/jrising/ActionReaction.  The references throughout
+the project assume that ActionReaction is contained in a subdirectory
+of the git repository root.
+
 *** Tools
 
 *Grammarian* provides a common code base for all of the natural language
